@@ -21,9 +21,8 @@ export default {
     },
     methods: {
         drawTuto(data, id) {
-            // TODO
-            // - tooltip + valeur x et y
-            // - effet visuel au survol
+            // TODO tooltip + valeur x et y
+            // TODO effet visuel au survol
 
             // https://d3-graph-gallery.com/graph/interactivity_zoom.html
             // set the dimensions and margins of the graph
@@ -97,7 +96,7 @@ export default {
 </script>
 
 <template>
-    <main>
+    <main class="l-graphs">
         <ReadLength />
         <hr />
         <BlockNumber />
@@ -115,16 +114,10 @@ export default {
 <style lang="scss">
 @import './assets/base.css';
 
-#app {
-    /* max-width: 1280px; */
+.l-graphs {
     margin: 0 auto;
-    padding: 2rem;
+    width: 100%;
     text-align: center;
     font-weight: normal;
-
-    main {
-        // TODO better selector
-        width: 100%;
-    }
 }
 </style>

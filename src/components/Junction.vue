@@ -7,13 +7,13 @@ import FileReader from './FileReader.vue'
 </script>
 
 <template>
-    <section class="entry">
+    <section class="entry l-junction">
         <h2>{{type}}' Junction</h2>
         <FileReader @load="parseFile" />
         <div>
-            <div class="graph-wrapper">
-                <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
-                <div :id="`${idGraph}Sorted`" :ref="`${idGraph}Sorted`" class="entry__graph"></div>
+            <div class="l-junction__graphs">
+                <div :id="idGraph" :ref="idGraph" class="entry__graph l-junction__graphs__item"></div>
+                <div :id="`${idGraph}Sorted`" :ref="`${idGraph}Sorted`" class="entry__graph l-junction__graphs__item"></div>
             </div>
             <footer v-if="d3Data">
                 <div class="data">
@@ -111,11 +111,13 @@ export default {
 @import '../assets/styles/modules/data.scss';
 @import '../assets/styles/modules/entry.scss';
 
-.graph-wrapper {
-    .entry__graph { // TODO better selectors
-        display: inline-block;
-        width: 50%;
-        box-sizing: border-box;
+.l-junction {
+    &__graphs {
+        &__item {
+            display: inline-block;
+            width: 50%;
+            box-sizing: border-box;
+        }
     }
 }
 </style>
