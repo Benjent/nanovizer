@@ -2,6 +2,7 @@
 import * as d3 from 'd3'
 import chartUtils from '../utils/chart'
 import numberUtils from '../utils/number'
+import tooltipUtils from '../utils/tooltip'
 import ChartSaver from './ChartSaver.vue'
 import FileReader from './FileReader.vue'
 </script>
@@ -148,21 +149,31 @@ export default {
                 .style("font-size", "0.71em")
                 .style("opacity", 0)
 
+            const tooltip = tooltipUtils.set(this.idGraph)
             circles
-            .on('mouseover', function (d) {
+            .on('mouseover', function (event) {
                 const opacity = 0.1
                 circles.style('opacity', opacity)
                 d3.select(this).style('opacity', 1)
 
-                const key = Number.parseInt(d.target.dataset.key)
-
+                const key = Number.parseInt(event.target.dataset.key)
                 arcs.style('opacity', (l) => [l.start, l.end].includes(key) ? 1 : opacity)
                 labels.style('opacity', (l) => l === key ? 1 : 0)
+                tooltip.style("opacity", 1)
             })
-            .on('mouseout', function (d) {
+            .on("mousemove", function (event) {
+                tooltipUtils.setCoordinates(event, tooltip)
+                const key = Number.parseInt(event.target.dataset.key)
+                tooltip
+                .html(`
+                    <div>Pair: ${key}</div>
+                `)
+            })
+            .on('mouseleave', function () {
                 circles.style('opacity', 1)
                 arcs.style('opacity', 1)
                 labels.style('opacity', 0)
+                tooltip.style("opacity", 0)
             })
         },
     },

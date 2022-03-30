@@ -1,4 +1,5 @@
 import * as d3 from 'd3'
+import tooltipUtils from './tooltip'
 
 const parseTsv = (data) => {
     const parsedData = d3.tsvParse(data)
@@ -56,12 +57,13 @@ const setScales = (data, svg, width, height, options = {}) => {
     return { xScale, xAxis, xMax, yScale, yAxis, yMax }
 }
 
-const drawLollipops = (data, svg, xScale, yScale) => {
+const drawLollipops = (idGraph, data, svg, xScale, yScale) => {
     const lines = svg.selectAll()
     .data(data)
     .enter()
     .append("line")
         .attr("data-key", (d) => d.key)
+        .attr("data-value", (d) => d.value)
         .attr("x1", (d) => xScale(d.key))
         .attr("x2", (d) => xScale(d.key))
         .attr("y1", (d) => yScale(d.value))
@@ -73,24 +75,39 @@ const drawLollipops = (data, svg, xScale, yScale) => {
     .enter()
     .append("circle")
         .attr("data-key", (d) => d.key)
+        .attr("data-value", (d) => d.value)
         .attr("cx", (d) => xScale(d.key))
         .attr("cy", (d) => yScale(d.value))
         .attr("r", "4")
         .classed('lollipop__sugar', true)
 
+    const tooltip = tooltipUtils.set(idGraph)
+
     circles
-    .on('mouseover', function (d) {
+    .on('mouseover', function (event) {
         const opacity = 0.1
         circles.style('opacity', opacity)
         d3.select(this).style('opacity', 1)
 
-        const key = Number.parseInt(d.target.dataset.key)
+        const key = Number.parseInt(event.target.dataset.key)
+        lines.style('opacity', (l) => l.key === key ? 1 : opacity)
 
-        lines.style('opacity', (l) => l === key ? 1 : opacity)
+        tooltip.style("opacity", 1)
     })
-    .on('mouseout', function (d) {
+    .on("mousemove", function (event) {
+        tooltipUtils.setCoordinates(event, tooltip)
+        const key = Number.parseInt(event.target.dataset.key)
+        const value = Number.parseInt(event.target.dataset.value)
+        tooltip
+        .html(`
+            <div>Junction: ${key}</div>
+            <div>Occurrences: ${value}</div>
+        `)
+    })
+    .on('mouseleave', function () {
         circles.style('opacity', 1)
         lines.style('opacity', 1)
+        tooltip.style("opacity", 0)
     })
 
     return { lines, circles }

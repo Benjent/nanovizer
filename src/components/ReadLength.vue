@@ -2,6 +2,7 @@
 import * as d3 from 'd3'
 import chartUtils from '../utils/chart'
 import numberUtils from '../utils/number'
+import tooltipUtils from '../utils/tooltip'
 import ChartSaver from './ChartSaver.vue'
 import FileReader from './FileReader.vue'
 </script>
@@ -104,12 +105,27 @@ export default {
                 .attr("y2", yScale(max))
                 .classed("boxplot__line", true)
 
+            const tooltipBox = tooltipUtils.set(this.idGraph)
             const box = svg.append("rect")
                 .attr("x", center - (boxWidth / 2))
                 .attr("y", yScale(q3))
                 .attr("height", yScale(q1) - yScale(q3))
                 .attr("width", boxWidth)
                 .classed("boxplot__box", true)
+                .on('mouseover', function (d) {
+                    tooltipBox.style("opacity", 1)
+                })
+                .on("mousemove", function(event) {
+                    tooltipUtils.setCoordinates(event, tooltipBox)
+                    tooltipBox.html(`
+                        <div>q1: ${q1}</div>
+                        <div>Median: ${median}</div>
+                        <div>q3: ${q3}</div>
+                    `)
+                })
+                .on('mouseleave', function (d) {
+                    tooltipBox.style("opacity", 0)
+                })
 
             const lines = svg
             .selectAll()
@@ -122,15 +138,29 @@ export default {
                 .attr("y2", (d) => yScale(d))
                 .classed("boxplot__line", true)
 
+            const tooltipCircle = tooltipUtils.set(this.idGraph)
             const circles = svg.selectAll()
             .data(this.d3Data.filter((d) => d > max || d < min))
             .enter()
             .append("circle")
-                .attr("data-key", (d) => d.key)
+                .attr("data-value", (d) => d)
                 .attr("cx", (d) => center)
                 .attr("cy", (d) => yScale(d))
                 .attr("r", "4")
                 .classed('lollipop__sugar', true)
+                .on('mouseover', function (d) {
+                    tooltipCircle.style("opacity", 1)
+                })
+                .on("mousemove", function(event) {
+                    tooltipUtils.setCoordinates(event, tooltipCircle)
+                    const value = Number.parseInt(event.target.dataset.value)
+                    tooltipCircle.html(`
+                        <div>Occurences: ${value}</div>
+                    `)
+                })
+                .on('mouseleave', function (d) {
+                    tooltipCircle.style("opacity", 0)
+                })
         },
     },
 }

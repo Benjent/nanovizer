@@ -68,7 +68,7 @@ export default {
         drawGraph() {
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
             const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3Data, svg, width, height)
-            const { lines, circles } = chartUtils.drawLollipops(this.filteredD3Data, svg, xScale, yScale)
+            const { lines, circles } = chartUtils.drawLollipops(this.idGraph, this.filteredD3Data, svg, xScale, yScale)
 
             this.max = yMax
         },
