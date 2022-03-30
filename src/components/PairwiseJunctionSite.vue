@@ -155,10 +155,10 @@ export default {
                 circles.style('opacity', opacity)
                 d3.select(this).style('opacity', 1)
 
-                const junction = Number.parseInt(d.target.dataset.key)
+                const key = Number.parseInt(d.target.dataset.key)
 
-                arcs.style('opacity', (l) => [l.start, l.end].includes(junction) ? 1 : opacity)
-                labels.style('opacity', (l) => l === junction ? 1 : 0)
+                arcs.style('opacity', (l) => [l.start, l.end].includes(key) ? 1 : opacity)
+                labels.style('opacity', (l) => l === key ? 1 : 0)
             })
             .on('mouseout', function (d) {
                 circles.style('opacity', 1)

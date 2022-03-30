@@ -62,6 +62,7 @@ const drawLollipops = (data, svg, xScale, yScale) => {
     .data(data)
     .enter()
     .append("line")
+        .attr("data-key", (d) => d.key)
         .attr("x1", (d) => xScale(d.key))
         .attr("x2", (d) => xScale(d.key))
         .attr("y1", (d) => yScale(d.value))
@@ -73,10 +74,26 @@ const drawLollipops = (data, svg, xScale, yScale) => {
     .data(data)
     .enter()
     .append("circle")
+        .attr("data-key", (d) => d.key)
         .attr("cx", (d) => xScale(d.key))
         .attr("cy", (d) => yScale(d.value))
         .attr("r", "4")
         .classed('lollipop__sugar', true)
+
+    circles
+    .on('mouseover', function (d) {
+        const opacity = 0.1
+        circles.style('opacity', opacity)
+        d3.select(this).style('opacity', 1)
+
+        const key = Number.parseInt(d.target.dataset.key)
+
+        lines.style('opacity', (l) => l === key ? 1 : opacity)
+    })
+    .on('mouseout', function (d) {
+        circles.style('opacity', 1)
+        lines.style('opacity', 1)
+    })
 
     return { lines, circles }
 }
