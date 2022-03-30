@@ -118,9 +118,9 @@ export default {
                 .on("mousemove", function(event) {
                     tooltipUtils.setCoordinates(event, tooltipBox)
                     tooltipBox.html(`
-                        <div>q1: ${q1}</div>
+                        <div>Q1: ${q1}</div>
                         <div>Median: ${median}</div>
-                        <div>q3: ${q3}</div>
+                        <div>Q3: ${q3}</div>
                     `)
                 })
                 .on('mouseleave', function (d) {

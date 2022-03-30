@@ -4,12 +4,8 @@ const set = (idGraph) => {
     return d3.select(`#${idGraph}`)
         .append("div")
             .style("opacity", 0)
-            .style("position", "absolute")
             .attr("class", "tooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "2px")
-            .style("padding", "5px")
+            .style("position", "absolute")
 }
 
 const setCoordinates = (event, tooltip) => {
