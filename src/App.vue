@@ -21,8 +21,10 @@ export default {
     },
     methods: {
         drawTuto(data, id) {
+            // TODO afficher les outliers EN DEHORS de la box pour boxplot
             // TODO tooltip + valeur x et y
             // TODO effet visuel au survol
+            // TODO barcode
 
             // https://d3-graph-gallery.com/graph/interactivity_zoom.html
             // set the dimensions and margins of the graph
@@ -45,10 +47,10 @@ export default {
             const clip = svg.append("defs").append("svg:clipPath")
                 .attr("id", "clip")
                 .append("svg:rect")
-                .attr("width", width )
-                .attr("height", height )
-                .attr("x", 0)
-                .attr("y", 0)
+                    .attr("width", width )
+                    .attr("height", height )
+                    .attr("x", 0)
+                    .attr("y", 0)
 
             // Create the scatter variable: where both the circles and the brush take place
             const scatter = svg.append('g')

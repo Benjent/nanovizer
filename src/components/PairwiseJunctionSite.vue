@@ -101,41 +101,70 @@ export default {
             const xMax = d3.max(nodes)
             this.max = d3.max(links.map((l) => l.value))
 
-            const xScale = d3.scaleLinear()
-            .range([0, width])
-            .domain([0, xMax])
+            const xScale = d3.scaleLinear().range([0, width]).domain([0, xMax])
 
-            svg
+            const arcs = svg
             .selectAll()
             .data(links)
             .enter()
             .append('path')
-            .attr('d', (d) => {
-                const start = xScale(d.start)
-                const end = xScale(d.end)
-                return ['M', start, height - 30,    // the arc starts at the coordinate x=start, y=height-30 (where the starting node is)
-                    'A',                            // This means we're gonna build an elliptical arc
-                    (start - end) / 2, ',',    // Next 2 lines are the coordinates of the inflexion point. Height of this point is proportional with start - end distance
-                    (start - end) / 2, 0, 0, ',',
-                    start < end ? 1 : 0, end, ',', height - 30] // We always want the arc on top. So if end is before start, putting 0 here turn the arc upside down.
-                    .join(' ');
-                })
-            .style("fill", "none")
-            .classed("lollipop__stick", true)
+                .attr('d', (d) => {
+                    const start = xScale(d.start)
+                    const end = xScale(d.end)
+                    return ['M', start, height - 30,    // the arc starts at the coordinate x=start, y=height-30 (where the starting node is)
+                        'A',                            // This means we're gonna build an elliptical arc
+                        (start - end) / 2, ',',    // Next 2 lines are the coordinates of the inflexion point. Height of this point is proportional with start - end distance
+                        (start - end) / 2, 0, 0, ',',
+                        start < end ? 1 : 0, end, ',', height - 30] // We always want the arc on top. So if end is before start, putting 0 here turn the arc upside down.
+                        .join(' ');
+                    })
+                .style("fill", "none")
+                .classed("lollipop__stick", true)
 
             // const size = d3.scaleLinear()
             // .domain([1, 1000])
             // .range([2,10])
 
-            svg
+            const circles = svg
             .selectAll()
             .data(nodes)
             .enter()
             .append("circle")
+                .attr("data-key", (d) => d)
                 .attr("cx", (d) => xScale(d))
                 .attr("cy", height - 30)
                 .attr("r", (d) => 4)
                 .classed("lollipop__sugar", true)
+
+            const labels = svg
+            .selectAll()
+            .data(nodes)
+            .enter()
+            .append("text")
+                .attr("data-key", (d) => d)
+                .attr("x", (d) => xScale(d))
+                .attr("y", height - 10)
+                .text((d) => d)
+                .style("text-anchor", "middle")
+                .style("font-size", "0.71em")
+                .style("opacity", 0)
+
+            circles
+            .on('mouseover', function (d) {
+                const opacity = 0.1
+                circles.style('opacity', opacity)
+                d3.select(this).style('opacity', 1)
+
+                const junction = Number.parseInt(d.target.dataset.key)
+
+                arcs.style('opacity', (l) => [l.start, l.end].includes(junction) ? 1 : opacity)
+                labels.style('opacity', (l) => l === junction ? 1 : 0)
+            })
+            .on('mouseout', function (d) {
+                circles.style('opacity', 1)
+                arcs.style('opacity', 1)
+                labels.style('opacity', 0)
+            })
         },
     },
 }
