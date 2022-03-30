@@ -66,8 +66,7 @@ const drawLollipops = (data, svg, xScale, yScale) => {
         .attr("x2", (d) => xScale(d.key))
         .attr("y1", (d) => yScale(d.value))
         .attr("y2", yScale(0))
-        .attr("stroke", "grey")
-        .classed('stem', true)
+        .classed('lollipop__stick', true)
 
     // Circles
     const circles = svg.selectAll()
@@ -77,9 +76,7 @@ const drawLollipops = (data, svg, xScale, yScale) => {
         .attr("cx", (d) => xScale(d.key))
         .attr("cy", (d) => yScale(d.value))
         .attr("r", "4")
-        .style("fill", "#69b3a2")
-        .attr("stroke", "black")
-        .classed('flower', true)
+        .classed('lollipop__sugar', true)
 
     return { lines, circles }
 }

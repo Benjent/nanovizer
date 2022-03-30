@@ -108,9 +108,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../assets/styles/modules/data.scss';
-@import '../assets/styles/modules/entry.scss';
-
 .l-junction {
     &__graphs {
         &__item {

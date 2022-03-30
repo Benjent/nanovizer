@@ -1,0 +1,10 @@
+.boxplot {
+    &__line {
+        stroke: $black;
+    }
+
+    &__box {
+        stroke: $black;
+        fill: $turquoise;
+    }
+}

@@ -75,8 +75,3 @@ export default {
     },
 }
 </script>
-
-<style lang="scss">
-@import '../assets/styles/modules/data.scss';
-@import '../assets/styles/modules/entry.scss';
-</style>

@@ -49,7 +49,12 @@ export default {
         filteredD3Data() {
             const { nodes, links } = this.d3Data
             const filteredLinks = links.filter((d) => d.value >= this.threshold)
-            return { nodes, links: filteredLinks}
+            const filteredNodes = nodes.filter((d) => {
+                const start = filteredLinks.map((d) => d.start).includes(d)
+                const end = filteredLinks.map((d) => d.end).includes(d)
+                return start || end
+            })
+            return { nodes: filteredNodes, links: filteredLinks}
         },
         percentageFilteredD3Data() {
             const ratio = this.d3Data && this.filteredD3Data ? this.filteredD3Data.links.length / this.d3Data.links.length : 1
@@ -116,27 +121,22 @@ export default {
                     .join(' ');
                 })
             .style("fill", "none")
-            .attr("stroke", "#69b3a2")
+            .classed("lollipop__stick", true)
 
             // const size = d3.scaleLinear()
             // .domain([1, 1000])
             // .range([2,10])
 
-            // svg
-            // .selectAll()
-            // .data(nodes)
-            // .enter()
-            // .append("circle")
-            //     .attr("cx", (d) => xScale(d))
-            //     .attr("cy", height - 30)
-            //     .attr("r", (d) => 2)
-            //     .style("fill", "#69b3a2")
+            svg
+            .selectAll()
+            .data(nodes)
+            .enter()
+            .append("circle")
+                .attr("cx", (d) => xScale(d))
+                .attr("cy", height - 30)
+                .attr("r", (d) => 4)
+                .classed("lollipop__sugar", true)
         },
     },
 }
 </script>
-
-<style lang="scss">
-@import '../assets/styles/modules/data.scss';
-@import '../assets/styles/modules/entry.scss';
-</style>

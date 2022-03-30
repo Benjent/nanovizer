@@ -81,7 +81,7 @@ export default {
             const q3 = d3.quantile(this.d3Data, .75)
             const interQuantileRange = q3 - q1
             const gaussianishScale = 1.5
-            const min = q1 - gaussianishScale * interQuantileRange
+            const min = q3 - gaussianishScale * interQuantileRange
             const max = q1 + gaussianishScale * interQuantileRange
             const yMin = Math.min(this.d3Data[0], min)
             const yMax = Math.max(this.d3Data[this.d3Data.length - 1], max)
@@ -94,7 +94,7 @@ export default {
             const yAxis = d3.axisLeft(yScale)
             const yLegend = svg.call(yAxis)
 
-            const boxCenter = 200
+            const boxCenter = width / 2
             const boxWidth = 100
 
             // Show the main vertical line
@@ -104,34 +104,28 @@ export default {
             .attr("x2", boxCenter)
             .attr("y1", yScale(min))
             .attr("y2", yScale(max))
-            .attr("stroke", "black")
+            .classed("boxplot__line", true)
 
             // Show the box
             svg
             .append("rect")
-            .attr("x", boxCenter - boxWidth / 2)
+            .attr("x", boxCenter - (boxWidth / 2))
             .attr("y", yScale(q3))
             .attr("height", yScale(q1) - yScale(q3))
-            .attr("width", boxWidth )
-            .attr("stroke", "black")
-            .style("fill", "#69b3a2")
+            .attr("width", boxWidth)
+            .classed("boxplot__box", true)
 
             svg
             .selectAll()
             .data([min, median, max])
             .enter()
             .append("line")
-            .attr("x1", boxCenter - boxWidth /2)
-            .attr("x2", boxCenter + boxWidth /2)
+            .attr("x1", boxCenter - (boxWidth / 2))
+            .attr("x2", boxCenter + (boxWidth / 2))
             .attr("y1", (d) => yScale(d))
             .attr("y2", (d) => yScale(d))
-            .attr("stroke", "grey")
+            .classed("boxplot__line", true)
         },
     },
 }
 </script>
-
-<style lang="scss">
-@import '../assets/styles/modules/data.scss';
-@import '../assets/styles/modules/entry.scss';
-</style>

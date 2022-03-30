@@ -112,7 +112,8 @@ export default {
 </template>
 
 <style lang="scss">
-@import './assets/base.css';
+@import './assets/styles/main.scss';
+@import './assets/base.css'; // TODO refact
 
 .l-graphs {
     margin: 0 auto;
