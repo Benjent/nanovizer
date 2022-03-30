@@ -94,35 +94,43 @@ export default {
             const yAxis = d3.axisLeft(yScale)
             const yLegend = svg.call(yAxis)
 
-            const boxCenter = width / 2
+            const center = width / 2
             const boxWidth = 100
 
-            // Show the main vertical line
-            svg.append("line")
-                .attr("x1", boxCenter)
-                .attr("x2", boxCenter)
+            const verticalLine = svg.append("line")
+                .attr("x1", center)
+                .attr("x2", center)
                 .attr("y1", yScale(min))
                 .attr("y2", yScale(max))
                 .classed("boxplot__line", true)
 
-            // Show the box
-            svg.append("rect")
-                .attr("x", boxCenter - (boxWidth / 2))
+            const box = svg.append("rect")
+                .attr("x", center - (boxWidth / 2))
                 .attr("y", yScale(q3))
                 .attr("height", yScale(q1) - yScale(q3))
                 .attr("width", boxWidth)
                 .classed("boxplot__box", true)
 
-            svg
+            const lines = svg
             .selectAll()
             .data([min, median, max])
             .enter()
             .append("line")
-                .attr("x1", boxCenter - (boxWidth / 2))
-                .attr("x2", boxCenter + (boxWidth / 2))
+                .attr("x1", center - (boxWidth / 2))
+                .attr("x2", center + (boxWidth / 2))
                 .attr("y1", (d) => yScale(d))
                 .attr("y2", (d) => yScale(d))
                 .classed("boxplot__line", true)
+
+            const circles = svg.selectAll()
+            .data(this.d3Data.filter((d) => d > max || d < min))
+            .enter()
+            .append("circle")
+                .attr("data-key", (d) => d.key)
+                .attr("cx", (d) => center)
+                .attr("cy", (d) => yScale(d))
+                .attr("r", "4")
+                .classed('lollipop__sugar', true)
         },
     },
 }

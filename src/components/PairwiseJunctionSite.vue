@@ -95,7 +95,6 @@ export default {
             }
         },
         drawGraph() {
-            // https://d3-graph-gallery.com/graph/arc_highlight.html
             const { nodes, links } = this.filteredD3Data
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width / 2)
             const xMax = d3.max(nodes)

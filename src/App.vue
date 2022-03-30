@@ -21,9 +21,7 @@ export default {
     },
     methods: {
         drawTuto(data, id) {
-            // TODO afficher les outliers EN DEHORS de la box pour boxplot
             // TODO tooltip + valeur x et y
-            // TODO effet visuel au survol
             // TODO barcode
 
             // https://d3-graph-gallery.com/graph/interactivity_zoom.html

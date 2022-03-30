@@ -57,7 +57,6 @@ const setScales = (data, svg, width, height, options = {}) => {
 }
 
 const drawLollipops = (data, svg, xScale, yScale) => {
-    // Lines
     const lines = svg.selectAll()
     .data(data)
     .enter()
@@ -69,7 +68,6 @@ const drawLollipops = (data, svg, xScale, yScale) => {
         .attr("y2", yScale(0))
         .classed('lollipop__stick', true)
 
-    // Circles
     const circles = svg.selectAll()
     .data(data)
     .enter()
