@@ -40,14 +40,17 @@ export default {
             const parsedData = d3.tsvParse(data)
             return parsedData.map((d) => {
                 const blocks = d.Barcode.split('_')
-                return blocks.map((b) => Number.parseInt(b))
+                return {
+                    barCode: d.Barcode,
+                    blocks: blocks.map((b) => Number.parseInt(b)),
+                }
             })
         },
         drawGraph() {
-            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
+            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width, { margin: { left: 180 } })
             const nbBarCodeBlocks = 3
-            const xMin = d3.min(this.d3Data.map((d) => d[0]))
-            const xMax = d3.max(this.d3Data.map((d) => d[nbBarCodeBlocks - 1]))
+            const xMin = d3.min(this.d3Data.map((d) => d.blocks[0]))
+            const xMax = d3.max(this.d3Data.map((d) => d.blocks[nbBarCodeBlocks - 1]))
             const xScale = d3.scaleLinear().range([0, width]).domain([xMin, xMax])
             const xAxis = d3.axisBottom(xScale)
             const xLegend = svg.append('g')
@@ -58,7 +61,7 @@ export default {
                     .style('text-anchor', 'end')
 
             const yScale = d3.scaleBand()
-                .domain(this.d3Data.map((d, i) => i))
+                .domain(this.d3Data.map((d) => d.barCode))
                 .range([height, 0])
                 .padding(0.1)
             const yAxis = d3.axisLeft(yScale)
@@ -70,12 +73,12 @@ export default {
             
             for (let i = 0; i < nbBarCodeBlocks; i++) {
                 bars.append('rect')
-                    .attr('data-start', (d) => d[i])
-                    .attr('data-end', (d) => d[i + 1])
-                    .attr('x', (d) => xScale(d[i]))
-                    .attr('y', (d, j) => i % 2 === 0 ? yScale(j) : yScale(j) + yScale.bandwidth() / 2)
+                    .attr('data-start', (d) => d.blocks[i])
+                    .attr('data-end', (d) => d.blocks[i + 1])
+                    .attr('x', (d) => xScale(d.blocks[i]))
+                    .attr('y', (d) => i % 2 === 0 ? yScale(d.barCode) : yScale(d.barCode) + yScale.bandwidth() / 2)
                     .attr('height', () => i % 2 === 0 ? yScale.bandwidth() : 0)
-                    .attr('width', (d) => xScale(d[i + 1] - d[i]))
+                    .attr('width', (d) => xScale(d.blocks[i + 1] - d.blocks[i]))
                     .classed('rectangle', true)
             }
 

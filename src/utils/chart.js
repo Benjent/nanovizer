@@ -11,10 +11,10 @@ const parseTsv = (data) => {
     })
 }
 
-const setSvg = (id, wrapperWidth, rawHeight = 500) => {
-    const margin = { top: 10, right: 30, bottom: 50, left: 40 }
+const setSvg = (id, wrapperWidth, options = {}) => {
+    const margin = Object.assign({ top: 10, right: 30, bottom: 50, left: 40 }, options.margin)
     const width = wrapperWidth - margin.left - margin.right
-    const height = rawHeight - margin.top - margin.bottom
+    const height = (options.height || 500) - margin.top - margin.bottom
 
     d3.select(`#${id} svg`).remove()
     const svg = d3.select(`#${id}`)
