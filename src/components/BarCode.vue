@@ -109,7 +109,6 @@ export default {
             })
 
             // TODO input commun de taille de génôme
-            // TODO style data -> mettre en aside?
         },
     },
 }

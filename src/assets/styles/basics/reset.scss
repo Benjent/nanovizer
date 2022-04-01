@@ -1,21 +1,28 @@
-*,
-*::before,
-*::after {
+* {
     box-sizing: border-box;
+}
+
+body {
     margin: 0;
     position: relative;
     font-weight: normal;
     font-size: initial;
 }
 
+p {
+    margin: 0;
+}
+
 button {
     border: none;
     font-family: inherit;
+    font-size: inherit;
 }
 
 input {
     border: none;
     font-family: inherit;
+    font-size: inherit;
 
     &:focus {
         outline: none;

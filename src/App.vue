@@ -19,6 +19,11 @@ export default {
         ReadLength,
         StartSitePosition,
     },
+    data() {
+        return {
+            email: 'benjent@hotmail.fr',
+        }
+    },
     methods: {
         drawTuto(data, id) {
             // https://d3-graph-gallery.com/graph/interactivity_zoom.html
@@ -93,15 +98,22 @@ export default {
 </script>
 
 <template>
-    <main class="l-graphs">
-        <ReadLength />
-        <BlockNumber />
-        <StartSitePosition />
-        <Junction :type="3"/>
-        <Junction :type="5"/>
-        <PairwiseJunctionSite />
-        <BarCode />
-    </main>
+    <div class="l-graphs">
+        <main>
+            <ReadLength />
+            <BlockNumber />
+            <StartSitePosition />
+            <Junction :type="3"/>
+            <Junction :type="5"/>
+            <PairwiseJunctionSite />
+            <BarCode />
+        </main>
+        <footer class="l-graphs__footer">
+            <p>
+                Like this webapp? Have a feedback? Give me a shout at {{email}}!
+            </p>
+        </footer>
+    </div>
 </template>
 
 <style lang="scss">
@@ -114,5 +126,11 @@ export default {
     width: 100%;
     text-align: center;
     font-weight: normal;
+
+    &__footer {
+        padding: var(--button-padding-v) var(--button-padding-h);
+        background: lighten($marine, 10%);
+        font-size: 0.8rem;
+    }
 }
 </style>
