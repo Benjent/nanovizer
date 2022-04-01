@@ -109,9 +109,7 @@ export default {
             <BarCode />
         </main>
         <footer class="l-graphs__footer">
-            <p>
-                Like this webapp? Have a feedback? Give me a shout at {{email}}!
-            </p>
+            Like this webapp? Have a feedback? Give me a shout at {{email}}!
         </footer>
     </div>
 </template>
