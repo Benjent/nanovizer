@@ -29,8 +29,10 @@ import FileReader from './FileReader.vue'
                     <label class="data__label">Displayed data percentage</label>
                     <output class="data__value">{{percentageFilteredD3Data}}%</output>
                 </div>
-                <ChartSaver :id-graph="idGraph" />
-                <ChartSaver :id-graph="`${idGraph}Sorted`" />
+                <div class="l-junction__actions">
+                    <ChartSaver :id-graph="idGraph" />
+                    <ChartSaver :id-graph="`${idGraph}Sorted`" />
+                </div>
             </footer>
         </div>
     </section>
@@ -119,6 +121,11 @@ export default {
             width: 50%;
             box-sizing: border-box;
         }
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: space-around;
     }
 }
 </style>
