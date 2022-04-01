@@ -8,8 +8,8 @@ import FileReader from './FileReader.vue'
 
 <template>
     <section class="entry l-junction">
-        <h2>{{type}}' Junction</h2>
-        <FileReader @load="parseFile" />
+        <h2 class="title title--2">{{type}}' Junction</h2>
+        <FileReader :id="`file${type}Junction`" @load="parseFile" />
         <div>
             <div class="l-junction__graphs">
                 <div :id="idGraph" :ref="idGraph" class="entry__graph l-junction__graphs__item"></div>
@@ -18,14 +18,14 @@ import FileReader from './FileReader.vue'
             <footer v-if="d3Data">
                 <div class="data">
                     <label class="data__label">Seuil</label>
-                    <input type="number" v-model.number="threshold"/>
+                    <input type="number" class="input" v-model.number="threshold"/>
                 </div>
                 <div class="data">
                     <label class="data__label">Max</label>
                     <output class="data__value">{{max}}</output>
                 </div>
                 <div class="data">
-                    <label class="data__label">Pourcentage de données affichées</label>
+                    <label class="data__label">Displayed data percentage</label>
                     <output class="data__value">{{percentageFilteredD3Data}}%</output>
                 </div>
                 <ChartSaver :id-graph="idGraph" />
@@ -101,7 +101,7 @@ export default {
         drawGraphSorted() {
             const { svg, width, height, margin } = chartUtils.setSvg(`${this.idGraph}Sorted`, this.$refs[`${this.idGraph}Sorted`].getBoundingClientRect().width)
             const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3DataSorted, svg, width, height, { sorted: true })
-            const { lines, circles } = chartUtils.drawLollipops(this.idGraph, this.filteredD3DataSorted, svg, xScale, yScale)
+            const { lines, circles } = chartUtils.drawLollipops(`${this.idGraph}Sorted`, this.filteredD3DataSorted, svg, xScale, yScale)
         },
     },
 }

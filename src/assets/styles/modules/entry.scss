@@ -1,6 +1,10 @@
 .entry {
-    padding: 10px 20px;
+    padding: 40px 20px;
     width: 100%;
+
+    &:not(:first-child) {
+        border-top: solid 1px lighten($marine, 10%);
+    }
 
     &__graph {
         margin-bottom: 20px;

@@ -9,21 +9,21 @@ import FileReader from './FileReader.vue'
 
 <template>
     <section class="entry">
-        <h2>Pairwise junction site</h2>
-        <FileReader @load="parseFile" />
+        <h2 class="title title--2">Pairwise junction site</h2>
+        <FileReader id="filePairwiseJunctionSite" @load="parseFile" />
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data">
                 <div class="data">
                     <label class="data__label">Seuil</label>
-                    <input type="number" v-model.number="threshold"/>
+                    <input type="number" class="input" v-model.number="threshold"/>
                 </div>
                 <div class="data">
                     <label class="data__label">Max</label>
                     <output class="data__value">{{max}}</output>
                 </div>
                 <div class="data">
-                    <label class="data__label">Pourcentage de données affichées</label>
+                    <label class="data__label">Displayed data percentage</label>
                     <output class="data__value">{{percentageFilteredD3Data}}%</output>
                 </div>
                 <ChartSaver :id-graph="idGraph" />
@@ -97,7 +97,7 @@ export default {
         },
         drawGraph() {
             const { nodes, links } = this.filteredD3Data
-            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width / 2)
+            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width / 1.4)
             const xMax = d3.max(nodes)
             this.max = d3.max(links.map((l) => l.value))
 
@@ -116,10 +116,10 @@ export default {
                         (start - end) / 2, ',',    // Next 2 lines are the coordinates of the inflexion point. Height of this point is proportional with start - end distance
                         (start - end) / 2, 0, 0, ',',
                         start < end ? 1 : 0, end, ',', height - 30] // We always want the arc on top. So if end is before start, putting 0 here turn the arc upside down.
-                        .join(' ');
+                        .join(' ')
                     })
-                .style("fill", "none")
-                .classed("lollipop__stick", true)
+                .style('fill', 'none')
+                .classed('lollipop__stick', true)
 
             // const size = d3.scaleLinear()
             // .domain([1, 1000])
@@ -129,25 +129,25 @@ export default {
             .selectAll()
             .data(nodes)
             .enter()
-            .append("circle")
-                .attr("data-key", (d) => d)
-                .attr("cx", (d) => xScale(d))
-                .attr("cy", height - 30)
-                .attr("r", (d) => 4)
-                .classed("lollipop__sugar", true)
+            .append('circle')
+                .attr('data-key', (d) => d)
+                .attr('cx', (d) => xScale(d))
+                .attr('cy', height - 30)
+                .attr('r', (d) => 4)
+                .classed('lollipop__sugar', true)
 
             const labels = svg
             .selectAll()
             .data(nodes)
             .enter()
-            .append("text")
-                .attr("data-key", (d) => d)
-                .attr("x", (d) => xScale(d))
-                .attr("y", height - 10)
+            .append('text')
+                .attr('data-key', (d) => d)
+                .attr('x', (d) => xScale(d))
+                .attr('y', height - 10)
                 .text((d) => d)
-                .style("text-anchor", "middle")
-                .style("font-size", "0.71em")
-                .style("opacity", 0)
+                .style('text-anchor', 'middle')
+                .style('font-size', '0.71em')
+                .style('opacity', 0)
 
             const tooltip = tooltipUtils.set(this.idGraph)
             circles
@@ -159,10 +159,11 @@ export default {
                 const key = Number.parseInt(event.target.dataset.key)
                 arcs.style('opacity', (l) => [l.start, l.end].includes(key) ? 1 : opacity)
                 labels.style('opacity', (l) => l === key ? 1 : 0)
-                tooltip.style("opacity", 1)
+                tooltip.style('opacity', 1)
             })
-            .on("mousemove", function (event) {
+            .on('mousemove', function (event) {
                 tooltipUtils.setCoordinates(event, tooltip)
+                tooltip.style('left', event.clientX + 'px') // Somehow d3 messes up x position
                 const key = Number.parseInt(event.target.dataset.key)
                 tooltip
                 .html(`
@@ -173,7 +174,7 @@ export default {
                 circles.style('opacity', 1)
                 arcs.style('opacity', 1)
                 labels.style('opacity', 0)
-                tooltip.style("opacity", 0)
+                tooltip.style('opacity', 0)
             })
         },
     },

@@ -1,0 +1,11 @@
+.button {
+    padding: var(--button-padding-v) var(--button-padding-h);
+    background: $pink;
+    color: $white;
+    cursor: pointer;
+    border-radius: var(--radius);
+
+    &:hover {
+        background: lighten($pink, 10%);
+    }
+}

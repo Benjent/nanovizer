@@ -12,18 +12,19 @@ const parseTsv = (data) => {
 }
 
 const setSvg = (id, wrapperWidth, rawHeight = 500) => {
-    const margin = { top: 10, right: 30, bottom: 90, left: 40 }
+    const margin = { top: 10, right: 30, bottom: 50, left: 40 }
     const width = wrapperWidth - margin.left - margin.right
     const height = rawHeight - margin.top - margin.bottom
 
     d3.select(`#${id} svg`).remove()
     const svg = d3.select(`#${id}`)
-    .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")")
+    .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .classed('d3', true)
+    .append('g')
+        .attr('transform',
+            'translate(' + margin.left + ',' + margin.top + ')')
 
     return { svg, width, height, margin }
 }
@@ -36,13 +37,25 @@ const setScales = (data, svg, width, height, options = {}) => {
         : d3.scaleLinear().range([0, width]).domain([0, xMax])
 
     const xAxis = d3.axisBottom(xScale)
+    if (options.nice && !options.sorted) {
+        const integerTicks = xScale.ticks().filter((t) => Number.isInteger(t))
+        xAxis.tickValues(integerTicks).tickFormat((t) => Number.parseInt(t))
+    }
 
-    const xLegend = svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
+    const xLegend = svg.append('g')
+    .attr('transform', 'translate(0,' + height + ')')
     .call(xAxis)
-    .selectAll("text")
-        .attr("transform", "translate(-10,0)rotate(-45)")
-        .style("text-anchor", "end");
+
+    if (data.length > 1000) {
+        xLegend.selectAll('text')
+        .attr('transform', 'translate(-10,0)rotate(-45)')
+        .style('text-anchor', 'end')
+    }
+
+    if (options.sorted) {
+        xLegend.selectAll('.tick')
+            .style('opacity', 0)
+    }
 
     const yMax = d3.max(data.map((d) => d.value))
     const yScale = d3.scaleLinear()
@@ -51,7 +64,7 @@ const setScales = (data, svg, width, height, options = {}) => {
 
     const yAxis = d3.axisLeft(yScale)
 
-    const yLegend = svg.append("g")
+    const yLegend = svg.append('g')
     .call(yAxis)
 
     return { xScale, xAxis, xMax, yScale, yAxis, yMax }
@@ -61,24 +74,24 @@ const drawLollipops = (idGraph, data, svg, xScale, yScale) => {
     const lines = svg.selectAll()
     .data(data)
     .enter()
-    .append("line")
-        .attr("data-key", (d) => d.key)
-        .attr("data-value", (d) => d.value)
-        .attr("x1", (d) => xScale(d.key))
-        .attr("x2", (d) => xScale(d.key))
-        .attr("y1", (d) => yScale(d.value))
-        .attr("y2", yScale(0))
+    .append('line')
+        .attr('data-key', (d) => d.key)
+        .attr('data-value', (d) => d.value)
+        .attr('x1', (d) => xScale(d.key))
+        .attr('x2', (d) => xScale(d.key))
+        .attr('y1', (d) => yScale(d.value))
+        .attr('y2', yScale(0))
         .classed('lollipop__stick', true)
 
     const circles = svg.selectAll()
     .data(data)
     .enter()
-    .append("circle")
-        .attr("data-key", (d) => d.key)
-        .attr("data-value", (d) => d.value)
-        .attr("cx", (d) => xScale(d.key))
-        .attr("cy", (d) => yScale(d.value))
-        .attr("r", "4")
+    .append('circle')
+        .attr('data-key', (d) => d.key)
+        .attr('data-value', (d) => d.value)
+        .attr('cx', (d) => xScale(d.key))
+        .attr('cy', (d) => yScale(d.value))
+        .attr('r', '4')
         .classed('lollipop__sugar', true)
 
     const tooltip = tooltipUtils.set(idGraph)
@@ -92,9 +105,9 @@ const drawLollipops = (idGraph, data, svg, xScale, yScale) => {
         const key = Number.parseInt(event.target.dataset.key)
         lines.style('opacity', (l) => l.key === key ? 1 : opacity)
 
-        tooltip.style("opacity", 1)
+        tooltip.style('opacity', 1)
     })
-    .on("mousemove", function (event) {
+    .on('mousemove', function (event) {
         tooltipUtils.setCoordinates(event, tooltip)
         const key = Number.parseInt(event.target.dataset.key)
         const value = Number.parseInt(event.target.dataset.value)
@@ -107,7 +120,7 @@ const drawLollipops = (idGraph, data, svg, xScale, yScale) => {
     .on('mouseleave', function () {
         circles.style('opacity', 1)
         lines.style('opacity', 1)
-        tooltip.style("opacity", 0)
+        tooltip.style('opacity', 0)
     })
 
     return { lines, circles }

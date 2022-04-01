@@ -1,0 +1,21 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    position: relative;
+    font-weight: normal;
+    font-size: initial;
+}
+
+button {
+    border: none;
+}
+
+input {
+    border: none;
+
+    &:focus {
+        outline: none;
+    }
+}

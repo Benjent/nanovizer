@@ -1,0 +1,17 @@
+.input {
+    padding: var(--button-padding-v) var(--button-padding-h);
+    background: lighten($marine, 10%);
+    border: solid 1px $blue;
+    border-top-color: $marine;
+    border-right-color: $marine;
+    border-left-color: $marine;
+    color: $white;
+
+    &:focus {
+        border: solid 1px $blue;
+    }
+
+    &--file {
+        display: none;
+    }
+}

@@ -12,6 +12,9 @@ export default {
     },
     methods: {
         saveGraph() {
+            // console.log(Array.from(document.getElementById(this.idGraph).children))
+            // Array.from(document.getElementById(this.idGraph).children).filter((n) => n.tagName === 'svg')
+            // console.log(document.getElementById(this.idGraph).children)
             saveSvgAsPng(document.getElementById(this.idGraph).children[0], this.idGraph)
         },
     },
@@ -20,6 +23,6 @@ export default {
 
 <template>
     <label>
-        <button @click="saveGraph">Enregistrer la visualisation</button>
+        <button class="button" @click="saveGraph">Enregistrer la visualisation</button>
     </label>
 </template>

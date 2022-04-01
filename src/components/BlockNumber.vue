@@ -7,8 +7,8 @@ import FileReader from './FileReader.vue'
 
 <template>
     <section class="entry">
-        <h2>Number of blocks</h2>
-        <FileReader @load="parseFile" />
+        <h2 class="title title--2">Number of blocks</h2>
+        <FileReader id="fileBlockNumber" @load="parseFile" />
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data">
@@ -59,7 +59,7 @@ export default {
         },
         drawGraph() {
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
-            const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3Data, svg, width, height)
+            const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3Data, svg, width, height, { nice: true })
             const { lines, circles } = chartUtils.drawLollipops(this.idGraph, this.filteredD3Data, svg, xScale, yScale)
 
             this.max = yMax

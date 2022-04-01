@@ -7,21 +7,21 @@ import FileReader from './FileReader.vue'
 
 <template>
     <section class="entry">
-        <h2>Start site position</h2>
-        <FileReader @load="parseFile" />
+        <h2 class="title title--2">Start site position</h2>
+        <FileReader :id="'fileStartSitePosition'" @load="parseFile" />
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data">
                 <div class="data">
                     <label class="data__label">Seuil</label>
-                    <input type="number" v-model.number="threshold"/>
+                    <input type="number" class="input" v-model.number="threshold"/>
                 </div>
                 <div class="data">
                     <label class="data__label">Max</label>
                     <output class="data__value">{{max}}</output>
                 </div>
                 <div class="data">
-                    <label class="data__label">Pourcentage de données affichées</label>
+                    <label class="data__label">Displayed data percentage</label>
                     <output class="data__value">{{percentageFilteredD3Data}}%</output>
                 </div>
                 <ChartSaver :id-graph="idGraph" />

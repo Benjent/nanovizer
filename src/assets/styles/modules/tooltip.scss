@@ -1,5 +1,7 @@
 .tooltip {
-    background: white;
-    border: solid 1px $black;
-    padding: 4px;
+    background: $blue;
+    padding: var(--button-padding-v) var(--button-padding-h);
+    border-radius: var(--radius);
+    font-size: 0.8rem;
+    text-align: left;
 }
