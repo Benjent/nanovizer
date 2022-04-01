@@ -77,7 +77,6 @@ export default {
             return parsedData.map((d) => Number.parseInt(d.size))
         },
         drawGraph() {
-            console.log('too much?')
             if (!this.$refs[this.idGraph] || !this.d3Data) { return }
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
 
