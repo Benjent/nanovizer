@@ -12,7 +12,7 @@ import FileReader from './FileReader.vue'
         <FileReader id="fileBarCode" @load="parseFile" />
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
-            <footer v-if="d3Data">
+            <footer v-if="d3Data" class="entry__footer">
                 <ChartSaver :id-graph="idGraph" />
             </footer>
         </div>

@@ -9,4 +9,10 @@
     &__graph {
         margin-bottom: 20px;
     }
+
+    &__footer {
+        & > *:not(:first-child) {
+            margin-top: 20px;
+        }
+    }
 }

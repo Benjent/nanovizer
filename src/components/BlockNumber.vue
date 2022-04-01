@@ -11,7 +11,7 @@ import FileReader from './FileReader.vue'
         <FileReader id="fileBlockNumber" @load="parseFile" />
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
-            <footer v-if="d3Data">
+            <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
                     <label class="data__label">Max</label>
                     <output class="data__value">{{max}}</output>

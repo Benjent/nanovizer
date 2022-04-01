@@ -11,6 +11,10 @@
         border: solid 1px $blue;
     }
 
+    &:hover {
+        background: lighten($marine, 20%);
+    }
+
     &--file {
         display: none;
     }

@@ -15,7 +15,7 @@ import FileReader from './FileReader.vue'
                 <div :id="idGraph" :ref="idGraph" class="entry__graph l-junction__graphs__item"></div>
                 <div :id="`${idGraph}Sorted`" :ref="`${idGraph}Sorted`" class="entry__graph l-junction__graphs__item"></div>
             </div>
-            <footer v-if="d3Data">
+            <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
                     <label class="data__label">Seuil</label>
                     <input type="number" class="input" v-model.number="threshold"/>

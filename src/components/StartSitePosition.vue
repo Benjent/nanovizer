@@ -11,7 +11,7 @@ import FileReader from './FileReader.vue'
         <FileReader :id="'fileStartSitePosition'" @load="parseFile" />
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
-            <footer v-if="d3Data">
+            <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
                     <label class="data__label">Seuil</label>
                     <input type="number" class="input" v-model.number="threshold"/>

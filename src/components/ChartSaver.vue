@@ -22,7 +22,5 @@ export default {
 </script>
 
 <template>
-    <label>
-        <button class="button" @click="saveGraph">Enregistrer la visualisation</button>
-    </label>
+    <button class="button" @click="saveGraph">Enregistrer la visualisation</button>
 </template>
