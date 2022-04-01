@@ -19,7 +19,7 @@ export default {
 
 <template>
     <div class="l-file-reader">
-        <label :for="id" class="button">Select a file</label>
+        <label :for="id" class="button">Load file</label>
         <input type="file" class="button input--file" :id="id" @change="loadFile">
     </div>
 </template>
