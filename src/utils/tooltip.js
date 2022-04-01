@@ -15,7 +15,15 @@ const setCoordinates = (event, tooltip) => {
         .style('top', (d3.pointer(event)[1]) + 'px')
 }
 
+const reset = (tooltip) => {
+    tooltip
+        .style('opacity', 0)
+        .style('left', 0 + 'px') // Prevent from being out of the webap width on window resize
+        .style('top', 0 + 'px')
+}
+
 export default {
+    reset,
     set,
     setCoordinates,
 }

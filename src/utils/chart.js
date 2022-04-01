@@ -118,9 +118,9 @@ const drawLollipops = (idGraph, data, svg, xScale, yScale) => {
         `)
     })
     .on('mouseleave', function () {
+        tooltipUtils.reset(tooltip)
         circles.style('opacity', 1)
         lines.style('opacity', 1)
-        tooltip.style('opacity', 0)
     })
 
     return { lines, circles }

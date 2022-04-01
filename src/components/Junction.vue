@@ -2,6 +2,7 @@
 import chartUtils from '../utils/chart'
 import mathUtils from '../utils/math'
 import numberUtils from '../utils/number'
+import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
 import FileReader from './FileReader.vue'
 </script>
@@ -37,6 +38,7 @@ import FileReader from './FileReader.vue'
 
 <script>
 export default {
+    mixins: [resizeMixin],
     components: {
         ChartSaver,
         FileReader,
@@ -92,6 +94,7 @@ export default {
             this.drawGraphSorted()
         },
         drawGraph() {
+            if (!this.$refs[this.idGraph] || !this.filteredD3Data) { return }
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
             const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3Data, svg, width, height)
             const { lines, circles } = chartUtils.drawLollipops(this.idGraph, this.filteredD3Data, svg, xScale, yScale)
@@ -99,6 +102,7 @@ export default {
             this.max = yMax
         },
         drawGraphSorted() {
+            if (!this.$refs[`${this.idGraph}Sorted`] || !this.filteredD3Data) { return }
             const { svg, width, height, margin } = chartUtils.setSvg(`${this.idGraph}Sorted`, this.$refs[`${this.idGraph}Sorted`].getBoundingClientRect().width)
             const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3DataSorted, svg, width, height, { sorted: true })
             const { lines, circles } = chartUtils.drawLollipops(`${this.idGraph}Sorted`, this.filteredD3DataSorted, svg, xScale, yScale)

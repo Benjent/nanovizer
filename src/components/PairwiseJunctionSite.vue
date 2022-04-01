@@ -3,6 +3,7 @@ import * as d3 from 'd3'
 import chartUtils from '../utils/chart'
 import numberUtils from '../utils/number'
 import tooltipUtils from '../utils/tooltip'
+import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
 import FileReader from './FileReader.vue'
 </script>
@@ -34,6 +35,7 @@ import FileReader from './FileReader.vue'
 
 <script>
 export default {
+    mixins: [resizeMixin],
     components: {
         ChartSaver,
         FileReader,
@@ -48,6 +50,7 @@ export default {
     },
     computed: {
         filteredD3Data() {
+            if (!this.d3Data) { return }
             const { nodes, links } = this.d3Data
             const filteredLinks = links.filter((d) => d.value >= this.threshold)
             const filteredNodes = nodes.filter((d) => {
@@ -96,8 +99,9 @@ export default {
             }
         },
         drawGraph() {
+            if (!this.$refs[this.idGraph] || !this.filteredD3Data) { return }
             const { nodes, links } = this.filteredD3Data
-            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width / 1.4)
+            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width / 1.4, { height: this.$refs[this.idGraph].getBoundingClientRect().width / 2 })
             const xMax = d3.max(nodes)
             this.max = d3.max(links.map((l) => l.value))
 
@@ -171,10 +175,10 @@ export default {
                 `)
             })
             .on('mouseleave', function () {
+                tooltipUtils.reset(tooltip)
                 circles.style('opacity', 1)
                 arcs.style('opacity', 1)
                 labels.style('opacity', 0)
-                tooltip.style('opacity', 0)
             })
         },
     },

@@ -2,6 +2,7 @@
 import * as d3 from 'd3'
 import chartUtils from '../utils/chart'
 import tooltipUtils from '../utils/tooltip'
+import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
 import FileReader from './FileReader.vue'
 </script>
@@ -21,6 +22,7 @@ import FileReader from './FileReader.vue'
 
 <script>
 export default {
+    mixins: [resizeMixin],
     components: {
         ChartSaver,
         FileReader,
@@ -47,6 +49,7 @@ export default {
             })
         },
         drawGraph() {
+            if (!this.$refs[this.idGraph] || !this.d3Data) { return }
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width, { margin: { left: 180 } })
             const nbBarCodeBlocks = 3
             const xMin = d3.min(this.d3Data.map((d) => d.blocks[0]))
@@ -94,7 +97,6 @@ export default {
             })
             .on('mousemove', function (event) {
                 tooltipUtils.setCoordinates(event, tooltip)
-                // tooltip.style('left', event.clientX + 'px') // Somehow d3 messes up x position
                 const start = Number.parseInt(event.target.dataset.start)
                 const end = Number.parseInt(event.target.dataset.end)
                 tooltip
@@ -104,8 +106,8 @@ export default {
                 `)
             })
             .on('mouseleave', function () {
+                tooltipUtils.reset(tooltip)
                 blocks.style('opacity', 1)
-                tooltip.style('opacity', 0)
             })
 
             // TODO input commun de taille de génôme

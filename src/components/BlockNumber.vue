@@ -1,6 +1,7 @@
 <script setup>
 import chartUtils from '../utils/chart'
 import numberUtils from '../utils/number'
+import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
 import FileReader from './FileReader.vue'
 </script>
@@ -24,6 +25,7 @@ import FileReader from './FileReader.vue'
 
 <script>
 export default {
+    mixins: [resizeMixin],
     components: {
         ChartSaver,
         FileReader,
@@ -58,6 +60,7 @@ export default {
             this.drawGraph()
         },
         drawGraph() {
+            if (!this.$refs[this.idGraph] || !this.filteredD3Data) { return }
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
             const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3Data, svg, width, height, { nice: true })
             const { lines, circles } = chartUtils.drawLollipops(this.idGraph, this.filteredD3Data, svg, xScale, yScale)

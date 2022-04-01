@@ -3,6 +3,7 @@ import * as d3 from 'd3'
 import chartUtils from '../utils/chart'
 import numberUtils from '../utils/number'
 import tooltipUtils from '../utils/tooltip'
+import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
 import FileReader from './FileReader.vue'
 </script>
@@ -34,6 +35,7 @@ import FileReader from './FileReader.vue'
 
 <script>
 export default {
+    mixins: [resizeMixin],
     components: {
         ChartSaver,
         FileReader,
@@ -75,6 +77,8 @@ export default {
             return parsedData.map((d) => Number.parseInt(d.size))
         },
         drawGraph() {
+            console.log('too much?')
+            if (!this.$refs[this.idGraph] || !this.d3Data) { return }
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
 
             const q1 = d3.quantile(this.d3Data, .25)
@@ -124,7 +128,7 @@ export default {
                     `)
                 })
                 .on('mouseleave', function (d) {
-                    tooltipBox.style('opacity', 0)
+                    tooltipUtils.reset(tooltip)
                 })
 
             const lines = svg
@@ -159,7 +163,7 @@ export default {
                     `)
                 })
                 .on('mouseleave', function (d) {
-                    tooltipCircle.style('opacity', 0)
+                    tooltipUtils.reset(tooltipCircle)
                 })
         },
     },
