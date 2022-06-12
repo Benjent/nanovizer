@@ -51,9 +51,8 @@ export default {
         drawGraph() {
             if (!this.$refs[this.idGraph] || !this.d3Data) { return }
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width, { margin: { left: 180 } })
-            const nbBarCodeBlocks = 3
             const xMin = d3.min(this.d3Data.map((d) => d.blocks[0]))
-            const xMax = d3.max(this.d3Data.map((d) => d.blocks[nbBarCodeBlocks - 1]))
+            const xMax = d3.max(this.d3Data.map((d) => d.blocks[d.blocks.length - 1]))
             const xScale = d3.scaleLinear().range([0, width]).domain([xMin, xMax])
             const xAxis = d3.axisBottom(xScale)
             const xLegend = svg.append('g')
@@ -70,21 +69,23 @@ export default {
             const yAxis = d3.axisLeft(yScale)
             const yLegend = svg.append('g').call(yAxis)
 
-            const bars = svg.selectAll()
+            const entries = svg.selectAll()
                 .data(this.d3Data)
                 .enter()
-            
-            for (let i = 0; i < nbBarCodeBlocks; i++) {
-                bars.append('rect')
-                    .attr('data-start', (d) => d.blocks[i])
-                    .attr('data-end', (d) => d.blocks[i + 1])
-                    .attr('x', (d) => xScale(d.blocks[i]))
-                    .attr('y', (d) => i % 2 === 0 ? yScale(d.barCode) : yScale(d.barCode) + yScale.bandwidth() / 2)
-                    .attr('height', () => i % 2 === 0 ? yScale.bandwidth() : 0)
-                    .attr('width', (d) => xScale(d.blocks[i + 1] - d.blocks[i]))
-                    .classed('rectangle', true)
-            }
 
+            entries.each((d, i) => {
+                d.blocks.forEach(() => {
+                    entries.append('rect')
+                        .attr('data-start', (d) => d.blocks[i])
+                        .attr('data-end', (d) => d.blocks[i + 1])
+                        .attr('x', (d) => xScale(d.blocks[i]))
+                        .attr('y', (d) => i % 2 === 0 ? yScale(d.barCode) : yScale(d.barCode) + yScale.bandwidth() / 2)
+                        .attr('height', () => i % 2 === 0 ? yScale.bandwidth() : 1)
+                        .attr('width', (d) => xScale(d.blocks[i + 1] - d.blocks[i]))
+                        .classed('rectangle', true)
+                })
+            })
+            
             const tooltip = tooltipUtils.set(this.idGraph)
             const blocks = svg.selectAll('.rectangle')
             blocks
