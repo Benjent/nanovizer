@@ -5,13 +5,11 @@ import numberUtils from '../utils/number'
 import tooltipUtils from '../utils/tooltip'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
-import FileReader from './FileReader.vue'
 </script>
 
 <template>
     <section class="entry">
         <h2 class="title title--2">Read length</h2>
-        <FileReader id="fileReadLength" @load="parseFile" />
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
@@ -38,7 +36,11 @@ export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
-        FileReader,
+    },
+    props: {
+        data: {
+            type: Array,
+        },
     },
     data() {
         return {
@@ -61,21 +63,16 @@ export default {
         }
     },
     watch: {
-        threshold(value) {
+        data(value) {
+            this.d3Data = value.map((d) => d.size)
+            this.d3Data.sort(d3.ascending)
+            this.drawGraph()
+        },
+        threshold() {
             this.drawGraph()
         },
     },
     methods: {
-        parseFile(data) {
-            this.d3Data = this.parseTsv(data)
-            this.d3Data.sort(d3.ascending)
-
-            this.drawGraph()
-        },
-        parseTsv(data) {
-            const parsedData = d3.tsvParse(data)
-            return parsedData.map((d) => Number.parseInt(d.size))
-        },
         drawGraph() {
             if (!this.$refs[this.idGraph] || !this.d3Data) { return }
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
@@ -127,7 +124,7 @@ export default {
                     `)
                 })
                 .on('mouseleave', function (d) {
-                    tooltipUtils.reset(tooltip)
+                    tooltipUtils.reset(tooltipBox)
                 })
 
             const lines = svg

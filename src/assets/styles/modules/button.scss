@@ -5,7 +5,13 @@
     cursor: pointer;
     border-radius: var(--radius);
 
-    &:hover {
+    &:disabled {
+        background: $grey;
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
         background: lighten($pink, 10%);
     }
 }

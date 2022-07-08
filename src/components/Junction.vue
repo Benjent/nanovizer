@@ -4,13 +4,11 @@ import mathUtils from '../utils/math'
 import numberUtils from '../utils/number'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
-import FileReader from './FileReader.vue'
 </script>
 
 <template>
     <section class="entry l-junction">
         <h2 class="title title--2">{{type}}' Junction</h2>
-        <FileReader :id="`file${type}Junction`" @load="parseFile" />
         <div>
             <div class="l-junction__graphs">
                 <div :id="idGraph" :ref="idGraph" class="entry__graph l-junction__graphs__item"></div>
@@ -43,9 +41,11 @@ export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
-        FileReader,
     },
     props: {
+        data: {
+            type: Array,
+        },
         type: {
             type: Number,
             required: true,
@@ -79,17 +79,24 @@ export default {
         },
     },
     watch: {
-        threshold(value) {
+        data(value) {
+            const parsedData = this.parseData(value)
+            this.d3Data = mathUtils.sort(parsedData, 'key')
+            this.d3DataSorted = mathUtils.sort(parsedData, 'value', 'DESC')
+            this.drawGraphs()
+        },
+        threshold() {
             this.drawGraphs()
         },
     },
     methods: {
-        parseFile(data) {
-            const parsedData = chartUtils.parseTsv(data)
-            this.d3Data = mathUtils.sort(parsedData, 'key')
-            this.d3DataSorted = mathUtils.sort(parsedData, 'value', 'DESC')
-
-            this.drawGraphs()
+        parseData(data) {
+            return data.map((d) => {
+                return {
+                    key: d[`${this.type}_prime`],
+                    value: d.count,
+                }
+            })
         },
         drawGraphs() {
             this.drawGraph()

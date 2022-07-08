@@ -3,13 +3,11 @@ import chartUtils from '../utils/chart'
 import numberUtils from '../utils/number'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
-import FileReader from './FileReader.vue'
 </script>
 
 <template>
     <section class="entry">
         <h2 class="title title--2">Number of blocks</h2>
-        <FileReader id="fileBlockNumber" @load="parseFile" />
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
@@ -28,7 +26,11 @@ export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
-        FileReader,
+    },
+    props: {
+        data: {
+            type: Array,
+        },
     },
     data() {
         return {
@@ -49,15 +51,22 @@ export default {
         }
     },
     watch: {
-        threshold(value) {
+        data(value) {
+            this.d3Data = this.parseData(value)
+            this.drawGraph()
+        },
+        threshold() {
             this.drawGraph()
         },
     },
     methods: {
-        parseFile(data) {
-            this.d3Data = chartUtils.parseTsv(data)
-
-            this.drawGraph()
+        parseData(data) {
+            return data.map((d) => {
+                return {
+                    key: d.block_number,
+                    value: d.count,
+                }
+            })
         },
         drawGraph() {
             if (!this.$refs[this.idGraph] || !this.filteredD3Data) { return }

@@ -4,13 +4,11 @@ import chartUtils from '../utils/chart'
 import tooltipUtils from '../utils/tooltip'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
-import FileReader from './FileReader.vue'
 </script>
 
 <template>
     <section class="entry">
         <h2 class="title title--2">Bar code</h2>
-        <FileReader id="fileBarCode" @load="parseFile" />
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
@@ -25,7 +23,11 @@ export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
-        FileReader,
+    },
+    props: {
+        data: {
+            type: Array,
+        },
     },
     data() {
         return {
@@ -33,24 +35,25 @@ export default {
             d3Data: undefined,
         }
     },
-    methods: {
-        parseFile(data) {
-            this.d3Data = this.parseTsv(data)
+    watch: {
+        data(value) {
+            this.d3Data = this.parseData(value)
             this.drawGraph()
         },
-        parseTsv(data) {
-            const parsedData = d3.tsvParse(data)
-            return parsedData.map((d) => {
-                const blocks = d.Barcode.split('_')
+    },
+    methods: {
+        parseData(data) {
+            return data.map((d) => {
+                const blocks = d.barcode.split('_')
                 return {
-                    barCode: d.Barcode,
+                    barcode: d.barcode,
                     blocks: blocks.map((b) => Number.parseInt(b)),
                 }
             })
         },
         drawGraph() {
             if (!this.$refs[this.idGraph] || !this.d3Data) { return }
-            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width, { margin: { left: 180 } })
+            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width, { height: 10 * this.d3Data.length, margin: { left: 180 } })
             const nbBarCodeBlocks = 3
             const xMin = d3.min(this.d3Data.map((d) => d.blocks[0]))
             const xMax = d3.max(this.d3Data.map((d) => d.blocks[nbBarCodeBlocks - 1]))
@@ -64,7 +67,7 @@ export default {
                     .style('text-anchor', 'end')
 
             const yScale = d3.scaleBand()
-                .domain(this.d3Data.map((d) => d.barCode))
+                .domain(this.d3Data.map((d) => d.barcode))
                 .range([height, 0])
                 .padding(0.1)
             const yAxis = d3.axisLeft(yScale)
@@ -79,7 +82,7 @@ export default {
                     .attr('data-start', (d) => d.blocks[i])
                     .attr('data-end', (d) => d.blocks[i + 1])
                     .attr('x', (d) => xScale(d.blocks[i]))
-                    .attr('y', (d) => i % 2 === 0 ? yScale(d.barCode) : yScale(d.barCode) + yScale.bandwidth() / 2)
+                    .attr('y', (d) => i % 2 === 0 ? yScale(d.barcode) : yScale(d.barcode) + yScale.bandwidth() / 2)
                     .attr('height', () => i % 2 === 0 ? yScale.bandwidth() : 0)
                     .attr('width', (d) => xScale(d.blocks[i + 1] - d.blocks[i]))
                     .classed('rectangle', true)

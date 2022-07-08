@@ -5,13 +5,11 @@ import numberUtils from '../utils/number'
 import tooltipUtils from '../utils/tooltip'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
-import FileReader from './FileReader.vue'
 </script>
 
 <template>
     <section class="entry">
         <h2 class="title title--2">Pairwise junction site</h2>
-        <FileReader id="filePairwiseJunctionSite" @load="parseFile" />
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
@@ -38,7 +36,11 @@ export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
-        FileReader,
+    },
+    props: {
+        data: {
+            type: Array,
+        },
     },
     data() {
         return {
@@ -67,33 +69,31 @@ export default {
         }
     },
     watch: {
-        threshold(value) {
+        data(value) {
+            this.d3Data = this.parseData(value)
+            this.drawGraph()
+        },
+        threshold() {
             this.drawGraph()
         },
     },
     methods: {
-        parseFile(data) {
-            this.d3Data = this.parseTsv(data)
-
-            this.drawGraph()
-        },
-        parseTsv(data) {
-            const parsedData = d3.tsvParse(data)
+        parseData(data) {
             const junctions = []
-            parsedData.forEach((d) => {
-                junctions.push(Number.parseInt(d[`3'`]))
-                junctions.push(Number.parseInt(d[`5'`]))
+            data.forEach((d) => {
+                junctions.push(d[`3_prime`])
+                junctions.push(d[`5_prime`])
             })
 
             const unique = [...new Set(junctions)]
             unique.sort((a, b) => a - b)
             return {
                 nodes: unique,
-                links: parsedData.map((d) => {
+                links: data.map((d) => {
                     return {
-                        start: Number.parseInt(d[`3'`]),
-                        end: Number.parseInt(d[`5'`]),
-                        value: Number.parseInt(d.count),
+                        start: d[`3_prime`],
+                        end: d[`5_prime`],
+                        value: d.count,
                     }
                 }),
             }
