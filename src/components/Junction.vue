@@ -70,8 +70,10 @@ export default {
     },
     watch: {
         data(value) {
-            this.d3Data = this.parseData(value)
-            this.drawGraph()
+            if (value) {
+                this.d3Data = this.parseData(value)
+                this.drawGraph()
+            }
         },
         threshold() {
             this.drawGraph()

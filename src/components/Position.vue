@@ -78,10 +78,12 @@ export default {
     },
     watch: {
         data(value) {
-            const parsedData = chartUtils.parseData(value)
-            this.d3Data = mathUtils.sort(parsedData, 'key')
-            this.d3DataSorted = mathUtils.sort(parsedData, 'value', 'DESC')
-            this.drawGraphs()
+            if (value) {
+                const parsedData = chartUtils.parseData(value)
+                this.d3Data = mathUtils.sort(parsedData, 'key')
+                this.d3DataSorted = mathUtils.sort(parsedData, 'value', 'DESC')
+                this.drawGraphs()
+            }
         },
         threshold() {
             this.drawGraphs()

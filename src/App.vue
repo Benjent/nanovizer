@@ -192,7 +192,7 @@ export default {
         &__file {
             display: flex;
             flex-direction: column;
-            margin-bottom: 40px;
+            margin-bottom: 100px;
         }
 
         &__try {

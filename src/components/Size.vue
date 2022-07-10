@@ -64,9 +64,11 @@ export default {
     },
     watch: {
         data(value) {
-            this.d3Data = value.map((d) => d)
-            this.d3Data.sort(d3.ascending)
-            this.drawGraph()
+            if (value) {
+                this.d3Data = value.map((d) => d)
+                this.d3Data.sort(d3.ascending)
+                this.drawGraph()
+            }
         },
         threshold() {
             this.drawGraph()

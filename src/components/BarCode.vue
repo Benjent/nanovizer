@@ -38,9 +38,11 @@ export default {
     },
     watch: {
         data(value) {
-            const parsedData = this.parseData(value)
-            this.d3Data = mathUtils.sort(parsedData, 'count', 'DESC')
-            this.drawGraph()
+            if (value) {
+                const parsedData = this.parseData(value)
+                this.d3Data = mathUtils.sort(parsedData, 'count', 'DESC')
+                this.drawGraph()
+            }
         },
     },
     methods: {
