@@ -1,6 +1,7 @@
 <script setup>
 import * as d3 from 'd3'
 import chartUtils from '../utils/chart'
+import mathUtils from '../utils/math'
 import tooltipUtils from '../utils/tooltip'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
@@ -8,7 +9,7 @@ import ChartSaver from './ChartSaver.vue'
 
 <template>
     <section class="entry">
-        <h2 class="title title--2">Bar code</h2>
+        <h2 class="title title--2" id="barcode">Barcode</h2>
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
@@ -31,23 +32,27 @@ export default {
     },
     data() {
         return {
-            idGraph: 'd3GraphBarCode',
+            idGraph: 'd3GraphBarcode',
             d3Data: undefined,
         }
     },
     watch: {
         data(value) {
-            this.d3Data = this.parseData(value)
+            const parsedData = this.parseData(value)
+            this.d3Data = mathUtils.sort(parsedData, 'count', 'DESC')
             this.drawGraph()
         },
     },
     methods: {
         parseData(data) {
             return data.map((d) => {
-                const blocks = d.barcode.split('_')
+                const [ barcode, count ] = Object.entries(d)[0]
+                const blocks = barcode.split('_')
+                
                 return {
-                    barcode: d.barcode,
+                    barcode,
                     blocks: blocks.map((b) => Number.parseInt(b)),
+                    count,
                 }
             })
         },
@@ -113,7 +118,6 @@ export default {
                 blocks.style('opacity', 1)
             })
 
-            // TODO input commun de taille de génôme
         },
     },
 }

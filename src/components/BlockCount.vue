@@ -7,7 +7,7 @@ import ChartSaver from './ChartSaver.vue'
 
 <template>
     <section class="entry">
-        <h2 class="title title--2">Number of blocks</h2>
+        <h2 class="title title--2" id="blockCount">Block count</h2>
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
@@ -34,45 +34,23 @@ export default {
     },
     data() {
         return {
-            idGraph: 'd3GraphBlockNumber',
+            idGraph: 'd3GraphBlockCount',
             max: 0,
             d3Data: undefined,
-            threshold: 0,
-        }
-    },
-    computed: {
-        filteredD3Data() {
-            return this.d3Data?.filter((d) => d.value >= this.threshold)
-        },
-        percentageFilteredD3Data() {
-            const ratio = this.d3Data && this.filteredD3Data ? this.filteredD3Data.length / this.d3Data.length : 1
-            const percentage = ratio * 100
-            return numberUtils.frFloat(numberUtils.decimal(percentage))
         }
     },
     watch: {
         data(value) {
-            this.d3Data = this.parseData(value)
-            this.drawGraph()
-        },
-        threshold() {
+            this.d3Data = chartUtils.parseData(value)
             this.drawGraph()
         },
     },
     methods: {
-        parseData(data) {
-            return data.map((d) => {
-                return {
-                    key: d.block_number,
-                    value: d.count,
-                }
-            })
-        },
         drawGraph() {
-            if (!this.$refs[this.idGraph] || !this.filteredD3Data) { return }
+            if (!this.$refs[this.idGraph] || !this.d3Data) { return }
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
-            const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3Data, svg, width, height, { nice: true })
-            const { lines, circles } = chartUtils.drawLollipops(this.idGraph, this.filteredD3Data, svg, xScale, yScale)
+            const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.d3Data, svg, width, height, { nice: true })
+            const { lines, circles } = chartUtils.drawLollipops(this.idGraph, this.d3Data, svg, xScale, yScale)
 
             this.max = yMax
         },

@@ -9,7 +9,7 @@ import ChartSaver from './ChartSaver.vue'
 
 <template>
     <section class="entry">
-        <h2 class="title title--2">Read length</h2>
+        <h2 class="title title--2" id="size">Size</h2>
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
@@ -44,7 +44,7 @@ export default {
     },
     data() {
         return {
-            idGraph: 'd3GraphReadLength',
+            idGraph: 'd3GraphSize',
             max: 0,
             min: 0,
             median: 0,
@@ -64,7 +64,7 @@ export default {
     },
     watch: {
         data(value) {
-            this.d3Data = value.map((d) => d.size)
+            this.d3Data = value.map((d) => d)
             this.d3Data.sort(d3.ascending)
             this.drawGraph()
         },

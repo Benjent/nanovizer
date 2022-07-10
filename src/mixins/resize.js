@@ -2,7 +2,7 @@ export default {
     created() {
         window.addEventListener('resize', this.drawGraph)
     },
-    destroyed() {
+    unmounted() {
         window.removeEventListener('resize', this.drawGraph)
     },
 }

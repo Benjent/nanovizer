@@ -7,7 +7,7 @@ import ChartSaver from './ChartSaver.vue'
 
 <template>
     <section class="entry">
-        <h2 class="title title--2">Start site position</h2>
+        <h2 class="title title--2" id="startSite">Start site</h2>
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
@@ -42,7 +42,7 @@ export default {
     },
     data() {
         return {
-            idGraph: 'd3GraphStartSitePosition',
+            idGraph: 'd3GraphStartSite',
             max: 0,
             d3Data: undefined,
             threshold: 0,
@@ -60,7 +60,7 @@ export default {
     },
     watch: {
         data(value) {
-            this.d3Data = this.parseData(value)
+            this.d3Data = chartUtils.parseData(value)
             this.drawGraph()
         },
         threshold() {
@@ -68,14 +68,6 @@ export default {
         },
     },
     methods: {
-        parseData(data) {
-            return data.map((d) => {
-                return {
-                    key: d.pos_start,
-                    value: d.count,
-                }
-            })
-        },
         drawGraph() {
             if (!this.$refs[this.idGraph] || !this.filteredD3Data) { return }
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
