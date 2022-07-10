@@ -1,12 +1,11 @@
 import * as d3 from 'd3'
 import tooltipUtils from './tooltip'
 
-const parseTsv = (data) => {
-    const parsedData = d3.tsvParse(data)
-    return parsedData.map((d) => {
+const parseData = (data) => {
+    return data.map((d) => {
         return {
-            key: Number.parseInt(d[`3'junction`] || d[`5'junction`] || d.start_site || d.nb_blocks),
-            value: Number.parseInt(d.count || d.Count),
+            key: Object.entries(d)[0][0],
+            value: Object.entries(d)[0][1],
         }
     })
 }
@@ -128,7 +127,7 @@ const drawLollipops = (idGraph, data, svg, xScale, yScale) => {
 
 export default {
     drawLollipops,
-    parseTsv,
+    parseData,
     setScales,
     setSvg,
 }

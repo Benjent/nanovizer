@@ -3,19 +3,25 @@ import chartUtils from '../utils/chart'
 import numberUtils from '../utils/number'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
-import FileReader from './FileReader.vue'
 </script>
 
 <template>
     <section class="entry">
-        <h2 class="title title--2">Number of blocks</h2>
-        <FileReader id="fileBlockNumber" @load="parseFile" />
+        <h2 class="title title--2" id="startSite">Start site</h2>
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
+                    <label class="data__label">Seuil</label>
+                    <input type="number" class="input data__value" v-model.number="threshold"/>
+                </div>
+                <div class="data">
                     <label class="data__label">Max</label>
                     <output class="data__value">{{max}}</output>
+                </div>
+                <div class="data">
+                    <label class="data__label">Displayed data percentage</label>
+                    <output class="data__value">{{percentageFilteredD3Data}}%</output>
                 </div>
                 <ChartSaver :id-graph="idGraph" />
             </footer>
@@ -28,11 +34,15 @@ export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
-        FileReader,
+    },
+    props: {
+        data: {
+            type: Array,
+        },
     },
     data() {
         return {
-            idGraph: 'd3GraphBlockNumber',
+            idGraph: 'd3GraphStartSite',
             max: 0,
             d3Data: undefined,
             threshold: 0,
@@ -49,20 +59,21 @@ export default {
         }
     },
     watch: {
-        threshold(value) {
+        data(value) {
+            if (value) {
+                this.d3Data = chartUtils.parseData(value)
+                this.drawGraph()
+            }
+        },
+        threshold() {
             this.drawGraph()
         },
     },
     methods: {
-        parseFile(data) {
-            this.d3Data = chartUtils.parseTsv(data)
-
-            this.drawGraph()
-        },
         drawGraph() {
             if (!this.$refs[this.idGraph] || !this.filteredD3Data) { return }
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
-            const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3Data, svg, width, height, { nice: true })
+            const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3Data, svg, width, height)
             const { lines, circles } = chartUtils.drawLollipops(this.idGraph, this.filteredD3Data, svg, xScale, yScale)
 
             this.max = yMax

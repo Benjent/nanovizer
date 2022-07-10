@@ -4,8 +4,15 @@
     color: $white;
     cursor: pointer;
     border-radius: var(--radius);
+    height: fit-content;
 
-    &:hover {
+    &:disabled {
+        background: $grey;
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
         background: lighten($pink, 10%);
     }
 }

@@ -8,6 +8,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "axios": "^0.26.1",
     "d3": "^7.3.0",
     "save-svg-as-png": "^1.4.17",
     "vue": "^3.2.31"
