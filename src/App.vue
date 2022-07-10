@@ -30,6 +30,8 @@ export default {
             email: 'benjent@hotmail.fr',
             fileName: '',
             isFileLoaded: false,
+            isLoading: false,
+            isError: false,
             nanoVizerData: undefined,
             nav: [
                 { title: 'Size', to: 'size' },
@@ -71,7 +73,11 @@ export default {
         },
         setNanovizerData(data) {
             this.nanoVizerData = data
-            this.isFileLoaded = true
+            setTimeout(() => {
+                // Arbitrary wait for graphs to be drawn
+                this.isLoading = false
+                this.isFileLoaded = true
+            }, 3000)
         },
         startAgain() {
             this.isFileLoaded = false
@@ -80,6 +86,9 @@ export default {
             window.scrollTo(0, 0)
         },
         triggerParsing() {
+            this.isLoading = true
+            this.isError = false
+
             const path = 'http://localhost:5000/parse-file'
             const params = { fileName: this.fileName }
             axios.post(path, params)
@@ -88,14 +97,24 @@ export default {
             })
             .catch((error) => {
                 console.error(error)
+                this.isError = true
+            })
+            .finally(() => {
+                this.isLoading = false
             })
         },
         updateScrollPosition() {
             this.scrollPosition = window.scrollY
         },
         useShowcaseData() {
+            this.isLoading = true
+            this.isError = false
             this.fileName = 'showcase'
-            this.setNanovizerData(showcaseResponse.data)
+
+            setTimeout(() => {
+                this.setNanovizerData(showcaseResponse.data)
+            }, 1)
+            
         },
     }
 }
@@ -125,9 +144,13 @@ export default {
                     <div class="l-graphs__header__input">
                         <label class="data__label">File name</label>
                         <input class="input data__value" v-model="fileName"/>
-                        <button class="button l-graphs__header__button" :disabled="!fileName || fileName.length === 0" @click="triggerParsing">Submit</button>
+                        <button class="button l-graphs__header__button" :disabled="!fileName || fileName.length === 0 || isLoading" @click="triggerParsing">Submit</button>
                     </div>
                     <a class="link l-graphs__header__try" @click="useShowcaseData">Or try with showcase data</a>
+                    <div v-if="isLoading" class="loader" />
+                    <p v-if="isError" class="l-graphs__header__error">
+                        An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
+                    </p>
                 </div>
             </section>
             
@@ -198,6 +221,7 @@ export default {
         &__try {
             font-size: 0.8rem;
             margin-right: 32px; // Align with input by setting a margin whose width is label width
+            margin-bottom: 20px;
         }
 
         &__button {
@@ -229,6 +253,10 @@ export default {
                 flex: 1;
                 border-bottom: solid 2px lighten($marine, 20%);
             }
+        }
+
+        &__error {
+            color: $pink;
         }
     }
 
