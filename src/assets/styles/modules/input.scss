@@ -1,13 +1,13 @@
 .input {
     padding: var(--button-padding-v) var(--button-padding-h);
     background: lighten($marine, 10%);
-    border: solid 1px $blue;
+    border: solid 1px $tertiary;
     border-top-color: $marine;
     border-right-color: $marine;
     border-left-color: $marine;
 
     &:focus {
-        border: solid 1px $blue;
+        border: solid 1px $tertiary;
     }
 
     &:hover {

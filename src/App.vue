@@ -259,7 +259,7 @@ export default {
         }
 
         &__error {
-            color: $pink;
+            color: $alert;
         }
     }
 

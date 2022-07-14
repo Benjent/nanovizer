@@ -93,7 +93,7 @@ export default {
                             .attr('data-end', (d) => d.blocks[i + 1])
                             .attr('x', (d) => xScale(d.blocks[i]))
                             .attr('y', (d) => i % 2 === 0 ? yScale(d.barcode) : yScale(d.barcode) + yScale.bandwidth() / 2)
-                            .attr('height', () => i % 2 === 0 ? yScale.bandwidth() : 1)
+                            .attr('height', () => i % 2 === 0 ? yScale.bandwidth() : 0.6)
                             .attr('width', (d) => xScale(d.blocks[i + 1] - d.blocks[i]))
                             .classed('rectangle', true)
                     }

@@ -1,5 +1,11 @@
 .d3 {
+    .domain {
+        stroke: $tertiary;
+    }
+
     .tick {
+        color: $tertiary;
+
         text {
             font-size: 0.6rem;
         }

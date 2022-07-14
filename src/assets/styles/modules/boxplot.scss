@@ -1,9 +1,9 @@
 .boxplot {
     &__line {
-        stroke: $pink;
+        stroke: $primary;
     }
 
     &__box {
-        fill: $turquoise;
+        fill: $secondary;
     }
 }

@@ -1,18 +1,18 @@
 .button {
     padding: var(--button-padding-v) var(--button-padding-h);
-    background: $pink;
+    background: $primary;
     color: $white;
     cursor: pointer;
     border-radius: var(--radius);
     height: fit-content;
 
     &:disabled {
-        background: $grey;
+        background: $disabled;
         opacity: 0.3;
         cursor: not-allowed;
     }
 
     &:hover:not(:disabled) {
-        background: lighten($pink, 10%);
+        background: lighten($primary, 10%);
     }
 }
