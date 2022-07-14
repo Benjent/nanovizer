@@ -29,6 +29,7 @@ export default {
         return {
             email: 'benjent@hotmail.fr',
             fileName: '',
+            headerHeightOffset: 200, // Ugly
             isFileLoaded: false,
             isLoading: false,
             isError: false,
@@ -51,8 +52,7 @@ export default {
             let highlightedNavItem = this.nav[0].to
             this.nav.forEach((item) => {
                 const navItemScrollPosition = document.getElementById(item.to).offsetTop
-                const headerHeightOffset = 200
-                if (this.scrollPosition + headerHeightOffset > navItemScrollPosition) {
+                if (this.scrollPosition + this.headerHeightOffset + 1 > navItemScrollPosition) {
                     highlightedNavItem = item.to
                 }
             })
@@ -89,8 +89,11 @@ export default {
             this.isLoading = true
             this.isError = false
 
-            const path = 'http://localhost:5000/parse-file'
-            const params = { fileName: this.fileName }
+            const port = 5000
+            const server = 'http://localhost'
+            const endpoint = '/parse-file'
+            const path = `${server}:${port}${endpoint}`
+            const params = { file_name: this.fileName }
             axios.post(path, params)
             .then((response) => {
                 this.setNanovizerData(response.data)

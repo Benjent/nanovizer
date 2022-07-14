@@ -1,6 +1,5 @@
 <script setup>
 import chartUtils from '../utils/chart'
-import numberUtils from '../utils/number'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
 </script>
