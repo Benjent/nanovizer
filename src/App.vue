@@ -1,97 +1,120 @@
 <script setup>
-import * as d3 from 'd3'
-import chartUtils from './utils/chart'
-import BarCode from './components/BarCode.vue'
-import BlockNumber from './components/BlockNumber.vue'
+import axios from 'axios'
+import showcaseResponse from './showcase-response.json'
+import Barcode from './components/Barcode.vue'
+import BlockCount from './components/BlockCount.vue'
+import Position from './components/Position.vue'
 import Junction from './components/Junction.vue'
-import PairwiseJunctionSite from './components/PairwiseJunctionSite.vue'
-import ReadLength from './components/ReadLength.vue'
-import StartSitePosition from './components/StartSitePosition.vue'
+import Size from './components/Size.vue'
+import StartSite from './components/StartSite.vue'
+import Summary from './components/Summary.vue'
+import logoCnrs from './assets/images/logos/cnrs.svg'
+import logoInserm from './assets/images/logos/inserm.svg'
+import logoInstitutCochin from './assets/images/logos/institut-cochin.svg'
+import logoUniversiteParisCite from './assets/images/logos/universite-paris-cite.svg'
 </script>
 
 <script>
 export default {
     components: {
-        BarCode,
-        BlockNumber,
+        Barcode,
+        BlockCount,
         Junction,
-        PairwiseJunctionSite,
-        ReadLength,
-        StartSitePosition,
+        Position,
+        Size,
+        StartSite,
+        Summary,
     },
     data() {
         return {
             email: 'benjent@hotmail.fr',
+            fileName: '',
+            isFileLoaded: false,
+            isLoading: false,
+            isError: false,
+            nanoVizerData: undefined,
+            nav: [
+                { title: 'Size', to: 'size' },
+                { title: 'Block count', to: 'blockCount' },
+                { title: 'Start site', to: 'startSite' },
+                { title: '3\' Position', to: 'position3' },
+                { title: '5\' Position', to: 'position5' },
+                { title: 'Junction', to: 'junction' },
+                { title: 'Barcode', to: 'barcode' },
+                { title: 'Summary', to: 'summary' },
+            ],
+            scrollPosition: 0,
         }
     },
+    computed: {
+        activeNavItem() {
+            let highlightedNavItem = this.nav[0].to
+            this.nav.forEach((item) => {
+                const navItemScrollPosition = document.getElementById(item.to).offsetTop
+                const headerHeightOffset = 200
+                if (this.scrollPosition + headerHeightOffset > navItemScrollPosition) {
+                    highlightedNavItem = item.to
+                }
+            })
+            return highlightedNavItem
+        },
+    },
+    mounted() {
+        window.addEventListener('scroll', this.updateScrollPosition)
+    },
+    unmounted() {
+        window.removeEventListener('scroll', this.updateScrollPosition)
+    },
     methods: {
-        drawTuto(data, id) {
-            // https://d3-graph-gallery.com/graph/interactivity_zoom.html
-            // set the dimensions and margins of the graph
-            const { svg, width, height, margin } = chartUtils.setSvg(id)
+        scrollTo(to) {
+            const element = document.getElementById(to)
+            const headerHeightOffset = 200
+            window.scrollTo({ top: element.offsetTop - headerHeightOffset, behavior: "smooth" })
+        },
+        setNanovizerData(data) {
+            this.nanoVizerData = data
+            setTimeout(() => {
+                // Arbitrary wait for graphs to be drawn
+                this.isLoading = false
+                this.isFileLoaded = true
+            }, 3000)
+        },
+        startAgain() {
+            this.isFileLoaded = false
+            this.fileName = ''
+            this.nanoVizerData = undefined
+            window.scrollTo(0, 0)
+        },
+        triggerParsing() {
+            this.isLoading = true
+            this.isError = false
 
-            // Add X axis
-            const xMax = d3.max(data.map((d) => d.key))
-            const x = d3.scaleLinear().domain([0, xMax]).range([0, width])
-            const xAxis = svg.append('g')
-                .attr('transform', 'translate(0,' + height + ')')
-                .call(d3.axisBottom(x))
+            const path = 'http://localhost:5000/parse-file'
+            const params = { fileName: this.fileName }
+            axios.post(path, params)
+            .then((response) => {
+                this.setNanovizerData(response.data)
+            })
+            .catch((error) => {
+                console.error(error)
+                this.isError = true
+            })
+            .finally(() => {
+                this.isLoading = false
+            })
+        },
+        updateScrollPosition() {
+            this.scrollPosition = window.scrollY
+        },
+        useShowcaseData() {
+            this.isLoading = true
+            this.isError = false
+            this.fileName = 'showcase'
 
-            // Add Y axis
-            const yMax = d3.max(data.map((d) => d.value))
-            const y = d3.scaleLinear().domain([0, yMax]).range([height, 0])
-            const yAxis = svg.append('g')
-                .call(d3.axisLeft(y))
-
-            // Add a clipPath: everything out of this area won't be drawn.
-            const clip = svg.append('defs').append('svg:clipPath')
-                .attr('id', 'clip')
-                .append('svg:rect')
-                    .attr('width', width )
-                    .attr('height', height )
-                    .attr('x', 0)
-                    .attr('y', 0)
-
-            // Create the scatter variable: where both the circles and the brush take place
-            const scatter = svg.append('g')
-                .attr('clip-path', 'url(#clip)')
-
-            const { lines, circles } = chartUtils.drawLollipops(data, scatter, x, y)
-
-            // Set the zoom and Pan features: how much you can zoom, on which part, and what to do when there is a zoom
-            const zoom = d3.zoom()
-                .scaleExtent([1, 10])  // This control how much you can unzoom (x0.5) and zoom (x20)
-                .extent([[0, 0], [width, height]])
-                .on('zoom', updateChart)
-
-            // This add an invisible rect on top of the chart area. This rect can recover pointer events: necessary to understand when the user zoom
-            svg.append('rect')
-                .attr('width', width)
-                .attr('height', height)
-                .style('fill', 'none')
-                .style('pointer-events', 'all')
-                .call(zoom)
-            // now the user can zoom and it will trigger the function called updateChart
-
-            function updateChart(event) {
-                const newXScale = event.transform.rescaleX(x)
-                const newYScale = event.transform.rescaleY(y)
-
-                xAxis.call(d3.axisBottom(newXScale))
-                yAxis.call(d3.axisLeft(newYScale))
-
-                scatter
-                .selectAll('circle')
-                .attr('cx', (d) => newXScale(d.key))
-                .attr('cy', (d) => newYScale(d.value))
-
-                scatter
-                .selectAll('.stem')
-                .attr('x1', (d) => newXScale(d.key))
-                .attr('x2', (d) => newXScale(d.key))
-                .attr('y1', (d) => newYScale(d.value))
-                .attr('y2', newYScale(0))
-            }
+            setTimeout(() => {
+                this.setNanovizerData(showcaseResponse.data)
+            }, 1)
+            
         },
     }
 }
@@ -99,24 +122,65 @@ export default {
 
 <template>
     <div class="l-graphs">
-        <main>
-            <ReadLength />
-            <BlockNumber />
-            <StartSitePosition />
-            <Junction :type="3"/>
-            <Junction :type="5"/>
-            <PairwiseJunctionSite />
-            <BarCode />
+        <header class="l-graphs__header" :class="{ 'l-graphs__header--overlay': !isFileLoaded }">
+            <template v-if="isFileLoaded">
+                <h1 class="title--1 data__value">{{fileName}}</h1>
+                <a class="link" @click="startAgain">Make another analysis</a>
+                <nav class="l-graphs__header__nav">
+                    <span class="l-graphs__header__nav__filler"></span>
+                    <a
+                        class="l-graphs__header__nav__item"
+                        :class="{ 'l-graphs__header__nav__item--active': activeNavItem === item.to }"
+                        v-for="item in nav" :key="item.to"
+                        @click="scrollTo(item.to)">
+                        {{item.title}}
+                    </a>
+                    <span class="l-graphs__header__nav__filler"></span>
+                </nav>
+            </template>
+            <section class="l-graphs__header__inputs" v-else>
+                <div class="data l-graphs__header__file">
+                    <h1 class="title--1 l-graphs__header__title">Genome analyzer</h1>
+                    <div class="l-graphs__header__input">
+                        <label class="data__label">File name</label>
+                        <input class="input data__value" v-model="fileName"/>
+                        <button class="button l-graphs__header__button" :disabled="!fileName || fileName.length === 0 || isLoading" @click="triggerParsing">Submit</button>
+                    </div>
+                    <a class="link l-graphs__header__try" @click="useShowcaseData">Or try with showcase data</a>
+                    <div v-if="isLoading" class="loader" />
+                    <p v-if="isError" class="l-graphs__header__error">
+                        An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
+                    </p>
+                </div>
+            </section>
+            
+        </header>
+        <main class="l-graphs__main">
+            <Size :data="nanoVizerData?.read_size" />
+            <BlockCount :data="nanoVizerData?.block_count" />
+            <StartSite :data="nanoVizerData?.start_site_count" />
+            <Position :data="nanoVizerData?.['3_prime_count']" :type="3"/>
+            <Position :data="nanoVizerData?.['5_prime_count']" :type="5"/>
+            <Junction :data="nanoVizerData?.junction_count" />
+            <Barcode :data="nanoVizerData?.barcode_count" />
+            <Summary :data="nanoVizerData?.read_summary_count" />
         </main>
         <footer class="l-graphs__footer">
-            Like this webapp? Have a feedback? Give me a shout at {{email}}!
+            <p class="l-graphs__footer__feedback">
+                Like this webapp? Have a feedback? Give me a shout at {{email}}!
+            </p>
+            <div class="l-graphs__footer__logos">
+                <img :src="logoCnrs" alt="Logo CNRS" />
+                <img :src="logoInserm" alt="Logo Inserm" />
+                <img :src="logoInstitutCochin" alt="Logo Institut Cochin" />
+                <img :src="logoUniversiteParisCite" alt="Logo Université Paris Cité" />
+            </div>
         </footer>
     </div>
 </template>
 
 <style lang="scss">
 @import './assets/styles/main.scss';
-@import './assets/base.css'; // TODO refact
 
 .l-graphs {
     @include theme;
@@ -125,10 +189,99 @@ export default {
     text-align: center;
     font-weight: normal;
 
+    &__header {
+        position: sticky;
+        z-index: 1;
+        top: 0;
+        background: darken($marine, 4%);
+        height: 170px;
+        transition: height 1s;
+
+        &--overlay {
+            height: 100vh;
+        }
+
+        &__title {
+            margin-bottom: 30px;
+        }
+
+        &__inputs {
+            display: flex;
+            justify-content: center;
+            height: 100%;
+            align-items: center;
+        }
+
+        &__file {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 100px;
+        }
+
+        &__try {
+            font-size: 0.8rem;
+            margin-right: 32px; // Align with input by setting a margin whose width is label width
+            margin-bottom: 20px;
+        }
+
+        &__button {
+            margin-left: 20px;
+        }
+
+        &__nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+
+            &__item {
+                padding: 10px 20px;
+                cursor: pointer;
+                border-bottom: solid 2px transparent;
+                border-bottom-color: lighten($marine, 20%);
+
+                &:hover:not(.l-graphs__header__nav__item--active) {
+                    background: $marine;
+                }
+
+                &--active {
+                    background: lighten($marine, 20%);
+                    border-bottom-color: transparent;
+                }
+            }
+
+            &__filler {
+                flex: 1;
+                border-bottom: solid 2px lighten($marine, 20%);
+            }
+        }
+
+        &__error {
+            color: $pink;
+        }
+    }
+
+    &__main {
+        min-height: 80vh;
+    }
+
     &__footer {
-        padding: var(--button-padding-v) var(--button-padding-h);
+        padding: 20px 60px;
         background: lighten($marine, 10%);
-        font-size: 0.8rem;
+
+        &__feedback {
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+        }
+
+        &__logos {
+            display: flex;
+            justify-content: center;
+
+            img {
+                height: 60px;
+                margin: 0 10px;
+            }
+        }
     }
 }
 </style>

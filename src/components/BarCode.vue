@@ -1,16 +1,15 @@
 <script setup>
 import * as d3 from 'd3'
 import chartUtils from '../utils/chart'
+import mathUtils from '../utils/math'
 import tooltipUtils from '../utils/tooltip'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
-import FileReader from './FileReader.vue'
 </script>
 
 <template>
     <section class="entry">
-        <h2 class="title title--2">Bar code</h2>
-        <FileReader id="fileBarCode" @load="parseFile" />
+        <h2 class="title title--2" id="barcode">Barcode</h2>
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
@@ -25,32 +24,43 @@ export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
-        FileReader,
+    },
+    props: {
+        data: {
+            type: Array,
+        },
     },
     data() {
         return {
-            idGraph: 'd3GraphBarCode',
+            idGraph: 'd3GraphBarcode',
             d3Data: undefined,
         }
     },
-    methods: {
-        parseFile(data) {
-            this.d3Data = this.parseTsv(data)
-            this.drawGraph()
+    watch: {
+        data(value) {
+            if (value) {
+                const parsedData = this.parseData(value)
+                this.d3Data = mathUtils.sort(parsedData, 'count', 'DESC')
+                this.drawGraph()
+            }
         },
-        parseTsv(data) {
-            const parsedData = d3.tsvParse(data)
-            return parsedData.map((d) => {
-                const blocks = d.Barcode.split('_')
+    },
+    methods: {
+        parseData(data) {
+            return data.map((d) => {
+                const [ barcode, count ] = Object.entries(d)[0]
+                const blocks = barcode.split('_')
+                
                 return {
-                    barCode: d.Barcode,
+                    barcode,
                     blocks: blocks.map((b) => Number.parseInt(b)),
+                    count,
                 }
             })
         },
         drawGraph() {
             if (!this.$refs[this.idGraph] || !this.d3Data) { return }
-            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width, { margin: { left: 180 } })
+            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width, { height: 10 * this.d3Data.length, margin: { left: 180 } })
             const xMin = d3.min(this.d3Data.map((d) => d.blocks[0]))
             const xMax = d3.max(this.d3Data.map((d) => d.blocks[d.blocks.length - 1]))
             const xScale = d3.scaleLinear().range([0, width]).domain([xMin, xMax])
@@ -63,7 +73,7 @@ export default {
                     .style('text-anchor', 'end')
 
             const yScale = d3.scaleBand()
-                .domain(this.d3Data.map((d) => d.barCode))
+                .domain(this.d3Data.map((d) => d.barcode))
                 .range([height, 0])
                 .padding(0.1)
             const yAxis = d3.axisLeft(yScale)
@@ -111,7 +121,6 @@ export default {
                 blocks.style('opacity', 1)
             })
 
-            // TODO input commun de taille de génôme
         },
     },
 }
