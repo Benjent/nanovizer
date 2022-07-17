@@ -51,13 +51,18 @@ export default {
     },
     computed: {
         activeNavItem() {
-            let highlightedNavItem = this.nav[0].to
+            if (document.body.clientHeight - window.innerHeight === this.scrollPosition) {
+                return this.nav[this.nav.length - 1].to
+            }
+
+            let highlightedNavItem =  this.nav[0].to
             this.nav.forEach((item) => {
                 const navItemScrollPosition = document.getElementById(item.to).offsetTop
                 if (this.scrollPosition + this.headerHeightOffset + 1 > navItemScrollPosition) {
                     highlightedNavItem = item.to
                 }
             })
+
             return highlightedNavItem
         },
     },
