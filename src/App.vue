@@ -80,11 +80,8 @@ export default {
         },
         setNanovizerData(data) {
             this.nanoVizerData = data
-            setTimeout(() => {
-                // Arbitrary wait for graphs to be drawn
-                this.isLoading = false
-                this.isFileLoaded = true
-            }, 3000)
+            this.isLoading = false
+            this.isFileLoaded = true
         },
         startAgain() {
             this.isFileLoaded = false
@@ -120,11 +117,10 @@ export default {
             this.isLoading = true
             this.isError = false
             this.fileName = 'showcase'
-
             setTimeout(() => {
+                // Force loading rendering before drawing charts
                 this.setNanovizerData(showcaseResponse.data)
             }, 1)
-            
         },
     }
 }
