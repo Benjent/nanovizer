@@ -143,7 +143,7 @@ export default {
             </template>
             <section class="l-graphs__header__inputs" v-else>
                 <div class="data l-graphs__header__file">
-                    <h1 class="title--1 l-graphs__header__title">Genome analyzer</h1>
+                    <h1 class="title--1 l-graphs__header__title">NanoVizer</h1>
                     <div class="l-graphs__header__input">
                         <label class="data__label">File name</label>
                         <input class="input data__value" v-model="fileName"/>
