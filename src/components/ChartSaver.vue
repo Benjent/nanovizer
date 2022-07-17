@@ -12,7 +12,10 @@ export default {
     },
     methods: {
         saveGraph() {
-            saveSvgAsPng(document.getElementById(this.idGraph).children[0], this.idGraph)
+            const wrapper = document.getElementById(this.idGraph)
+            const wrapperChildren = [...wrapper.children]
+            const svg = wrapperChildren.find((element) => element.tagName === 'svg')
+            saveSvgAsPng(svg, this.idGraph)
         },
     },
 }
