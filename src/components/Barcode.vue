@@ -5,13 +5,18 @@ import mathUtils from '../utils/math'
 import tooltipUtils from '../utils/tooltip'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
+import Loader from './Loader.vue'
 </script>
 
 <template>
-    <section class="entry">
+    <section class="entry l-barcode">
         <h2 class="title title--2" id="barcode">Barcode</h2>
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
+            <button class="button l-barcode__sticky-cta" :disabled="isLoading" @click="collapseBarcodes">
+                <Loader v-if="isLoading" />
+                <span v-else>{{revealButtonText}}</span>
+            </button>
             <footer v-if="d3Data" class="entry__footer">
                 <ChartSaver :id-graph="idGraph" />
             </footer>
@@ -24,6 +29,7 @@ export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
+        Loader,
     },
     props: {
         data: {
@@ -33,8 +39,19 @@ export default {
     data() {
         return {
             idGraph: 'd3GraphBarcode',
+            isLoading: false,
+            isShownBarcodes: true,
             d3Data: undefined,
+            minimumShownBarcodes: 10
         }
+    },
+    computed: {
+        filteredOutBarcodes() {
+            return this.d3Data.length - this.minimumShownBarcodes
+        },
+        revealButtonText() {
+            return this.isShownBarcodes ? 'Collapse' : `Reveal remaining ${this.filteredOutBarcodes} barcodes`
+        },
     },
     watch: {
         data(value) {
@@ -44,8 +61,23 @@ export default {
                 this.drawGraph()
             }
         },
+        isShownBarcodes(value) {
+            if (value) {
+                this.isLoading = true
+                setTimeout(() => {
+                    // Force loading rendering before drawing charts
+                    this.drawGraph()
+                    this.isLoading = false
+                }, 1)
+            } else {
+                this.drawGraph()
+            }
+        },
     },
     methods: {
+        collapseBarcodes() {
+            this.isShownBarcodes = !this.isShownBarcodes
+        },
         parseData(data) {
             return data.map((d) => {
                 const [ barcode, count ] = Object.entries(d)[0]
@@ -61,10 +93,17 @@ export default {
         drawGraph() {
             if (!this.$refs[this.idGraph] || !this.d3Data) { return }
             const approximateBarHeight = 10
-            const chartHeight = approximateBarHeight * this.d3Data.length
+            const chartHeight = this.isShownBarcodes ? approximateBarHeight * this.d3Data.length : 160
+            const filteredData = this.isShownBarcodes ? this.d3Data : this.d3Data.slice(0, this.minimumShownBarcodes)
+
+            const xMin = d3.min(filteredData.map((d) => d.blocks[0]))
+            const xMax = d3.max(filteredData.map((d) => d.blocks[d.blocks.length - 1]))
+
+            if (!this.isShownBarcodes) {
+                filteredData.unshift({ barcode: `${this.filteredOutBarcodes} more to show...`, blocks: [1, xMax], count: -1 })
+            }
+
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width, { height: chartHeight, margin: { left: 180 } })
-            const xMin = d3.min(this.d3Data.map((d) => d.blocks[0]))
-            const xMax = d3.max(this.d3Data.map((d) => d.blocks[d.blocks.length - 1]))
             const xScale = d3.scaleLinear().range([0, width]).domain([xMin, xMax])
             const xAxis = d3.axisBottom(xScale)
             const xLegend = svg.append('g')
@@ -75,14 +114,14 @@ export default {
                     .style('text-anchor', 'end')
 
             const yScale = d3.scaleBand()
-                .domain(this.d3Data.map((d) => d.barcode))
+                .domain(filteredData.map((d) => d.barcode))
                 .range([height, 0])
                 .padding(0.1)
             const yAxis = d3.axisLeft(yScale)
             const yLegend = svg.append('g').call(yAxis)
 
             const entries = svg.selectAll()
-                .data(this.d3Data)
+                .data(filteredData)
                 .enter()
 
             entries.each((d, i) => {
@@ -129,3 +168,13 @@ export default {
     },
 }
 </script>
+
+<style lang="scss">
+.l-barcode {
+    &__sticky-cta {
+        position: sticky;
+        bottom: 20px;
+        margin-bottom: 20px;
+    }
+}
+</style>
