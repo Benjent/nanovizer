@@ -5,6 +5,7 @@ import Barcode from './components/Barcode.vue'
 import BlockCount from './components/BlockCount.vue'
 import Position from './components/Position.vue'
 import Junction from './components/Junction.vue'
+import Loader from './components/Loader.vue'
 import Size from './components/Size.vue'
 import StartSite from './components/StartSite.vue'
 import Summary from './components/Summary.vue'
@@ -20,6 +21,7 @@ export default {
         Barcode,
         BlockCount,
         Junction,
+        Loader,
         Position,
         Size,
         StartSite,
@@ -150,7 +152,7 @@ export default {
                         <button class="button l-graphs__header__button" :disabled="!fileName || fileName.length === 0 || isLoading" @click="triggerParsing">Submit</button>
                     </div>
                     <a class="link l-graphs__header__try" @click="useShowcaseData">Or try with showcase data</a>
-                    <div v-if="isLoading" class="loader" />
+                    <Loader v-if="isLoading" />
                     <p v-if="isError" class="l-graphs__header__error">
                         An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
                     </p>
