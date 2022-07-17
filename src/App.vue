@@ -93,12 +93,7 @@ export default {
             this.isLoading = true
             this.isError = false
 
-            const port = 5000
-            const server = 'http://localhost'
-            const endpoint = '/parse-file'
-            const path = `${server}:${port}${endpoint}`
-            const params = { file_name: this.fileName }
-            axios.post(path, params)
+            axios.post('/parse-file', { file_name: this.fileName })
             .then((response) => {
                 this.setNanovizerData(response.data)
             })
