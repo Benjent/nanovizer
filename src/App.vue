@@ -1,5 +1,5 @@
 <script setup>
-import axios from 'axios'
+import axios from './libs/axios'
 import showcaseResponse from './showcase-response.json'
 import Barcode from './components/Barcode.vue'
 import BlockCount from './components/BlockCount.vue'
