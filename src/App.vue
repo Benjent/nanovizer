@@ -132,6 +132,12 @@ export default {
             this.isLoading = true
             this.isError = false
             this.fileName = 'showcase'
+            this.genomeName = ''
+            this.genomeSize = undefined
+            this.minPosition3 = undefined
+            this.minPosition5 = undefined
+            this.maxPosition5 = undefined
+
             setTimeout(() => {
                 // Force loading rendering before drawing charts
                 this.setNanovizerData(showcaseResponse.data)
