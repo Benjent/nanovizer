@@ -31,6 +31,11 @@ export default {
         return {
             email: 'benjent@hotmail.fr',
             fileName: '',
+            genomeName: '',
+            genomeSize: undefined,
+            minPosition3: undefined,
+            minPosition5: undefined,
+            maxPosition5: undefined,
             headerHeightOffset: 200, // Ugly
             isFileLoaded: false,
             isLoading: false,
@@ -65,6 +70,12 @@ export default {
 
             return highlightedNavItem
         },
+        isFormValid() {
+            return !this.isLoading
+                && this.fileName && this.fileName.length !== 0
+                && this.genomeName && this.genomeName.length !== 0
+                && this.genomeSize
+        }
     },
     mounted() {
         window.addEventListener('scroll', this.updateScrollPosition)
@@ -93,7 +104,16 @@ export default {
             this.isLoading = true
             this.isError = false
 
-            axios.post('/parse-file', { file_name: this.fileName })
+            const params = {
+                file_name: this.fileName,
+                genome_name: this.genomeName,
+                genome_size: this.genomeSize,
+                min_position_3: this.minPosition3,
+                min_position_5: this.minPosition5,
+                max_position_5: this.maxPosition5,
+            }
+
+            axios.post('/parse-file', params)
             .then((response) => {
                 this.setNanovizerData(response.data)
             })
@@ -124,7 +144,7 @@ export default {
 <template>
     <div class="l-graphs">
         <header class="l-graphs__header" :class="{ 'l-graphs__header--overlay': !isFileLoaded }">
-            <template v-if="isFileLoaded">
+            <section v-if="isFileLoaded">
                 <h1 class="title--1 data__value">{{fileName}}</h1>
                 <a class="link" @click="startAgain">Make another analysis</a>
                 <nav class="l-graphs__header__nav">
@@ -138,21 +158,46 @@ export default {
                     </a>
                     <span class="l-graphs__header__nav__filler"></span>
                 </nav>
-            </template>
-            <section class="l-graphs__header__inputs" v-else>
-                <div class="data l-graphs__header__file">
-                    <h1 class="title--1 l-graphs__header__title">NanoVizer</h1>
-                    <div class="l-graphs__header__input">
-                        <label class="data__label">File name</label>
-                        <input class="input data__value" v-model="fileName"/>
-                        <button class="button l-graphs__header__button" :disabled="!fileName || fileName.length === 0 || isLoading" @click="triggerParsing">Submit</button>
-                    </div>
-                    <a class="link l-graphs__header__try" @click="useShowcaseData">Or try with showcase data</a>
-                    <Loader v-if="isLoading" />
+            </section>
+            <section class="l-graphs__header__landing" v-else>
+                <h1 class="title--1 l-graphs__header__title">NanoVizer</h1>
+                    <form class="l-graphs__header__landing__form">
+                        <div class="l-graphs__header__landing__form__input">
+                            <label class="data__label">File name</label>
+                            <input class="input data__value" v-model="fileName"/>
+                        </div>
+                        <a class="link l-graphs__header__try" @click="useShowcaseData">Or try with showcase data</a>
+                        <div class="l-graphs__header__landing__form__input">
+                            <label class="data__label">Genome name</label>
+                            <input class="input data__value" v-model="genomeName"/>
+                        </div>
+                        <div class="l-graphs__header__landing__form__input">
+                            <label class="data__label">Genome size</label>
+                            <input class="input data__value" type="number" v-model.number="genomeSize"/>
+                        </div>
+                        <fieldset class="fieldset fieldset--overflow l-graphs__header__landing__form__fieldset">
+                            <legend class="fieldset__legend">Position (optional)</legend>
+                            <div class="l-graphs__header__landing__form__input">
+                                <label class="data__label">3' minimum position</label>
+                                <input class="input data__value" v-model="minPosition3"/>
+                            </div>
+                            <div class="l-graphs__header__landing__form__input">
+                                <label class="data__label">5' minimum position</label>
+                                <input class="input data__value" v-model="minPosition5"/>
+                            </div>
+                            <div class="l-graphs__header__landing__form__input">
+                                <label class="data__label">5' maximum position</label>
+                                <input class="input data__value" v-model="maxPosition5"/>
+                            </div>
+                        </fieldset>
+                        <div class="l-graphs__header__button">
+                            <Loader v-if="isLoading" />
+                            <button v-else class="button" :disabled="!isFormValid" type="button" @click="triggerParsing">Submit</button>
+                        </div>
+                    </form>
                     <p v-if="isError" class="l-graphs__header__error">
                         An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
                     </p>
-                </div>
             </section>
             
         </header>
@@ -204,13 +249,29 @@ export default {
 
         &__title {
             margin-bottom: 30px;
+            padding-top: 6%;
         }
 
-        &__inputs {
-            display: flex;
-            justify-content: center;
+        &__landing {
             height: 100%;
-            align-items: center;
+
+            &__form {
+                margin: auto;
+                width: fit-content;
+
+                &__input + &__input{
+                    margin-top: 20px;
+                }
+
+                &__input {
+                    text-align: right;
+                }
+
+                &__fieldset {
+                    width: fit-content;
+                    margin-top: 40px;
+                }
+            }
         }
 
         &__file {
@@ -221,12 +282,11 @@ export default {
 
         &__try {
             font-size: 0.8rem;
-            margin-right: 32px; // Align with input by setting a margin whose width is label width
-            margin-bottom: 20px;
+            margin-left: 100px; // Ugly fake align
         }
 
         &__button {
-            margin-left: 20px;
+            margin-top: 40px;
         }
 
         &__nav {
@@ -257,6 +317,7 @@ export default {
         }
 
         &__error {
+            margin-top: 20px;
             color: $alert;
         }
     }

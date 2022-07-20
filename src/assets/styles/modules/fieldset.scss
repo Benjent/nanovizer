@@ -1,0 +1,13 @@
+.fieldset {
+    border-color: $tertiary;
+    border-radius: var(--radius);
+
+    &--overflow {
+        margin-left: -25px;
+        margin-right: -25px;
+    }
+
+    &__legend {
+        color: $tertiary;
+    }
+}
