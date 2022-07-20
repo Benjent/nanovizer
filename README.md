@@ -1,35 +1,56 @@
-# vue-d3
+# NanoVizer
 
-This template should help get you started developing with Vue 3 in Vite.
+TODO NanoVizer explainations
 
-## Recommended IDE Setup
+## Requirements
+- Python 3
+- flask 2
+- flask_cors 3
+- npm
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.vscode-typescript-vue-plugin).
+## Using NanoVizer for the first time
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+1. Setup the project
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+2. Follow the steps in the *Running NanoVizer* section
+
+## Running NanoVIzer
+
+1. Run the project
+
+    * Using the vanilla method
+
+        1. Run the backend in a terminal
+
+            ```sh
+            app.py
+            ```
+
+        2. Run the frontend in another terminal
+
+            ```sh
+            npm run dev
+            ```
+
+    * Using the custom method
+
+        ```sh
+        TODO commande de Corentin
+        ```
+
+2. Open a browser tab and go to the following URL
 
 ```sh
-npm run dev
+http://localhost:3000/
 ```
 
-### Compile and Minify for Production
+3. Put the .bam file in the TODO folder
 
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+## Why not using a serverless app?
+- This project is intended to run for free
+- .bam files are too heavy to manipulate for free
+- It is faster to move .bam files in a local directory compared to uploading them in the cloud
