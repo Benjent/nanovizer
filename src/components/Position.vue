@@ -16,7 +16,7 @@ import ChartSaver from './ChartSaver.vue'
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
                     <label class="data__label">Seuil</label>
-                    <input type="number" class="input data__value" v-model.number="threshold"/>
+                    <input type="number" class="input data__value" v-model.number="threshold" min="0" />
                 </div>
                 <div class="data">
                     <label class="data__label">Max</label>

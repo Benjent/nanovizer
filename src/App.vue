@@ -173,7 +173,7 @@ export default {
                         </div>
                         <div class="l-graphs__header__landing__form__input">
                             <label class="data__label">Genome size</label>
-                            <input class="input data__value" type="number" v-model.number="genomeSize"/>
+                            <input class="input data__value" type="number" v-model.number="genomeSize" min="0" />
                         </div>
                         <fieldset class="fieldset fieldset--overflow l-graphs__header__landing__form__fieldset">
                             <legend class="fieldset__legend">Position (optional)</legend>
