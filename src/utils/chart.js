@@ -2,7 +2,6 @@ import * as d3 from 'd3'
 import tooltipUtils from './tooltip'
 
 const getXMax = (max, dataMax) => {
-    console.log('max between', max, dataMax)
     return max ? Math.max(max, dataMax) : dataMax
 }
 
@@ -37,7 +36,6 @@ const setScales = (data, svg, width, height, options = {}) => {
     const keys = data.map((d) => d.key)
 
     const dataMax = d3.max(keys)
-    console.log(options.max)
     const xMax = options.max ? getXMax(options.max, dataMax) : dataMax
 
     const xScale = options.sorted

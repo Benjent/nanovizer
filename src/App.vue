@@ -55,6 +55,7 @@ export default {
             ],
             scrollPosition: 0,
             themeIcon: 'light_mode',
+            themeText: 'Light theme',
         }
     },
     computed: {
@@ -111,6 +112,7 @@ export default {
         toggleTheme() {
             document.body.classList.toggle("light")
             this.themeIcon = document.body.classList.contains("light") ? 'dark_mode' : 'light_mode'
+            this.themeText = document.body.classList.contains("light") ? 'Dark theme' : 'Light theme'
         },
         triggerParsing() {
             this.isLoading = true
@@ -222,7 +224,7 @@ export default {
                     </p>
             </template>
             <button class="button button--transparent l-graphs__header__switch-theme" @click="toggleTheme">
-                <Icon :icon="themeIcon" />
+                <Icon :icon="themeIcon" />&nbsp;{{themeText}}
             </button>
         </header>
         <main class="l-graphs__main">
@@ -279,6 +281,7 @@ export default {
             position: absolute;
             top: 20px;
             right: 20px;
+            font-size: 0.8rem;
         }
 
         &__titles {
