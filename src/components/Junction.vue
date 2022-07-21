@@ -112,23 +112,31 @@ export default {
             this.max = d3.max(links.map((l) => l.value))
 
             const xScale = d3.scaleLinear().range([0, width]).domain([0, xMax])
+            const xAxis = d3.axisBottom(xScale)
+            const xLegend = svg.append('g')
+            .attr('transform', 'translate(0,' + height + ')')
+            .call(xAxis)
+
+            const linkScale = d3.scaleLinear().domain([0, this.max]).range([0, 1])
 
             const arcs = svg
             .selectAll()
             .data(links)
             .enter()
             .append('path')
+                .attr('data-value', (d) => d.value)
                 .attr('d', (d) => {
                     const start = xScale(d.start)
                     const end = xScale(d.end)
-                    return ['M', start, height - 30,    // the arc starts at the coordinate x=start, y=height-30 (where the starting node is)
+                    return ['M', start, height,    // the arc starts at the coordinate x=start, y=height-30 (where the starting node is)
                         'A',                            // This means we're gonna build an elliptical arc
                         (start - end) / 2, ',',    // Next 2 lines are the coordinates of the inflexion point. Height of this point is proportional with start - end distance
                         (start - end) / 2, 0, 0, ',',
-                        start < end ? 1 : 0, end, ',', height - 30] // We always want the arc on top. So if end is before start, putting 0 here turn the arc upside down.
+                        start < end ? 1 : 0, end, ',', height] // We always want the arc on top. So if end is before start, putting 0 here turn the arc upside down.
                         .join(' ')
                     })
                 .style('fill', 'none')
+                .style('opacity', (d) => linkScale(d.value))
                 .classed('lollipop__stick', true)
 
             // const size = d3.scaleLinear()
@@ -141,50 +149,70 @@ export default {
             .enter()
             .append('circle')
                 .attr('data-key', (d) => d)
+                .attr('data-ends', (d) => {
+                    const relatedLinks = links.filter((l) => [l.start, l.end].includes(d))
+                    const flattenedLinks = []
+                    relatedLinks.forEach((l) => {
+                        if (d !== l.start) {
+                            flattenedLinks.push(l.start)
+                        }
+                        if (d !== l.end) {
+                            flattenedLinks.push(l.end)
+                        }
+                    })
+                    const unique = [...new Set(flattenedLinks)]
+                    unique.sort((a, b) => a - b)
+                    return unique
+                })
                 .attr('cx', (d) => xScale(d))
-                .attr('cy', height - 30)
+                .attr('cy', height)
                 .attr('r', (d) => 4)
                 .classed('lollipop__sugar', true)
 
-            const labels = svg
-            .selectAll()
-            .data(nodes)
-            .enter()
-            .append('text')
-                .attr('data-key', (d) => d)
-                .attr('x', (d) => xScale(d))
-                .attr('y', height - 10)
-                .text((d) => d)
-                .style('text-anchor', 'middle')
-                .style('font-size', '0.71em')
-                .style('opacity', 0)
+            // const labels = svg
+            // .selectAll()
+            // .data(nodes)
+            // .enter()
+            // .append('text')
+            //     .attr('data-key', (d) => d)
+            //     .attr('x', (d) => xScale(d))
+            //     .attr('y', height - 10)
+            //     .text((d) => d)
+            //     .style('text-anchor', 'middle')
+            //     .style('font-size', '0.71em')
+            //     .style('color', 'pink')
+            //     .style('fill', 'pink')
+            //     .style('stroke', 'pink')
+            //     .style('opacity', 0)
 
             const tooltip = tooltipUtils.set(this.idGraph)
             circles
             .on('mouseover', function (event) {
-                const opacity = 0.1
+                const opacity = 0
                 circles.style('opacity', opacity)
                 d3.select(this).style('opacity', 1)
 
                 const key = Number.parseInt(event.target.dataset.key)
                 arcs.style('opacity', (l) => [l.start, l.end].includes(key) ? 1 : opacity)
-                labels.style('opacity', (l) => l === key ? 1 : 0)
+                // labels.style('opacity', (l) => l === key ? 1 : 0)
                 tooltip.style('opacity', 1)
             })
             .on('mousemove', function (event) {
                 tooltipUtils.setCoordinates(event, tooltip)
                 tooltip.style('left', event.clientX + 'px') // Somehow d3 messes up x position
                 const key = Number.parseInt(event.target.dataset.key)
+                const ends = event.target.dataset.ends.replaceAll(',', ', ')
                 tooltip
                 .html(`
                     <div>Position: ${key}</div>
+                    <div>Junction with: ${ends}</div>
                 `)
             })
             .on('mouseleave', function () {
                 tooltipUtils.reset(tooltip)
                 circles.style('opacity', 1)
-                arcs.style('opacity', 1)
-                labels.style('opacity', 0)
+                arcs.style('opacity', (d) => linkScale(d.value))
+                // labels.style('opacity', 0)
             })
         },
     },

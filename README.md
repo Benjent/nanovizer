@@ -88,7 +88,7 @@ TODO NanoVizer explainations
 http://localhost:3000/
 ```
 
-3. Put the .bam file in the TODO folder
+3. Put the .bam file in the */data* folder
 
 ## FAQ
 

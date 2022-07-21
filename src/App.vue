@@ -1,6 +1,7 @@
 <script setup>
 import axios from './libs/axios'
-import showcaseResponse from './showcase-response.json'
+import showcaseSmall from './showcase/showcase-hdv.json'
+import showcaseBig from './showcase/showcase-sars.json'
 import Barcode from './components/Barcode.vue'
 import BlockCount from './components/BlockCount.vue'
 import Position from './components/Position.vue'
@@ -143,11 +144,14 @@ export default {
             this.scrollPosition = window.scrollY
         },
         useShowcaseData() {
+            const isShowcaseBig = false && Math.random() < 0.5
+            const showcaseResponse = isShowcaseBig ? showcaseBig : showcaseSmall
+
             this.isLoading = true
             this.isError = false
-            this.fileName = 'showcase'
+            this.fileName = isShowcaseBig ? 'showcase_big' : 'showcase_small'
             this.genomeName = 'genome'
-            this.genomeSize = 30000
+            this.genomeSize = isShowcaseBig ? 30000 : 2000
             this.minPosition3 = undefined
             this.minPosition5 = undefined
             this.maxPosition5 = undefined
