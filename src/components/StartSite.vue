@@ -39,6 +39,9 @@ export default {
         data: {
             type: Array,
         },
+        genomeSize: {
+            type: Number,
+        },
     },
     data() {
         return {
@@ -73,7 +76,7 @@ export default {
         drawGraph() {
             if (!this.$refs[this.idGraph] || !this.filteredD3Data) { return }
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
-            const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3Data, svg, width, height)
+            const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3Data, svg, width, height, { max: this.genomeSize })
             const { lines, circles } = chartUtils.drawLollipops(this.idGraph, this.filteredD3Data, svg, xScale, yScale)
 
             this.max = yMax

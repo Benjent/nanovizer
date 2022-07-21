@@ -145,7 +145,7 @@ export default {
             this.isError = false
             this.fileName = 'showcase'
             this.genomeName = 'genome'
-            this.genomeSize = 133
+            this.genomeSize = 30000
             this.minPosition3 = undefined
             this.minPosition5 = undefined
             this.maxPosition5 = undefined
@@ -162,10 +162,12 @@ export default {
 <template>
     <div class="l-graphs">
         <header id="header" class="l-graphs__header" :class="{ 'l-graphs__header--overlay': !isFileLoaded }">
-            <section v-if="isFileLoaded">
-                <h1 class="title--1 data__value">{{fileName}}</h1>
-                <h2 class="title title--4">{{genomeName}} ({{genomeSize}})</h2>
-                <a class="link" @click="startAgain">Make another analysis</a>
+            <template v-if="isFileLoaded">
+                <div class="l-graphs__header__titles">
+                    <h1 class="title title--1 title--marginless data__value">{{fileName}}</h1>
+                    <h2 class="title title--4 title--marginless">{{genomeName}} ({{genomeSize}})</h2>
+                    <a class="link" @click="startAgain">Make another analysis</a>
+                </div>
                 <nav class="l-graphs__header__nav">
                     <span class="l-graphs__header__nav__filler"></span>
                     <a
@@ -177,34 +179,35 @@ export default {
                     </a>
                     <span class="l-graphs__header__nav__filler"></span>
                 </nav>
-            </section>
-            <section class="l-graphs__header__landing" v-else>
+                <div class="l-graphs__header__titles"></div>
+            </template>
+            <template v-else>
                 <h1 class="title--1 l-graphs__header__title">NanoVizer</h1>
-                    <form class="l-graphs__header__landing__form">
-                        <div class="l-graphs__header__landing__form__input">
+                    <form class="l-graphs__header__form">
+                        <div class="l-graphs__header__form__input">
                             <label class="data__label">File name</label>
                             <input class="input data__value" v-model="fileName"/>
                         </div>
                         <a class="link l-graphs__header__try" @click="useShowcaseData">Or try with showcase data</a>
-                        <div class="l-graphs__header__landing__form__input">
+                        <div class="l-graphs__header__form__input">
                             <label class="data__label">Genome name</label>
                             <input class="input data__value" v-model="genomeName"/>
                         </div>
-                        <div class="l-graphs__header__landing__form__input">
+                        <div class="l-graphs__header__form__input">
                             <label class="data__label">Genome size</label>
                             <input class="input data__value" type="number" v-model.number="genomeSize" min="0" />
                         </div>
-                        <fieldset class="fieldset fieldset--overflow l-graphs__header__landing__form__fieldset">
+                        <fieldset class="fieldset fieldset--overflow l-graphs__header__form__fieldset">
                             <legend class="fieldset__legend">Position (optional)</legend>
-                            <div class="l-graphs__header__landing__form__input">
+                            <div class="l-graphs__header__form__input">
                                 <label class="data__label">3' minimum position</label>
                                 <input class="input data__value" v-model="minPosition3"/>
                             </div>
-                            <div class="l-graphs__header__landing__form__input">
+                            <div class="l-graphs__header__form__input">
                                 <label class="data__label">5' minimum position</label>
                                 <input class="input data__value" v-model="minPosition5"/>
                             </div>
-                            <div class="l-graphs__header__landing__form__input">
+                            <div class="l-graphs__header__form__input">
                                 <label class="data__label">5' maximum position</label>
                                 <input class="input data__value" v-model="maxPosition5"/>
                             </div>
@@ -217,7 +220,7 @@ export default {
                     <p v-if="isError" class="l-graphs__header__error">
                         An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
                     </p>
-            </section>
+            </template>
             <button class="button button--transparent l-graphs__header__switch-theme" @click="toggleTheme">
                 <Icon :icon="themeIcon" />
             </button>
@@ -225,11 +228,11 @@ export default {
         <main class="l-graphs__main">
             <Size :data="nanoVizerData?.read_size" />
             <BlockCount :data="nanoVizerData?.block_count" />
-            <StartSite :data="nanoVizerData?.start_site_count" />
-            <Position :data="nanoVizerData?.['3_prime_count']" :type="3"/>
-            <Position :data="nanoVizerData?.['5_prime_count']" :type="5"/>
-            <Junction :data="nanoVizerData?.junction_count" />
-            <Barcode :data="nanoVizerData?.barcode_count" :size="genomeSize" />
+            <StartSite :data="nanoVizerData?.start_site_count" :genome-size="genomeSize" />
+            <Position :data="nanoVizerData?.['3_prime_count']" :type="3" :genome-size="genomeSize" />
+            <Position :data="nanoVizerData?.['5_prime_count']" :type="5" :genome-size="genomeSize" />
+            <Junction :data="nanoVizerData?.junction_count" :genome-size="genomeSize" />
+            <Barcode :data="nanoVizerData?.barcode_count" :genome-size="genomeSize" />
             <Summary :data="nanoVizerData?.read_summary_count" />
         </main>
         <footer class="l-graphs__footer">
@@ -257,14 +260,19 @@ export default {
     font-weight: normal;
 
     &__header {
+        display: flex;
+        align-items: end;
         position: sticky;
         z-index: 1;
         top: 0;
         background: var(--background-dark);
-        transition: height 1s;
+        border-bottom: solid 2px var(--background-ultralight);
 
         &--overlay {
+            display: block;
             height: 100vh;
+            border-color: var(--background-dark);
+            box-sizing: border-box;
         }
 
         &__switch-theme {
@@ -273,30 +281,31 @@ export default {
             right: 20px;
         }
 
+        &__titles {
+            flex: 1;
+            padding: 10px 20px;
+        }
+
         &__title {
             margin-bottom: 30px;
             padding-top: 6%;
         }
 
-        &__landing {
-            height: 100%;
+        &__form {
+            margin: auto;
+            width: fit-content;
 
-            &__form {
-                margin: auto;
+            &__input + &__input{
+                margin-top: 20px;
+            }
+
+            &__input {
+                text-align: right;
+            }
+
+            &__fieldset {
                 width: fit-content;
-
-                &__input + &__input{
-                    margin-top: 20px;
-                }
-
-                &__input {
-                    text-align: right;
-                }
-
-                &__fieldset {
-                    width: fit-content;
-                    margin-top: 40px;
-                }
+                margin-top: 40px;
             }
         }
 
@@ -325,8 +334,8 @@ export default {
             &__item {
                 padding: 10px 20px;
                 cursor: pointer;
-                border-bottom: solid 2px transparent;
-                border-bottom-color: var(--background-ultralight);
+                // border-bottom: solid 2px transparent;
+                // border-bottom-color: var(--background-ultralight);
                 transition: all 0.2s;
 
                 &:hover:not(.l-graphs__header__nav__item--active) {
@@ -335,13 +344,13 @@ export default {
 
                 &--active {
                     background: var(--background-ultralight);
-                    border-bottom-color: transparent;
+                    // border-bottom-color: transparent;
                 }
             }
 
             &__filler {
                 flex: 1;
-                border-bottom: solid 2px var(--background-ultralight);
+                // border-bottom: solid 2px var(--background-ultralight);
             }
         }
 

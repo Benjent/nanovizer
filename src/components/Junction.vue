@@ -41,6 +41,9 @@ export default {
         data: {
             type: Array,
         },
+        genomeSize: {
+            type: Number,
+        },
     },
     data() {
         return {
@@ -104,7 +107,8 @@ export default {
             if (!this.$refs[this.idGraph] || !this.filteredD3Data) { return }
             const { nodes, links } = this.filteredD3Data
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width / 1.4, { height: this.$refs[this.idGraph].getBoundingClientRect().width / 2 })
-            const xMax = d3.max(nodes)
+            const dataMax = d3.max(nodes)
+            const xMax = chartUtils.getXMax(this.genomeSize, dataMax)
             this.max = d3.max(links.map((l) => l.value))
 
             const xScale = d3.scaleLinear().range([0, width]).domain([0, xMax])

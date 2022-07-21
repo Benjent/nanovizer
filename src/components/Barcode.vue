@@ -37,7 +37,7 @@ export default {
         data: {
             type: Array,
         },
-        size: {
+        genomeSize: {
             type: Number,
         },
     },
@@ -106,7 +106,7 @@ export default {
             const dataMax = d3.max(filteredData.map((d) => d.blocks[d.blocks.length - 1]))
 
             const xMin = d3.min(filteredData.map((d) => d.blocks[0]))
-            const xMax = this.size ? Math.max(this.size, dataMax) : dataMax
+            const xMax = chartUtils.getXMax(this.genomeSize, dataMax)
 
             if (!this.isShownBarcodes) {
                 filteredData.push({ barcode: `${this.filteredOutBarcodes} more to show...`, blocks: [1, xMax], count: -1 })
@@ -170,11 +170,9 @@ export default {
             .on('mousemove', function (event) {
                 tooltipUtils.setCoordinates(event, tooltip)
                 const start = Number.parseInt(event.target.dataset.start)
-                const end = Number.parseInt(event.target.dataset.end)
                 tooltip
                 .html(`
                     <div>Start: ${start}</div>
-                    <div>End: ${end}</div>
                 `)
             })
             .on('mouseleave', function () {

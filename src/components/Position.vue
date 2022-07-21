@@ -44,6 +44,9 @@ export default {
         data: {
             type: Array,
         },
+        genomeSize: {
+            type: Number,
+        },
         type: {
             type: Number,
             required: true,
@@ -103,7 +106,7 @@ export default {
         drawGraph() {
             if (!this.$refs[this.idGraph] || !this.filteredD3Data) { return }
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
-            const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3Data, svg, width, height)
+            const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3Data, svg, width, height, { max: this.genomeSize })
             const { lines, circles } = chartUtils.drawLollipops(this.idGraph, this.filteredD3Data, svg, xScale, yScale)
 
             this.max = yMax
@@ -111,7 +114,7 @@ export default {
         drawGraphSorted() {
             if (!this.$refs[`${this.idGraph}Sorted`] || !this.filteredD3Data) { return }
             const { svg, width, height, margin } = chartUtils.setSvg(`${this.idGraph}Sorted`, this.$refs[`${this.idGraph}Sorted`].getBoundingClientRect().width)
-            const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3DataSorted, svg, width, height, { sorted: true })
+            const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3DataSorted, svg, width, height, { max: this.genomeSize, sorted: true })
             const { lines, circles } = chartUtils.drawLollipops(`${this.idGraph}Sorted`, this.filteredD3DataSorted, svg, xScale, yScale)
         },
     },
@@ -132,6 +135,7 @@ export default {
         display: flex;
         justify-content: space-around;
         align-items: center;
+        width: 100%;
 
         & > *:not(:first-child) {
             margin-left: 20px;
