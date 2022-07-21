@@ -1,0 +1,19 @@
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    // border-bottom: solid 2px transparent;
+    // border-bottom-color: var(--background-ultralight);
+    transition: all 0.2s;
+    color: var(--tab-font);
+
+    &:hover:not(.tab--active) {
+        background: var(--tab-background-hover);
+        color: var(--tab-font-active);
+    }
+    
+    &--active {
+        background: var(--tab-background-active);
+        color: var(--tab-font-active);
+        // border-bottom-color: transparent;
+    }
+}

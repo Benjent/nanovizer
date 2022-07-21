@@ -5,6 +5,7 @@
     --marine-ultralight: #3b547b;
     --cyan: #42ccee;
     --blue: #468df3;
+    --blue-light: #6ca5f6;
     --pink: #c7489b;
     --pink-light: #e765ba;
     --pink-ultralight: #ffc0ec;
@@ -15,7 +16,7 @@
     --green-ultralight: #42ef9e;
     --white-light: #fefeff;
     --white: #fffffd;
-    --white-dark: #eeeeed;
+    --white-dark: #fefefd;
     --white-ultradark: #dfdfde;
     --grey: #cecece;
     --grey-dark: #bcbcbc;
@@ -35,30 +36,38 @@
     --button-background: var(--primary);
     --button-background-hover: var(--primary-light);
     --button-font: var(--white);
+    --chart: var(--tertiary);
     --input-background: var(--background-light);
     --input-background-hover: var(--background-ultralight);
     --link: var(--tertiary);
-    --chart: var(--tertiary);
+    --tab-background-active: var(--background-ultralight);
+    --tab-background-hover: var(--background);
+    --tab-font-active: var(--font);
 
     --alert: var(--pink);
     --disabled: var(--grey);
 }
 
 .light {
-    // --primary: var(--white);
-    // --primary-light: var(--white);
+    --primary: var(--blue);
+    --primary-light: var(--blue);
     --secondary: var(--blue);
-    // --tertiary: var(--pink-light);
+    --tertiary: var(--blue);
 
     --background: var(--white);
     --background-dark: var(--white-dark);
     --background-light: var(--white);
     --background-ultralight: var(--grey);
-    --font: var(--marine-dark);
+    --font: var(--grey-ultradark);
 
+    --button-background: var(--blue);
+    --button-background-hover: var(--blue-light);
     --chart: var(--grey-ultradark);
+    --input-background: var(--white-ultradark);
+    --input-background-hover: var(--grey);
+    --tab-background-active: var(--blue);
+    --tab-background-hover: var(--blue-light);
+    --tab-font-active: var(--white);
 
     --disabled: var(--grey-ultradark);
-
-    //#373b3e
 }

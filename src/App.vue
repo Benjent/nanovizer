@@ -171,8 +171,8 @@ export default {
                 <nav class="l-graphs__header__nav">
                     <span class="l-graphs__header__nav__filler"></span>
                     <a
-                        class="l-graphs__header__nav__item"
-                        :class="{ 'l-graphs__header__nav__item--active': activeNavItem === item.to }"
+                        class="tab"
+                        :class="{ 'tab--active': activeNavItem === item.to }"
                         v-for="item in nav" :key="item.to"
                         @click="scrollTo(item.to)">
                         {{item.title}}
@@ -266,7 +266,7 @@ export default {
         z-index: 1;
         top: 0;
         background: var(--background-dark);
-        border-bottom: solid 2px var(--background-ultralight);
+        border-bottom: solid 2px var(--tab-background-active);
 
         &--overlay {
             display: block;
@@ -330,23 +330,6 @@ export default {
             display: flex;
             justify-content: center;
             margin-top: 20px;
-
-            &__item {
-                padding: 10px 20px;
-                cursor: pointer;
-                // border-bottom: solid 2px transparent;
-                // border-bottom-color: var(--background-ultralight);
-                transition: all 0.2s;
-
-                &:hover:not(.l-graphs__header__nav__item--active) {
-                    background: var(--background);
-                }
-
-                &--active {
-                    background: var(--background-ultralight);
-                    // border-bottom-color: transparent;
-                }
-            }
 
             &__filler {
                 flex: 1;
