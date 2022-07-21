@@ -38,7 +38,7 @@ export default {
             minPosition3: undefined,
             minPosition5: undefined,
             maxPosition5: undefined,
-            headerHeightOffset: 200, // Ugly
+            headerHeightOffset: 190, // Ugly
             isFileLoaded: false,
             isLoading: false,
             isError: false,
@@ -66,7 +66,7 @@ export default {
             let highlightedNavItem =  this.nav[0].to
             this.nav.forEach((item) => {
                 const navItemScrollPosition = document.getElementById(item.to).offsetTop
-                if (this.scrollPosition + this.headerHeightOffset + 1 > navItemScrollPosition) {
+                if (this.scrollPosition + this.headerHeightOffset + 100 > navItemScrollPosition) {
                     highlightedNavItem = item.to
                 }
             })
@@ -89,17 +89,22 @@ export default {
     methods: {
         scrollTo(to) {
             const element = document.getElementById(to)
-            const headerHeightOffset = 200
-            window.scrollTo({ top: element.offsetTop - headerHeightOffset, behavior: "smooth" })
+            const niceOffset = 20
+            const top = to === this.nav[0].to ? 0 : element.offsetTop - this.headerHeightOffset - niceOffset
+            window.scrollTo({ top, behavior: "smooth" })
         },
         setNanovizerData(data) {
             this.nanoVizerData = data
             this.isLoading = false
             this.isFileLoaded = true
+
+            setTimeout(() => {
+                const header = document.querySelector('#header')
+                this.headerHeightOffset = header.getBoundingClientRect().height
+            }, 1001)
         },
         startAgain() {
             this.isFileLoaded = false
-            this.fileName = ''
             this.nanoVizerData = undefined
             window.scrollTo(0, 0)
         },
@@ -139,8 +144,8 @@ export default {
             this.isLoading = true
             this.isError = false
             this.fileName = 'showcase'
-            this.genomeName = ''
-            this.genomeSize = undefined
+            this.genomeName = 'genome'
+            this.genomeSize = 133
             this.minPosition3 = undefined
             this.minPosition5 = undefined
             this.maxPosition5 = undefined
@@ -156,9 +161,10 @@ export default {
 
 <template>
     <div class="l-graphs">
-        <header class="l-graphs__header" :class="{ 'l-graphs__header--overlay': !isFileLoaded }">
+        <header id="header" class="l-graphs__header" :class="{ 'l-graphs__header--overlay': !isFileLoaded }">
             <section v-if="isFileLoaded">
                 <h1 class="title--1 data__value">{{fileName}}</h1>
+                <h2 class="title title--4">{{genomeName}} ({{genomeSize}})</h2>
                 <a class="link" @click="startAgain">Make another analysis</a>
                 <nav class="l-graphs__header__nav">
                     <span class="l-graphs__header__nav__filler"></span>
@@ -223,7 +229,7 @@ export default {
             <Position :data="nanoVizerData?.['3_prime_count']" :type="3"/>
             <Position :data="nanoVizerData?.['5_prime_count']" :type="5"/>
             <Junction :data="nanoVizerData?.junction_count" />
-            <Barcode :data="nanoVizerData?.barcode_count" />
+            <Barcode :data="nanoVizerData?.barcode_count" :size="genomeSize" />
             <Summary :data="nanoVizerData?.read_summary_count" />
         </main>
         <footer class="l-graphs__footer">
@@ -255,7 +261,6 @@ export default {
         z-index: 1;
         top: 0;
         background: var(--background-dark);
-        height: 170px;
         transition: height 1s;
 
         &--overlay {
@@ -303,7 +308,7 @@ export default {
 
         &__try {
             font-size: 0.8rem;
-            margin-left: 100px; // Ugly fake align
+            margin-left: 120px; // Ugly fake align
         }
 
         &__button {

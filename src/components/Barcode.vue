@@ -37,6 +37,9 @@ export default {
         data: {
             type: Array,
         },
+        size: {
+            type: Number,
+        },
     },
     data() {
         return {
@@ -100,9 +103,10 @@ export default {
             const approximateBarHeight = 10
             const chartHeight = this.isShownBarcodes ? approximateBarHeight * this.d3Data.length : 160
             const filteredData = this.isShownBarcodes ? this.d3Data : this.d3Data.slice(0, this.minimumShownBarcodes)
+            const dataMax = d3.max(filteredData.map((d) => d.blocks[d.blocks.length - 1]))
 
             const xMin = d3.min(filteredData.map((d) => d.blocks[0]))
-            const xMax = d3.max(filteredData.map((d) => d.blocks[d.blocks.length - 1]))
+            const xMax = this.size ? Math.max(this.size, dataMax) : dataMax
 
             if (!this.isShownBarcodes) {
                 filteredData.push({ barcode: `${this.filteredOutBarcodes} more to show...`, blocks: [1, xMax], count: -1 })
@@ -135,7 +139,6 @@ export default {
             const entries = svg.selectAll()
                 .data(filteredData)
                 .enter()
-
 
             entries.each((d, i) => {
                 d.blocks.forEach(() => {
