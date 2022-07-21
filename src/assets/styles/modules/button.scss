@@ -1,18 +1,32 @@
 .button {
+    display: flex;
+    align-items: center;
     padding: var(--button-padding-v) var(--button-padding-h);
-    background: $primary;
-    color: $white;
+    background: var(--button-background);
+    color: var(--button-font);
     cursor: pointer;
     border-radius: var(--radius);
     height: fit-content;
+    width: fit-content;
+    transition: all 0.2s;
 
     &:disabled {
-        background: $disabled;
+        background: var(--disabled);
         opacity: 0.3;
         cursor: not-allowed;
     }
 
     &:hover:not(:disabled) {
-        background: lighten($primary, 10%);
+        background: var(--button-background-hover);
+    }
+
+    &--transparent {
+        background: transparent;
+        color: var(--button-background);
+
+        &:hover:not(:disabled) {
+            background: initial;
+            color: var(--button-background-hover);
+        }
     }
 }

@@ -1,16 +1,64 @@
-$marine: #1a2536;
-$turquoise: #39dbc4;
-$cyan: #42ccee;
-$blue: #468df3;
-$pink: #c7489b;
-$green: #1dca79;
-$white: #fbfbfe;
-$grey: #cecece;
+:root {
+    --marine: #1a2536;
+    --marine-dark: #131c28;
+    --marine-light: #2b3d58;
+    --marine-ultralight: #3b547b;
+    --cyan: #42ccee;
+    --blue: #468df3;
+    --pink: #c7489b;
+    --pink-light: #e765ba;
+    --pink-ultralight: #ffc0ec;
+    --orange: #ffa90a;
+    --green: #1dca79;
+    --green-dark: #20a466;
+    --green-light: #38e292;
+    --green-ultralight: #42ef9e;
+    --white-light: #fefeff;
+    --white: #fffffd;
+    --white-dark: #eeeeed;
+    --white-ultradark: #dfdfde;
+    --grey: #cecece;
+    --grey-dark: #bcbcbc;
+    --grey-ultradark: #aaaaaa;
 
-$primary: $green;
-$secondary: $cyan;
-$tertiary: $blue;
+    --primary: var(--green);
+    --primary-light: var(--green-light);
+    --secondary: var(--cyan);
+    --tertiary: var(--blue);
 
-// Semantics
-$alert: $pink;
-$disabled: $grey;
+    --background: var(--marine);
+    --background-dark: var(--marine-dark);
+    --background-light: var(--marine-light);
+    --background-ultralight: var(--marine-ultralight);
+    --font: var(--white);
+
+    --button-background: var(--primary);
+    --button-background-hover: var(--primary-light);
+    --button-font: var(--white);
+    --input-background: var(--background-light);
+    --input-background-hover: var(--background-ultralight);
+    --link: var(--tertiary);
+    --chart: var(--tertiary);
+
+    --alert: var(--pink);
+    --disabled: var(--grey);
+}
+
+.light {
+    // --primary: var(--white);
+    // --primary-light: var(--white);
+    --secondary: var(--blue);
+    // --tertiary: var(--pink-light);
+
+    --background: var(--white);
+    --background-dark: var(--white-dark);
+    --background-light: var(--white);
+    --background-ultralight: var(--grey);
+    --font: var(--marine-dark);
+
+    --chart: var(--grey-ultradark);
+
+    --disabled: var(--grey-ultradark);
+
+    //#373b3e
+}

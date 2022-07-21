@@ -5,6 +5,7 @@ import mathUtils from '../utils/math'
 import tooltipUtils from '../utils/tooltip'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
+import Icon from './Icon.vue'
 import Loader from './Loader.vue'
 </script>
 
@@ -15,7 +16,7 @@ import Loader from './Loader.vue'
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <button class="button l-barcode__sticky-cta" :disabled="isLoading" @click="collapseBarcodes">
                 <Loader v-if="isLoading" />
-                <span v-else>{{revealButtonText}}</span>
+                <Icon v-else :icon="revealButtonIcon" />&nbsp;{{revealButtonText}}
             </button>
             <footer v-if="d3Data" class="entry__footer">
                 <ChartSaver :id-graph="idGraph" />
@@ -29,6 +30,7 @@ export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
+        Icon,
         Loader,
     },
     props: {
@@ -48,6 +50,9 @@ export default {
     computed: {
         filteredOutBarcodes() {
             return this.d3Data.length - this.minimumShownBarcodes
+        },
+        revealButtonIcon() {
+            return this.isShownBarcodes ? 'unfold_less' : `unfold_more`
         },
         revealButtonText() {
             return this.isShownBarcodes ? 'Collapse' : `Reveal remaining ${this.filteredOutBarcodes} barcodes`
@@ -174,6 +179,7 @@ export default {
     &__sticky-cta {
         position: sticky;
         bottom: 20px;
+        margin: auto;
         margin-bottom: 20px;
     }
 }

@@ -3,7 +3,7 @@
     width: 100%;
 
     &:not(:first-child) {
-        border-top: solid 1px lighten($marine, 10%);
+        border-top: solid 1px var(--background-light);
     }
 
     &__graph {
@@ -12,11 +12,11 @@
     }
 
     &__footer {
-        // & > *:not(:first-child) {
-        //     margin-top: 20px;
-        // }
-        
-        * + button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        & > *:not(:first-child) {
             margin-top: 20px;
         }
     }

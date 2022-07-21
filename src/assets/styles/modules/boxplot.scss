@@ -1,9 +1,9 @@
 .boxplot {
     &__line {
-        stroke: $primary;
+        stroke: var(--primary);
     }
 
     &__box {
-        fill: $secondary;
+        fill: var(--secondary);
     }
 }

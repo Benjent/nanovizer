@@ -1,9 +1,13 @@
 <script setup>
 import { saveSvgAsPng } from 'save-svg-as-png'
+import Icon from './Icon.vue'
 </script>
 
 <script>
 export default {
+    components: {
+        Icon,
+    },
     props: {
         idGraph: {
             type: String,
@@ -22,5 +26,5 @@ export default {
 </script>
 
 <template>
-    <button class="button" @click="saveGraph">Save graph</button>
+    <button class="button" @click="saveGraph"><Icon icon="file_download" />&nbsp;Save graph</button>
 </template>

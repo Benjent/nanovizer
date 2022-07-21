@@ -131,6 +131,11 @@ export default {
     &__actions {
         display: flex;
         justify-content: space-around;
+        align-items: center;
+
+        & > *:not(:first-child) {
+            margin-left: 20px;
+        }
     }
 }
 </style>

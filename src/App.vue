@@ -4,6 +4,7 @@ import showcaseResponse from './showcase-response.json'
 import Barcode from './components/Barcode.vue'
 import BlockCount from './components/BlockCount.vue'
 import Position from './components/Position.vue'
+import Icon from './components/Icon.vue'
 import Junction from './components/Junction.vue'
 import Loader from './components/Loader.vue'
 import Size from './components/Size.vue'
@@ -20,6 +21,7 @@ export default {
     components: {
         Barcode,
         BlockCount,
+        Icon,
         Junction,
         Loader,
         Position,
@@ -52,6 +54,7 @@ export default {
                 { title: 'Summary', to: 'summary' },
             ],
             scrollPosition: 0,
+            themeIcon: 'light_mode',
         }
     },
     computed: {
@@ -75,7 +78,7 @@ export default {
                 && this.fileName && this.fileName.length !== 0
                 && this.genomeName && this.genomeName.length !== 0
                 && this.genomeSize
-        }
+        },
     },
     mounted() {
         window.addEventListener('scroll', this.updateScrollPosition)
@@ -99,6 +102,10 @@ export default {
             this.fileName = ''
             this.nanoVizerData = undefined
             window.scrollTo(0, 0)
+        },
+        toggleTheme() {
+            document.body.classList.toggle("light")
+            this.themeIcon = document.body.classList.contains("light") ? 'dark_mode' : 'light_mode'
         },
         triggerParsing() {
             this.isLoading = true
@@ -198,14 +205,16 @@ export default {
                         </fieldset>
                         <div class="l-graphs__header__button">
                             <Loader v-if="isLoading" />
-                            <button v-else class="button" :disabled="!isFormValid" type="button" @click="triggerParsing">Submit</button>
+                            <button v-else class="button" :disabled="!isFormValid" type="button" @click="triggerParsing"><Icon icon="science" />&nbsp;Submit</button>
                         </div>
                     </form>
                     <p v-if="isError" class="l-graphs__header__error">
                         An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
                     </p>
             </section>
-            
+            <button class="button button--transparent l-graphs__header__switch-theme" @click="toggleTheme">
+                <Icon :icon="themeIcon" />
+            </button>
         </header>
         <main class="l-graphs__main">
             <Size :data="nanoVizerData?.read_size" />
@@ -245,12 +254,18 @@ export default {
         position: sticky;
         z-index: 1;
         top: 0;
-        background: darken($marine, 4%);
+        background: var(--background-dark);
         height: 170px;
         transition: height 1s;
 
         &--overlay {
             height: 100vh;
+        }
+
+        &__switch-theme {
+            position: absolute;
+            top: 20px;
+            right: 20px;
         }
 
         &__title {
@@ -293,6 +308,8 @@ export default {
 
         &__button {
             margin-top: 40px;
+            display: flex;
+            justify-content: center;
         }
 
         &__nav {
@@ -304,27 +321,28 @@ export default {
                 padding: 10px 20px;
                 cursor: pointer;
                 border-bottom: solid 2px transparent;
-                border-bottom-color: lighten($marine, 20%);
+                border-bottom-color: var(--background-ultralight);
+                transition: all 0.2s;
 
                 &:hover:not(.l-graphs__header__nav__item--active) {
-                    background: $marine;
+                    background: var(--background);
                 }
 
                 &--active {
-                    background: lighten($marine, 20%);
+                    background: var(--background-ultralight);
                     border-bottom-color: transparent;
                 }
             }
 
             &__filler {
                 flex: 1;
-                border-bottom: solid 2px lighten($marine, 20%);
+                border-bottom: solid 2px var(--background-ultralight);
             }
         }
 
         &__error {
             margin-top: 20px;
-            color: $alert;
+            color: var(--alert);
         }
     }
 
@@ -334,7 +352,7 @@ export default {
 
     &__footer {
         padding: 20px 60px;
-        background: lighten($marine, 10%);
+        background: var(--background-light);
 
         &__feedback {
             font-size: 0.8rem;
