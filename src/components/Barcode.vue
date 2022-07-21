@@ -105,10 +105,10 @@ export default {
             const xMax = d3.max(filteredData.map((d) => d.blocks[d.blocks.length - 1]))
 
             if (!this.isShownBarcodes) {
-                filteredData.unshift({ barcode: `${this.filteredOutBarcodes} more to show...`, blocks: [1, xMax], count: -1 })
+                filteredData.push({ barcode: `${this.filteredOutBarcodes} more to show...`, blocks: [1, xMax], count: -1 })
             }
 
-            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width, { height: chartHeight, margin: { left: 180 } })
+            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width, { height: chartHeight, margin: { left: 180, right: 100 } })
             const xScale = d3.scaleLinear().range([0, width]).domain([xMin, xMax])
             const xAxis = d3.axisBottom(xScale)
             const xLegend = svg.append('g')
@@ -120,26 +120,36 @@ export default {
 
             const yScale = d3.scaleBand()
                 .domain(filteredData.map((d) => d.barcode))
-                .range([height, 0])
+                .range([0, height])
                 .padding(0.1)
             const yAxis = d3.axisLeft(yScale)
             const yLegend = svg.append('g').call(yAxis)
+
+            const yScaleRight = d3.scaleBand()
+                .domain(filteredData)
+                .range([0, height])
+                .padding(0.1)
+            const yAxisRight = d3.axisRight(yScaleRight).tickFormat((d) => d.count > 0 ? d.count : '')
+            const yLegendRight = svg.append('g').attr('transform', `translate(${width}, 0)`).call(yAxisRight)
 
             const entries = svg.selectAll()
                 .data(filteredData)
                 .enter()
 
+
             entries.each((d, i) => {
                 d.blocks.forEach(() => {
-                    if (i < d.blocks.length - 1) {
+                    if (i < d.blocks.length - 1 && d.count > 0) { // Strangely, rect is still drawn despite d.count > 0 condition
                         entries.append('rect')
                             .attr('data-start', (d) => d.blocks[i])
                             .attr('data-end', (d) => d.blocks[i + 1])
+                            .attr('data-count', (d) => d.count)
                             .attr('x', (d) => xScale(d.blocks[i]))
                             .attr('y', (d) => i % 2 === 0 ? yScale(d.barcode) : yScale(d.barcode) + yScale.bandwidth() / 2)
                             .attr('height', () => i % 2 === 0 ? yScale.bandwidth() : 0.6)
                             .attr('width', (d) => xScale(d.blocks[i + 1] - d.blocks[i]))
                             .classed('rectangle', true)
+                            .style('display', (d) => d.count > 0 ? 'initial' : 'none') // Hide rect since d.count > 0 condition is not applied
                     }
                 })
             })
