@@ -1,14 +1,14 @@
 .input {
     padding: var(--button-padding-v) var(--button-padding-h);
     background: var(--input-background);
-    border: solid 1px var(--tertiary);
+    border: solid 1px var(--secondary);
     border-top-color: transparent;
     border-right-color: transparent;
     border-left-color: transparent;
     transition: all 0.2s;
 
     &:focus {
-        border: solid 1px var(--tertiary);
+        border: solid 1px var(--secondary);
     }
 
     &:hover {

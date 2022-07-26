@@ -1,5 +1,5 @@
 .fieldset {
-    border-color: var(--tertiary);
+    border-color: var(--secondary);
     border-radius: var(--radius);
 
     &--overflow {
@@ -8,6 +8,6 @@
     }
 
     &__legend {
-        color: var(--tertiary);
+        color: var(--secondary);
     }
 }

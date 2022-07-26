@@ -1,20 +1,16 @@
 :root {
+    --blue: 70, 141, 243;
+    --blue-light: 108, 165, 246;
+    --cyan: 66, 186, 238;
+    --cyan-light: 94, 201, 247;
+    --green: 29, 202, 121;
+    --green-light: 56, 226, 146;
+
     --marine: #1a2536;
     --marine-dark: #131c28;
     --marine-light: #2b3d58;
     --marine-ultralight: #3b547b;
-    --cyan: #42ccee;
-    --blue: #468df3;
-    --blue-light: #6ca5f6;
     --pink: #c7489b;
-    --pink-light: #e765ba;
-    --pink-ultralight: #ffc0ec;
-    --orange: #ffa90a;
-    --green: #1dca79;
-    --green-dark: #20a466;
-    --green-light: #38e292;
-    --green-ultralight: #42ef9e;
-    --white-light: #fefeff;
     --white: #fffffd;
     --white-dark: #fefefd;
     --white-ultradark: #dfdfde;
@@ -22,27 +18,29 @@
     --grey-dark: #bcbcbc;
     --grey-ultradark: #aaaaaa;
 
-    --primary: var(--green);
-    --primary-light: var(--green-light);
-    --secondary: var(--cyan);
-    --tertiary: var(--blue);
+    --primary: rgb(var(--green));
+    --primary-hover: rgb(var(--green-light));
+    --primary-hover-background: rgba(var(--green), 0.1);
+    --secondary: rgb(var(--blue));
+    --secondary-hover: rgb(var(--blue-light));
+    --secondary-hover-background: rgba(var(--blue), 0.1);
+    --tertiary: rgb(var(--cyan));
 
     --background: var(--marine);
-    --background-dark: var(--marine-dark);
-    --background-light: var(--marine-light);
-    --background-ultralight: var(--marine-ultralight);
+    --background-header: var(--marine-dark);
+    --background-footer: var(--marine-light);
+
     --font: var(--white);
     --font-helper: var(--grey-ultradark);
-
-    --button-background: var(--primary);
-    --button-background-hover: var(--primary-light);
     --button-font: var(--white);
-    --chart: var(--tertiary);
-    --input-background: var(--background-light);
-    --input-background-hover: var(--background-ultralight);
+
+    --chart-axis: var(--white);
+    --chart-data: rgb(var(--green));
+    --input-background: var(--marine-light);
+    --input-background-hover: var(--marine-ultralight);
     --link: var(--tertiary);
-    --tab-background-active: var(--background-ultralight);
-    --tab-background-hover: var(--background);
+    --tab-background-active: var(--secondary);
+    --tab-background-hover: var(--marine);
     --tab-font-active: var(--font);
 
     --alert: var(--pink);
@@ -50,26 +48,31 @@
 }
 
 .light {
-    --primary: var(--blue);
-    --primary-light: var(--blue);
-    --secondary: var(--blue);
-    --tertiary: var(--blue);
+    --primary: rgb(var(--blue));
+    --primary-hover: rgb(var(--blue-light));
+    --primary-hover-background: rgba(var(--blue), 0.1);
+    --secondary: rgb(var(--blue));
+    --secondary-hover: rgb(var(--blue-light));
+    --secondary-hover-background: rgba(var(--blue), 0.1);
+    --tertiary: rgb(var(--blue));
 
     --background: var(--white);
-    --background-dark: var(--white-dark);
-    --background-light: var(--white);
-    --background-ultralight: var(--grey);
+    --background-header: var(--white-dark);
+    --background-footer: var(--white);
+
     --font: var(--grey-ultradark);
     --font-helper: var(--grey-dark);
+    --button-font: var(--white);
 
-    --button-background: var(--blue);
-    --button-background-hover: var(--blue-light);
-    --chart: var(--grey-ultradark);
+    --chart-axis: var(--grey-ultradark);
+    --chart-data: rgb(var(--blue));
     --input-background: var(--white-ultradark);
     --input-background-hover: var(--grey);
-    --tab-background-active: var(--blue);
-    --tab-background-hover: var(--blue-light);
+    --link: var(--tertiary);
+    --tab-background-active: var(--primary);
+    --tab-background-hover: var(--primary-hover);
     --tab-font-active: var(--white);
 
+    --alert: var(--pink);
     --disabled: var(--grey-ultradark);
 }

@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     padding: var(--button-padding-v) var(--button-padding-h);
-    background: var(--button-background);
+    background: var(--primary);
     color: var(--button-font);
     cursor: pointer;
     border-radius: var(--radius);
@@ -11,7 +11,7 @@
     transition: all 0.2s;
 
     &:disabled {
-        &:not(.button--transparent) {
+        &:not(.button--text) {
             background: var(--disabled);
             opacity: 0.3;
             cursor: not-allowed;
@@ -19,16 +19,24 @@
     }
 
     &:hover:not(:disabled) {
-        background: var(--button-background-hover);
+        background: var(--primary-hover);
+    }
+    
+    &--secondary {
+        background: var(--secondary);
+        
+            &:hover:not(:disabled) {
+                background: var(--secondary-hover);
+            }
     }
 
-    &--transparent {
+    &--text {
         background: transparent;
-        color: var(--button-background);
+        color: var(--primary);
 
         &:hover:not(:disabled) {
-            background: initial;
-            color: var(--button-background-hover);
+            background: var(--primary-hover-background);
+            color: var(--primary-hover);
         }
 
         &:disabled {

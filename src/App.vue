@@ -228,7 +228,7 @@ export default {
                             <div class="l-graphs__header__genomes">
                                 <Loader v-if="isLoadingGenomes" />
                                 <template v-else>
-                                    <button class="button button--transparent" :disabled="!isFileNameValid" @click="getGenomes">List genomes from file</button>
+                                    <button class="button button--text" :disabled="!isFileNameValid" @click="getGenomes">List genomes from file</button>
                                     <p class="helper" v-if="knownGenomes">Known genomes for this file: {{knownGenomes.join(', ')}}</p>
                                 </template>
                             </div>
@@ -267,7 +267,7 @@ export default {
                         An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
                     </p>
             </template>
-            <button class="button button--transparent l-graphs__header__switch-theme" @click="toggleTheme">
+            <button class="button button--text l-graphs__header__switch-theme" @click="toggleTheme">
                 <Icon :icon="themeIcon" />&nbsp;{{themeText}}
             </button>
         </header>
@@ -311,13 +311,13 @@ export default {
         position: sticky;
         z-index: 1;
         top: 0;
-        background: var(--background-dark);
+        background: var(--background-header);
         border-bottom: solid 2px var(--tab-background-active);
 
         &--overlay {
             display: block;
             height: 100vh;
-            border-color: var(--background-dark);
+            border-color: var(--background-header);
             box-sizing: border-box;
         }
 
@@ -378,7 +378,6 @@ export default {
 
             &__filler {
                 flex: 1;
-                // border-bottom: solid 2px var(--background-ultralight);
             }
         }
 
@@ -402,7 +401,7 @@ export default {
 
     &__footer {
         padding: 20px 60px;
-        background: var(--background-light);
+        background: var(--background-footer);
 
         &__feedback {
             font-size: 0.8rem;

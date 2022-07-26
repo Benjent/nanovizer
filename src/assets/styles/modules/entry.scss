@@ -2,10 +2,6 @@
     padding: 40px 20px;
     width: 100%;
 
-    &:not(:first-child) {
-        border-top: solid 1px var(--background-light);
-    }
-
     &__graph {
         position: relative; // For tooltip
         margin-bottom: 20px;

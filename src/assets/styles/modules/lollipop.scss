@@ -1,11 +1,9 @@
 .lollipop {
     &__sugar {
-        // stroke: var(--primary);
-        // stroke-width: 0.2;
-        fill: var(--secondary);
+        fill: var(--chart-data);
     }
 
     &__stick {
-        stroke: var(--secondary);
+        stroke: var(--chart-data);
     }
 }

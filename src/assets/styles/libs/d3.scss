@@ -1,10 +1,10 @@
 .d3 {
     .domain {
-        stroke: var(--chart);
+        stroke: var(--chart-axis);
     }
 
     .tick {
-        color: var(--chart);
+        color: var(--chart-axis);
 
         text {
             font-size: 0.6rem;

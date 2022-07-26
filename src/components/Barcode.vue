@@ -14,10 +14,12 @@ import Loader from './Loader.vue'
         <h2 class="title title--2" id="barcode">Barcode</h2>
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
-            <button class="button l-barcode__sticky-cta" :disabled="isLoading" @click="collapseBarcodes">
+            <div class="l-barcode__sticky-cta">
                 <Loader v-if="isLoading" />
-                <Icon v-else :icon="revealButtonIcon" />&nbsp;{{revealButtonText}}
-            </button>
+                <button v-else class="button button--secondary" :disabled="isLoading" @click="collapseBarcodes">
+                    <Icon :icon="revealButtonIcon" />&nbsp;{{revealButtonText}}
+                </button>
+            </div>
             <footer v-if="d3Data" class="entry__footer">
                 <ChartSaver :id-graph="idGraph" />
             </footer>
@@ -188,6 +190,8 @@ export default {
 <style lang="scss">
 .l-barcode {
     &__sticky-cta {
+        display: flex;
+        justify-content: center;
         position: sticky;
         bottom: 20px;
         margin: auto;

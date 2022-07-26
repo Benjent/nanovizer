@@ -1,8 +1,6 @@
 .tab {
     padding: 10px 20px;
     cursor: pointer;
-    // border-bottom: solid 2px transparent;
-    // border-bottom-color: var(--background-ultralight);
     transition: all 0.2s;
     color: var(--tab-font);
 
@@ -14,6 +12,5 @@
     &--active {
         background: var(--tab-background-active);
         color: var(--tab-font-active);
-        // border-bottom-color: transparent;
     }
 }
