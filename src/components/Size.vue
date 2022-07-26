@@ -114,7 +114,7 @@ export default {
                 .attr('height', yScale(q1) - yScale(q3))
                 .attr('width', boxWidth)
                 .classed('boxplot__box', true)
-                .on('mouseover', function (d) {
+                .on('mouseover', function () {
                     tooltipBox.style('opacity', 1)
                 })
                 .on('mousemove', function(event) {
@@ -125,7 +125,7 @@ export default {
                         <div>Q3: ${q3}</div>
                     `)
                 })
-                .on('mouseleave', function (d) {
+                .on('mouseleave', function () {
                     tooltipUtils.reset(tooltipBox)
                 })
 
@@ -150,7 +150,11 @@ export default {
                 .attr('cy', (d) => yScale(d))
                 .attr('r', '4')
                 .classed('lollipop__sugar', true)
-                .on('mouseover', function (d) {
+                .on('mouseover', function () {
+                    const opacity = 0.1
+                    circles.style('opacity', opacity)
+                    d3.select(this).style('opacity', 1)
+                    
                     tooltipCircle.style('opacity', 1)
                 })
                 .on('mousemove', function(event) {
@@ -160,8 +164,9 @@ export default {
                         <div>Occurences: ${value}</div>
                     `)
                 })
-                .on('mouseleave', function (d) {
+                .on('mouseleave', function () {
                     tooltipUtils.reset(tooltipCircle)
+                    circles.style('opacity', 1)
                 })
         },
     },
