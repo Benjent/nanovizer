@@ -42,6 +42,7 @@ export default {
             headerHeightOffset: 190, // Ugly
             isFileLoaded: false,
             isLoading: false,
+            isLoadingGenomes: false,
             isError: false,
             nanoVizerData: undefined,
             nav: [
@@ -75,11 +76,20 @@ export default {
 
             return highlightedNavItem
         },
+        isFileNameValid() {
+            return this.fileName && this.fileName.length !== 0
+        },
         isFormValid() {
-            return !this.isLoading
-                && this.fileName && this.fileName.length !== 0
+            return !this.isLoading && !this.isLoadingGenomes
+                && this.isFileNameValid
                 && this.genomeName && this.genomeName.length !== 0
                 && this.genomeSize
+        },
+        knownGenomes() {
+            if (this.isFileNameValid) {
+                return JSON.parse(localStorage.getItem(this.fileName))
+            }
+            return null
         },
     },
     mounted() {
@@ -89,6 +99,21 @@ export default {
         window.removeEventListener('scroll', this.updateScrollPosition)
     },
     methods: {
+        getGenomes() {
+            this.isLoadingGenomes = true
+
+            axios.get('/genomes')
+            .then((response) => {
+                localStorage.setItem(this.fileName, JSON.stringify(response.data))
+            })
+            .catch((error) => {
+                console.error(error)
+                this.isError = true
+            })
+            .finally(() => {
+                this.isLoadingGenomes = false
+            })
+        },
         scrollTo(to) {
             const element = document.getElementById(to)
             const niceOffset = 20
@@ -194,30 +219,45 @@ export default {
                             <label class="data__label">File name</label>
                             <input class="input data__value" v-model="fileName"/>
                         </div>
-                        <a class="link l-graphs__header__try" @click="useShowcaseData">Or try with showcase data</a>
-                        <div class="l-graphs__header__form__input">
-                            <label class="data__label">Genome name</label>
-                            <input class="input data__value" v-model="genomeName"/>
-                        </div>
-                        <div class="l-graphs__header__form__input">
-                            <label class="data__label">Genome size</label>
-                            <input class="input data__value" type="number" v-model.number="genomeSize" min="0" />
-                        </div>
-                        <fieldset class="fieldset fieldset--overflow l-graphs__header__form__fieldset">
-                            <legend class="fieldset__legend">Position (optional)</legend>
-                            <div class="l-graphs__header__form__input">
-                                <label class="data__label">3' minimum position</label>
-                                <input class="input data__value" v-model="minPosition3"/>
+                        <p>
+                            <a class="link" @click="useShowcaseData">Or try with showcase data</a>
+                        </p>
+
+                        <fieldset class="fieldset l-graphs__header__form__fieldset">
+                            <legend class="fieldset__legend">Genome</legend>
+                            <div class="l-graphs__header__genomes">
+                                <Loader v-if="isLoadingGenomes" />
+                                <template v-else>
+                                    <button class="button button--transparent" :disabled="!isFileNameValid" @click="getGenomes">List genomes from file</button>
+                                    <p class="helper" v-if="knownGenomes">Known genomes for this file: {{knownGenomes.join(', ')}}</p>
+                                </template>
                             </div>
                             <div class="l-graphs__header__form__input">
-                                <label class="data__label">5' minimum position</label>
-                                <input class="input data__value" v-model="minPosition5"/>
+                                <label class="data__label">Name</label>
+                                <input class="input data__value" v-model="genomeName"/>
                             </div>
                             <div class="l-graphs__header__form__input">
-                                <label class="data__label">5' maximum position</label>
-                                <input class="input data__value" v-model="maxPosition5"/>
+                                <label class="data__label">Size</label>
+                                <input class="input input--pure data__value" type="number" v-model.number="genomeSize" min="0" />
                             </div>
                         </fieldset>
+
+                        <fieldset class="fieldset l-graphs__header__form__fieldset">
+                            <legend class="fieldset__legend">Position (optional)</legend>
+                            <div class="l-graphs__header__form__input">
+                                <label class="data__label">3' minimum</label>
+                                <input class="input input--pure data__value" type="number" v-model.number="minPosition3" min="0" />
+                            </div>
+                            <div class="l-graphs__header__form__input">
+                                <label class="data__label">5' minimum</label>
+                                <input class="input input--pure data__value" type="number" v-model.number="minPosition5" min="0" />
+                            </div>
+                            <div class="l-graphs__header__form__input">
+                                <label class="data__label">5' maximum</label>
+                                <input class="input input--pure data__value" type="number" v-model.number="maxPosition5" min="0" />
+                            </div>
+                        </fieldset>
+
                         <div class="l-graphs__header__button">
                             <Loader v-if="isLoading" />
                             <button v-else class="button" :disabled="!isFormValid" type="button" @click="triggerParsing"><Icon icon="science" />&nbsp;Submit</button>
@@ -301,6 +341,9 @@ export default {
         &__form {
             margin: auto;
             width: fit-content;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
 
             &__input + &__input{
                 margin-top: 20px;
@@ -322,11 +365,6 @@ export default {
             margin-bottom: 100px;
         }
 
-        &__try {
-            font-size: 0.8rem;
-            margin-left: 120px; // Ugly fake align
-        }
-
         &__button {
             margin-top: 40px;
             display: flex;
@@ -342,6 +380,14 @@ export default {
                 flex: 1;
                 // border-bottom: solid 2px var(--background-ultralight);
             }
+        }
+
+        &__genomes {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         &__error {

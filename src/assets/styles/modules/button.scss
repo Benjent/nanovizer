@@ -11,9 +11,11 @@
     transition: all 0.2s;
 
     &:disabled {
-        background: var(--disabled);
-        opacity: 0.3;
-        cursor: not-allowed;
+        &:not(.button--transparent) {
+            background: var(--disabled);
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
     }
 
     &:hover:not(:disabled) {
@@ -27,6 +29,12 @@
         &:hover:not(:disabled) {
             background: initial;
             color: var(--button-background-hover);
+        }
+
+        &:disabled {
+            color: var(--disabled);
+            opacity: 0.3;
+            cursor: not-allowed;
         }
     }
 }
