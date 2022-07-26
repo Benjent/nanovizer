@@ -195,8 +195,8 @@ export default {
         <header id="header" class="l-graphs__header" :class="{ 'l-graphs__header--overlay': !isFileLoaded }">
             <template v-if="isFileLoaded">
                 <div class="l-graphs__header__titles">
-                    <h1 class="title title--1 title--marginless data__value">{{fileName}}</h1>
-                    <h2 class="title title--4 title--marginless">{{genomeName}} ({{genomeSize}})</h2>
+                    <h2 class="title title--2 title--marginless data__value">{{fileName}}</h2>
+                    <h3 class="title title--4 title--marginless">{{genomeName}} ({{genomeSize}})</h3>
                     <a class="link" @click="startAgain">Make another analysis</a>
                 </div>
                 <nav class="l-graphs__header__nav">

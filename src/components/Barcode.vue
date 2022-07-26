@@ -1,5 +1,6 @@
 <script setup>
 import * as d3 from 'd3'
+import axios from '../libs/axios'
 import chartUtils from '../utils/chart'
 import mathUtils from '../utils/math'
 import tooltipUtils from '../utils/tooltip'
@@ -12,6 +13,17 @@ import Loader from './Loader.vue'
 <template>
     <section class="entry l-barcode">
         <h2 class="title title--2" id="barcode">Barcode</h2>
+        <div class="data">
+            <label class="data__label">FASTQ file name</label>
+            <input class="input data__value" v-model="fastqFile" min="0" />
+        </div>
+        <p class="helper l-barcode__helper">
+            Provide the name of the FASTQ file then click on a barcode to export all its corresponding sequences as a new FASTQ file saved in the result folder
+        </p>
+        <Loader v-if="isLoadingBarcode" />
+        <p v-if="isError" class="l-barcode__error">
+            An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
+        </p>
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <div class="l-barcode__sticky-cta">
@@ -45,8 +57,11 @@ export default {
     },
     data() {
         return {
+            fastqFile: '',
             idGraph: 'd3GraphBarcode',
+            isError: false,
             isLoading: false,
+            isLoadingBarcode: false,
             isShownBarcodes: true,
             d3Data: undefined,
             minimumShownBarcodes: 10
@@ -69,6 +84,23 @@ export default {
                 const parsedData = this.parseData(value)
                 this.d3Data = mathUtils.sort(parsedData, 'count', 'DESC')
                 this.drawGraph()
+            }
+        },
+        fastqFile(newVal) {
+            this.isError = false
+            const barcodes = document.querySelector('.barcode-axis').querySelectorAll('text')
+            if (newVal && newVal.length !== 0) {
+                barcodes.forEach((n) => {
+                    if (!n.classList.contains('link')) {
+                        n.classList.add('link')
+                    }
+                })
+            } else {
+                barcodes.forEach((n) => {
+                    if (n.classList.contains('link')) {
+                        n.classList.remove('link')
+                    }
+                })
             }
         },
         isShownBarcodes(value) {
@@ -100,7 +132,22 @@ export default {
                 }
             })
         },
+        saveBarcodeDetails(barcode) {
+            this.isLoadingBarcode = true
+
+            axios.post('/barcode', { barcode })
+            .then((response) => {})
+            .catch((error) => {
+                console.error(error)
+                this.isError = true
+            })
+            .finally(() => {
+                this.isLoadingBarcode = false
+            })
+        },
         drawGraph() {
+            const self = this
+
             if (!this.$refs[this.idGraph] || !this.d3Data) { return }
             const approximateBarHeight = 10
             const chartHeight = this.isShownBarcodes ? approximateBarHeight * this.d3Data.length : 160
@@ -129,7 +176,18 @@ export default {
                 .range([0, height])
                 .padding(0.1)
             const yAxis = d3.axisLeft(yScale)
-            const yLegend = svg.append('g').call(yAxis)
+            const yLegend = svg.append('g').classed('barcode-axis', true).call(yAxis)
+
+            const barcodes = svg.select('.barcode-axis')
+                .selectAll('.tick text')
+                // .classed('link', true)
+                .attr('data-barcode', (d) => d)
+                .on('click', function (event) {
+                    if (event.target.classList.contains('link')) {
+                        d3.select(this).classed('link', false)
+                        self.saveBarcodeDetails(event.target.dataset.barcode)
+                    }
+                })
 
             const yScaleRight = d3.scaleBand()
                 .domain(filteredData)
@@ -189,6 +247,15 @@ export default {
 
 <style lang="scss">
 .l-barcode {
+    &__helper {
+        margin-bottom: 20px;
+    }
+
+    &__error {
+        margin-top: 20px;
+        color: var(--alert);
+    }
+
     &__sticky-cta {
         display: flex;
         justify-content: center;

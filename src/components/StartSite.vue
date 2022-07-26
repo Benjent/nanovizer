@@ -12,7 +12,7 @@ import ChartSaver from './ChartSaver.vue'
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
-                    <label class="data__label">Seuil</label>
+                    <label class="data__label">Threshold</label>
                     <input type="number" class="input data__value" v-model.number="threshold" min="0" />
                 </div>
                 <div class="data">

@@ -1,6 +1,7 @@
 .fieldset {
     border-color: var(--secondary);
     border-radius: var(--radius);
+    padding: 20px;
 
     &--overflow {
         margin-left: -25px;
