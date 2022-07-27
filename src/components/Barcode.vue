@@ -235,9 +235,11 @@ export default {
             .on('mousemove', function (event) {
                 tooltipUtils.setCoordinates(event, tooltip)
                 const start = Number.parseInt(event.target.dataset.start)
+                const end = Number.parseInt(event.target.dataset.end) - 1 // Because end is inclusive
                 tooltip
                 .html(`
                     <div>Start: ${start}</div>
+                    <div>End: ${end}</div>
                 `)
             })
             .on('mouseleave', function () {
