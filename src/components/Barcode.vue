@@ -3,6 +3,7 @@ import * as d3 from 'd3'
 import axios from '../libs/axios'
 import chartUtils from '../utils/chart'
 import mathUtils from '../utils/math'
+import numberUtils from '../utils/number'
 import tooltipUtils from '../utils/tooltip'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
@@ -28,11 +29,20 @@ import Loader from './Loader.vue'
             <div :id="idGraph" :ref="idGraph" class="entry__graph entry__graph--big"></div>
             <div class="l-barcode__sticky-cta">
                 <Loader v-if="isLoading" />
-                <button v-else class="button button--secondary" :disabled="isLoading" @click="collapseBarcodes">
-                    <Icon :icon="revealButtonIcon" />&nbsp;{{revealButtonText}}
-                </button>
+                <template v-else>
+                    <button  class="button button--secondary" :disabled="isLoading" @click="moreBarcodes">
+                        <Icon icon="playlist_add" />&nbsp;Reveal 10 more barcodes
+                    </button>
+                    <button  class="button button--secondary" :disabled="isLoading" @click="lessBarcodes">
+                        <Icon icon="remove" />&nbsp;Hide last barcode
+                    </button>
+                </template>
             </div>
             <footer v-if="d3Data" class="entry__footer">
+                <div class="data">
+                    <label class="data__label">Displayed data percentage</label>
+                    <output class="data__value">{{percentageFilteredD3Data}}%</output>
+                </div>
                 <ChartSaver :id-graph="idGraph" />
             </footer>
         </div>
@@ -62,20 +72,18 @@ export default {
             isError: false,
             isLoading: false,
             isLoadingBarcode: false,
-            isShownBarcodes: false,
             d3Data: undefined,
-            minimumShownBarcodes: 10
+            nbShownBarcodes: 10,
         }
     },
     computed: {
-        filteredOutBarcodes() {
-            return this.d3Data && this.d3Data.length - this.minimumShownBarcodes
+        filteredD3Data() {
+            return this.d3Data?.slice(0, this.nbShownBarcodes)
         },
-        revealButtonIcon() {
-            return this.isShownBarcodes ? 'unfold_less' : `unfold_more`
-        },
-        revealButtonText() {
-            return this.isShownBarcodes ? 'Collapse' : `Reveal remaining ${this.filteredOutBarcodes} barcodes`
+        percentageFilteredD3Data() {
+            const ratio = this.d3Data && this.filteredD3Data ? this.filteredD3Data.length / this.d3Data.length : 1
+            const percentage = ratio * 100
+            return numberUtils.frFloat(numberUtils.decimal(percentage))
         },
     },
     watch: {
@@ -103,7 +111,7 @@ export default {
                 })
             }
         },
-        isShownBarcodes(value) {
+        nbShownBarcodes(value) {
             if (value) {
                 this.isLoading = true
                 setTimeout(() => {
@@ -117,8 +125,11 @@ export default {
         },
     },
     methods: {
-        collapseBarcodes() {
-            this.isShownBarcodes = !this.isShownBarcodes
+        moreBarcodes() {
+            this.nbShownBarcodes += 10
+        },
+        lessBarcodes() {
+            this.nbShownBarcodes -= 1
         },
         parseData(data) {
             return data.map((d) => {
@@ -149,17 +160,12 @@ export default {
             const self = this
 
             if (!this.$refs[this.idGraph] || !this.d3Data) { return }
-            const approximateBarHeight = 10
-            const chartHeight = this.isShownBarcodes ? approximateBarHeight * this.d3Data.length : 160
-            const filteredData = this.isShownBarcodes ? this.d3Data : this.d3Data.slice(0, this.minimumShownBarcodes)
-            const dataMax = d3.max(filteredData.map((d) => d.blocks[d.blocks.length - 1]))
+            const approximateBarHeight = 20
+            const chartHeight = approximateBarHeight * this.filteredD3Data.length
+            const dataMax = d3.max(this.filteredD3Data.map((d) => d.blocks[d.blocks.length - 1]))
 
-            const xMin = d3.min(filteredData.map((d) => d.blocks[0]))
+            const xMin = d3.min(this.filteredD3Data.map((d) => d.blocks[0]))
             const xMax = chartUtils.getXMax(this.genomeSize, dataMax)
-
-            if (!this.isShownBarcodes) {
-                filteredData.push({ barcode: `${this.filteredOutBarcodes} more to show...`, blocks: [1, xMax], count: -1 })
-            }
 
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width, { height: chartHeight, margin: { left: 180, right: 100 } })
             const xScale = d3.scaleLinear().range([0, width]).domain([xMin, xMax])
@@ -167,20 +173,20 @@ export default {
             const xLegend = svg.append('g')
                 .attr('transform', 'translate(0,' + height + ')')
                 .call(xAxis)
-                .selectAll('text')
-                    .attr('transform', 'translate(-10,0)rotate(-45)')
-                    .style('text-anchor', 'end')
+                // .selectAll('text')
+                //     .attr('transform', 'translate(-10,0)rotate(-45)')
+                //     .style('text-anchor', 'end')
 
             const yScale = d3.scaleBand()
-                .domain(filteredData.map((d) => d.barcode))
+                .domain(this.filteredD3Data.map((d) => d.barcode))
                 .range([0, height])
-                .padding(0.1)
+                // .padding(0.1) // Adding padding messes up chart height computation
             const yAxis = d3.axisLeft(yScale)
             const yLegend = svg.append('g').classed('barcode-axis', true).call(yAxis)
 
             const barcodes = svg.select('.barcode-axis')
                 .selectAll('.tick text')
-                // .classed('link', true)
+                .classed('link', () => self.fastqFile && self.fastqFile.length !== 0)
                 .attr('data-barcode', (d) => d)
                 .on('click', function (event) {
                     if (event.target.classList.contains('link')) {
@@ -190,19 +196,19 @@ export default {
                 })
 
             const yScaleRight = d3.scaleBand()
-                .domain(filteredData)
+                .domain(this.filteredD3Data)
                 .range([0, height])
                 .padding(0.1)
             const yAxisRight = d3.axisRight(yScaleRight).tickFormat((d) => d.count > 0 ? d.count : '')
             const yLegendRight = svg.append('g').attr('transform', `translate(${width}, 0)`).call(yAxisRight)
 
             const entries = svg.selectAll()
-                .data(filteredData)
+                .data(this.filteredD3Data)
                 .enter()
 
             entries.each((d, i) => {
                 d.blocks.forEach(() => {
-                    if (i < d.blocks.length - 1 && d.count > 0) { // Strangely, rect is still drawn despite d.count > 0 condition
+                    if (i < d.blocks.length - 1) {
                         entries.append('rect')
                             .attr('data-start', (d) => d.blocks[i])
                             .attr('data-end', (d) => d.blocks[i + 1])
@@ -212,7 +218,6 @@ export default {
                             .attr('height', () => i % 2 === 0 ? yScale.bandwidth() : 0.6)
                             .attr('width', (d) => xScale(d.blocks[i + 1] - d.blocks[i]))
                             .classed('rectangle', true)
-                            .style('display', (d) => d.count > 0 ? 'initial' : 'none') // Hide rect since d.count > 0 condition is not applied
                     }
                 })
             })
@@ -259,6 +264,7 @@ export default {
     &__sticky-cta {
         display: flex;
         justify-content: center;
+        gap: 20px;
         position: sticky;
         bottom: 20px;
         margin: auto;
