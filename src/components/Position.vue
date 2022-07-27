@@ -9,10 +9,7 @@ import ChartSaver from './ChartSaver.vue'
     <section class="entry l-position">
         <h2 class="title title--2" :id="`position${type}`">{{type}}' Position</h2>
         <div>
-            <div class="l-position__graphs">
-                <div :id="idGraph" :ref="idGraph" class="entry__graph l-position__graphs__item"></div>
-                <div :id="`${idGraph}Sorted`" :ref="`${idGraph}Sorted`" class="entry__graph l-position__graphs__item"></div>
-            </div>
+            <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
                     <label class="data__label">Threshold</label>
@@ -26,10 +23,7 @@ import ChartSaver from './ChartSaver.vue'
                     <label class="data__label">Displayed data percentage</label>
                     <output class="data__value">{{percentageFilteredD3Data}}%</output>
                 </div>
-                <div class="l-position__actions">
-                    <ChartSaver :id-graph="idGraph" />
-                    <ChartSaver :id-graph="`${idGraph}Sorted`" />
-                </div>
+                <ChartSaver :id-graph="idGraph" />
             </footer>
         </div>
     </section>
@@ -59,16 +53,12 @@ export default {
         return {
             max: 0,
             d3Data: undefined,
-            d3DataSorted: undefined,
             threshold: 0,
         }
     },
     computed: {
         filteredD3Data() {
             return this.d3Data?.filter((d) => d.value >= this.threshold)
-        },
-        filteredD3DataSorted() {
-            return this.d3DataSorted?.filter((d) => d.value >= this.threshold)
         },
         idGraph() {
             return `d3Graph${this.type}Position`
@@ -84,7 +74,6 @@ export default {
             if (value) {
                 const parsedData = chartUtils.parseData(value)
                 this.d3Data = mathUtils.sort(parsedData, 'key')
-                this.d3DataSorted = mathUtils.sort(parsedData, 'value', 'DESC')
                 this.drawGraphs()
             }
         },
@@ -101,7 +90,6 @@ export default {
     methods: {
         drawGraphs() {
             this.drawGraph()
-            this.drawGraphSorted()
         },
         drawGraph() {
             if (!this.$refs[this.idGraph] || !this.filteredD3Data) { return }
@@ -120,26 +108,3 @@ export default {
     },
 }
 </script>
-
-<style lang="scss">
-.l-position {
-    &__graphs {
-        &__item {
-            display: inline-block;
-            width: 50%;
-            box-sizing: border-box;
-        }
-    }
-
-    &__actions {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        width: 100%;
-
-        & > *:not(:first-child) {
-            margin-left: 20px;
-        }
-    }
-}
-</style>

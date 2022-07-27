@@ -4,7 +4,17 @@
 
     &__graph {
         position: relative; // For tooltip
+        margin: auto;
         margin-bottom: 20px;
+        max-width: 1000px;
+
+        &--small {
+            max-width: 300px;
+        }
+
+        &--big {
+            max-width: 1600px;
+        }
     }
 
     &__footer {

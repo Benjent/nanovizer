@@ -68,9 +68,12 @@ export default {
 
             let highlightedNavItem =  this.nav[0].to
             this.nav.forEach((item) => {
-                const navItemScrollPosition = document.getElementById(item.to).offsetTop
-                if (this.scrollPosition + this.headerHeightOffset + 100 > navItemScrollPosition) {
-                    highlightedNavItem = item.to
+                const navItemTargetElement = document.getElementById(item.to)
+                if (navItemTargetElement) {
+                    const navItemScrollPosition = navItemTargetElement.offsetTop
+                    if (this.scrollPosition + this.headerHeightOffset + 100 > navItemScrollPosition) {
+                        highlightedNavItem = item.to
+                    }
                 }
             })
 

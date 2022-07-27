@@ -11,7 +11,7 @@ import ChartSaver from './ChartSaver.vue'
     <section class="entry">
         <h2 class="title title--2" id="size">Size</h2>
         <div>
-            <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
+            <div :id="idGraph" :ref="idGraph" class="entry__graph entry__graph--small"></div>
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
                     <label class="data__label">Max</label>

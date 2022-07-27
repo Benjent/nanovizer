@@ -25,7 +25,7 @@ import Loader from './Loader.vue'
             An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
         </p>
         <div>
-            <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
+            <div :id="idGraph" :ref="idGraph" class="entry__graph entry__graph--big"></div>
             <div class="l-barcode__sticky-cta">
                 <Loader v-if="isLoading" />
                 <button v-else class="button button--secondary" :disabled="isLoading" @click="collapseBarcodes">
@@ -62,14 +62,14 @@ export default {
             isError: false,
             isLoading: false,
             isLoadingBarcode: false,
-            isShownBarcodes: true,
+            isShownBarcodes: false,
             d3Data: undefined,
             minimumShownBarcodes: 10
         }
     },
     computed: {
         filteredOutBarcodes() {
-            return this.d3Data.length - this.minimumShownBarcodes
+            return this.d3Data && this.d3Data.length - this.minimumShownBarcodes
         },
         revealButtonIcon() {
             return this.isShownBarcodes ? 'unfold_less' : `unfold_more`
