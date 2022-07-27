@@ -218,12 +218,13 @@ export default {
                             .attr('height', () => i % 2 === 0 ? yScale.bandwidth() : 0.6)
                             .attr('width', (d) => xScale(d.blocks[i + 1] - d.blocks[i]))
                             .classed('rectangle', true)
+                            .classed('tooltipable', () => i % 2 === 0)
                     }
                 })
             })
             
             const tooltip = tooltipUtils.set(this.idGraph)
-            const blocks = svg.selectAll('.rectangle')
+            const blocks = svg.selectAll('.tooltipable')
             blocks
             .on('mouseover', function (event) {
                 const opacity = 0.1
