@@ -56,14 +56,21 @@ export default {
     computed: {
         filteredD3Data() {
             if (!this.d3Data) { return }
-            const { nodes, links } = this.d3Data
+            const { nodes, links, nodeLinks } = this.d3Data
             const filteredLinks = links.filter((d) => d.value >= this.threshold)
             const filteredNodes = nodes.filter((d) => {
                 const start = filteredLinks.map((d) => d.start).includes(d)
                 const end = filteredLinks.map((d) => d.end).includes(d)
                 return start || end
             })
-            return { nodes: filteredNodes, links: filteredLinks}
+            const filteredNodeLinks = JSON.parse(JSON.stringify(nodeLinks))
+            Object.entries(filteredNodeLinks).forEach(([key, value]) => {
+                filteredNodeLinks[key] = value.filter((v) => filteredNodes.includes(v))
+            })
+            return { nodes: filteredNodes, links: filteredLinks, nodeLinks: filteredNodeLinks }
+
+            // TODO tester debounce event
+            // TODO recentrer les tooltips
         },
         percentageFilteredD3Data() {
             const ratio = this.d3Data && this.filteredD3Data ? this.filteredD3Data.links.length / this.d3Data.links.length : 1
@@ -84,30 +91,63 @@ export default {
     },
     methods: {
         parseData(data) {
-            const junctions = []
+            // const nodes = data.reduce((positions, d) => {
+            //     if (!positions.includes(d[`3_prime`])) {
+            //         positions.push(d[`3_prime`])
+            //     }
+            //     if (!positions.includes(d[`5_prime`])) {
+            //         positions.push(d[`5_prime`])
+            //     }
+            //     return positions
+            // }, [])
+
+            // const links = data.map((d) => {
+            //     return {
+            //         start: d[`3_prime`],
+            //         end: d[`5_prime`],
+            //         value: d.count,
+            //     }
+            // })
+
+            const nodes = []
+            const links = []
+            const nodeLinks = {}
+
             data.forEach((d) => {
-                junctions.push(d[`3_prime`])
-                junctions.push(d[`5_prime`])
+                if (!nodes.includes(d[`3_prime`])) {
+                    nodes.push(d[`3_prime`])
+                }
+                if (!nodes.includes(d[`5_prime`])) {
+                    nodes.push(d[`5_prime`])
+                }
+
+                links.push({
+                    start: d[`3_prime`],
+                    end: d[`5_prime`],
+                    value: d.count,
+                })
+                
+                if (!nodeLinks[d[`3_prime`]]) {
+                    nodeLinks[d[`3_prime`]] = []
+                }
+                if (!nodeLinks[d[`3_prime`]].includes(d[`5_prime`])) {
+                    nodeLinks[d[`3_prime`]].push(d[`5_prime`])
+                }
+                if (!nodeLinks[d[`5_prime`]]) {
+                    nodeLinks[d[`5_prime`]] = []
+                }
+                if (!nodeLinks[d[`5_prime`]].includes(d[`3_prime`])) {
+                    nodeLinks[d[`5_prime`]].push(d[`3_prime`])
+                }
             })
 
-            const unique = [...new Set(junctions)]
-            unique.sort((a, b) => a - b)
-            return {
-                nodes: unique,
-                links: data.map((d) => {
-                    return {
-                        start: d[`3_prime`],
-                        end: d[`5_prime`],
-                        value: d.count,
-                    }
-                }),
-            }
+            return { nodes, links, nodeLinks }
         },
         drawGraph() {
             if (!this.$refs[this.idGraph] || !this.filteredD3Data) { return }
-            const { nodes, links } = this.filteredD3Data
+            const { nodes, links, nodeLinks } = this.filteredD3Data
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width / 1.4, { height: this.$refs[this.idGraph].getBoundingClientRect().width / 2 })
-            const dataMax = d3.max(nodes)
+            const dataMax = d3.max([...links.map((l) => l.start), ...links.map((l) => l.end)])
             const xMax = chartUtils.getXMax(this.genomeSize, dataMax)
             this.max = d3.max(links.map((l) => l.value))
 
@@ -139,10 +179,6 @@ export default {
                 .style('opacity', (d) => linkScale(d.value))
                 .classed('lollipop__stick', true)
 
-            // const size = d3.scaleLinear()
-            // .domain([1, 1000])
-            // .range([2,10])
-
             const circles = svg
             .selectAll()
             .data(nodes)
@@ -150,19 +186,7 @@ export default {
             .append('circle')
                 .attr('data-key', (d) => d)
                 .attr('data-ends', (d) => {
-                    const relatedLinks = links.filter((l) => [l.start, l.end].includes(d))
-                    const flattenedLinks = []
-                    relatedLinks.forEach((l) => {
-                        if (d !== l.start) {
-                            flattenedLinks.push(l.start)
-                        }
-                        if (d !== l.end) {
-                            flattenedLinks.push(l.end)
-                        }
-                    })
-                    const unique = [...new Set(flattenedLinks)]
-                    unique.sort((a, b) => a - b)
-                    return unique
+                    return nodeLinks[d]
                 })
                 .attr('cx', (d) => xScale(d))
                 .attr('cy', height)
