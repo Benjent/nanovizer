@@ -15,7 +15,7 @@ const parseData = (data) => {
 }
 
 const setSvg = (id, wrapperWidth, options = {}) => {
-    const margin = Object.assign({ top: 10, right: 30, bottom: 50, left: 50 }, options.margin)
+    const margin = Object.assign({ top: 10, right: 30, bottom: 50, left: 40 }, options.margin) // Warning: increasing left value from 40 to 50 messes up tooltip position: TODO investigate
     const width = wrapperWidth - margin.left - margin.right
     const height = (options.height || 320) - margin.top - margin.bottom
 
