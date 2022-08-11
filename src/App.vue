@@ -4,17 +4,14 @@ import showcaseSmall from './showcase/showcase-hdv.json'
 import showcaseBig from './showcase/showcase-sars.json'
 import Barcode from './components/Barcode.vue'
 import BlockCount from './components/BlockCount.vue'
-import Position from './components/Position.vue'
+import Footer from './components/Footer.vue'
 import Icon from './components/Icon.vue'
 import Junction from './components/Junction.vue'
 import Loader from './components/Loader.vue'
+import Position from './components/Position.vue'
 import Size from './components/Size.vue'
 import StartSite from './components/StartSite.vue'
 import Summary from './components/Summary.vue'
-import logoCnrs from './assets/images/logos/cnrs.svg'
-import logoInserm from './assets/images/logos/inserm.svg'
-import logoInstitutCochin from './assets/images/logos/institut-cochin.svg'
-import logoUniversiteParisCite from './assets/images/logos/universite-paris-cite.svg'
 </script>
 
 <script>
@@ -22,6 +19,7 @@ export default {
     components: {
         Barcode,
         BlockCount,
+        Footer,
         Icon,
         Junction,
         Loader,
@@ -32,7 +30,6 @@ export default {
     },
     data() {
         return {
-            email: 'benjent@hotmail.fr',
             fileName: '',
             genomeName: '',
             genomeSize: undefined,
@@ -284,17 +281,7 @@ export default {
             <Barcode :data="nanoVizerData?.barcode_count" :genome-size="genomeSize" />
             <Summary :data="nanoVizerData?.read_summary_count" />
         </main>
-        <footer class="l-graphs__footer">
-            <p class="l-graphs__footer__feedback">
-                Like this webapp? Have a feedback? Give me a shout at {{email}}!
-            </p>
-            <div class="l-graphs__footer__logos">
-                <img :src="logoCnrs" alt="Logo CNRS" />
-                <img :src="logoInserm" alt="Logo Inserm" />
-                <img :src="logoInstitutCochin" alt="Logo Institut Cochin" />
-                <img :src="logoUniversiteParisCite" alt="Logo Université Paris Cité" />
-            </div>
-        </footer>
+        <Footer />
     </div>
 </template>
 
@@ -400,26 +387,6 @@ export default {
 
     &__main {
         min-height: 80vh;
-    }
-
-    &__footer {
-        padding: 20px 60px;
-        background: var(--background-footer);
-
-        &__feedback {
-            font-size: 0.8rem;
-            margin-bottom: 20px;
-        }
-
-        &__logos {
-            display: flex;
-            justify-content: center;
-
-            img {
-                height: 60px;
-                margin: 0 10px;
-            }
-        }
     }
 }
 </style>
