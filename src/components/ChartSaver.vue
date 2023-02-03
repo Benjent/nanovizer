@@ -1,5 +1,8 @@
 <script lang="js">
 import { saveSvgAsPng } from 'save-svg-as-png'
+import { mapState } from 'pinia'
+import { useMainStore } from '../stores/main'
+import dateUtils from '../utils/date'
 import Icon from './Icon.vue'
 
 export default {
@@ -16,6 +19,7 @@ export default {
         return {}
     },
     computed: {
+        ...mapState(useMainStore, ['fileName', 'genomeName']),
         isMultipleGraphs() {
             return Array.isArray(this.idGraph)
         },
@@ -34,7 +38,10 @@ export default {
             const wrapper = document.getElementById(id)
             const wrapperChildren = [...wrapper.children]
             const svg = wrapperChildren.find((element) => element.tagName === 'svg')
-            saveSvgAsPng(svg, id)
+            const now = new Date()
+            const { year, month, day, hour, minute, second } = dateUtils.getCalendarDate(now)
+            const imageName = `${this.fileName} ${this.genomeName} ${this.idGraph.replace("d3Graph", "")} ${year}-${month}-${day} ${hour}h${minute}m${second}s`
+            saveSvgAsPng(svg, imageName)
         },
     },
 }
