@@ -1,10 +1,3 @@
-<script setup>
-import chartUtils from '../utils/chart'
-import numberUtils from '../utils/number'
-import resizeMixin from '../mixins/resize'
-import ChartSaver from './ChartSaver.vue'
-</script>
-
 <template>
     <section class="entry">
         <h2 class="title title--2" id="startSite">Start site</h2>
@@ -30,6 +23,13 @@ import ChartSaver from './ChartSaver.vue'
 </template>
 
 <script>
+import { mapState } from 'pinia'
+import { useMainStore } from '../stores/main'
+import chartUtils from '../utils/chart'
+import numberUtils from '../utils/number'
+import resizeMixin from '../mixins/resize'
+import ChartSaver from './ChartSaver.vue'
+
 export default {
     mixins: [resizeMixin],
     components: {
@@ -38,9 +38,6 @@ export default {
     props: {
         data: {
             type: Array,
-        },
-        genomeSize: {
-            type: Number,
         },
     },
     data() {
@@ -52,6 +49,7 @@ export default {
         }
     },
     computed: {
+        ...mapState(useMainStore, ['genomeSize', 'nanoVizerData']),
         filteredD3Data() {
             return this.d3Data?.filter((d) => d.value >= this.threshold)
         },
@@ -62,15 +60,13 @@ export default {
         }
     },
     watch: {
-        data(value) {
-            if (value) {
-                this.d3Data = chartUtils.parseData(value)
-                this.drawGraph()
-            }
-        },
         threshold() {
             this.drawGraph()
         },
+    },
+    mounted() {
+        this.d3Data = chartUtils.parseData(this.nanoVizerData.start_site_count)
+        this.drawGraph()
     },
     methods: {
         drawGraph() {

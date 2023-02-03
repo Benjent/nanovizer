@@ -1,12 +1,3 @@
-<script setup>
-import * as d3 from 'd3'
-import chartUtils from '../utils/chart'
-import numberUtils from '../utils/number'
-import tooltipUtils from '../utils/tooltip'
-import resizeMixin from '../mixins/resize'
-import ChartSaver from './ChartSaver.vue'
-</script>
-
 <template>
     <section class="entry">
         <h2 class="title title--2" id="junction">Junction</h2>
@@ -32,18 +23,19 @@ import ChartSaver from './ChartSaver.vue'
 </template>
 
 <script>
+import * as d3 from 'd3'
+import { mapState } from 'pinia'
+import { useMainStore } from '../stores/main'
+import chartUtils from '../utils/chart'
+import numberUtils from '../utils/number'
+import tooltipUtils from '../utils/tooltip'
+import resizeMixin from '../mixins/resize'
+import ChartSaver from './ChartSaver.vue'
+
 export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
-    },
-    props: {
-        data: {
-            type: Array,
-        },
-        genomeSize: {
-            type: Number,
-        },
     },
     data() {
         return {
@@ -54,6 +46,7 @@ export default {
         }
     },
     computed: {
+        ...mapState(useMainStore, ['genomeSize', 'nanoVizerData']),
         filteredD3Data() {
             if (!this.d3Data) { return }
             const { nodes, links } = this.d3Data
@@ -72,15 +65,13 @@ export default {
         }
     },
     watch: {
-        data(value) {
-            if (value) {
-                this.d3Data = this.parseData(value)
-                this.drawGraph()
-            }
-        },
         threshold() {
             this.drawGraph()
         },
+    },
+    mounted() {
+        this.d3Data = this.parseData(this.nanoVizerData.junction_count)
+        this.drawGraph()
     },
     methods: {
         parseData(data) {

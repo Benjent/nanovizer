@@ -1,9 +1,3 @@
-<script setup>
-import chartUtils from '../utils/chart'
-import resizeMixin from '../mixins/resize'
-import ChartSaver from './ChartSaver.vue'
-</script>
-
 <template>
     <section class="entry">
         <h2 class="title title--2" id="blockCount">Block count</h2>
@@ -21,15 +15,16 @@ import ChartSaver from './ChartSaver.vue'
 </template>
 
 <script>
+import { mapState } from 'pinia'
+import { useMainStore } from '../stores/main'
+import chartUtils from '../utils/chart'
+import resizeMixin from '../mixins/resize'
+import ChartSaver from './ChartSaver.vue'
+
 export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
-    },
-    props: {
-        data: {
-            type: Array,
-        },
     },
     data() {
         return {
@@ -38,13 +33,12 @@ export default {
             d3Data: undefined,
         }
     },
-    watch: {
-        data(value) {
-            if (value) {
-                this.d3Data = chartUtils.parseData(value)
-                this.drawGraph()
-            }
-        },
+    computed: {
+        ...mapState(useMainStore, ['nanoVizerData']),
+    },
+    mounted() {
+        this.d3Data = chartUtils.parseData(this.nanoVizerData.block_count)
+        this.drawGraph()
     },
     methods: {
         drawGraph() {

@@ -1,16 +1,3 @@
-<script setup>
-import * as d3 from 'd3'
-import axios from '../libs/axios'
-import chartUtils from '../utils/chart'
-import mathUtils from '../utils/math'
-import numberUtils from '../utils/number'
-import tooltipUtils from '../utils/tooltip'
-import resizeMixin from '../mixins/resize'
-import ChartSaver from './ChartSaver.vue'
-import Icon from './Icon.vue'
-import Loader from './Loader.vue'
-</script>
-
 <template>
     <section class="entry l-barcode">
         <h2 class="title title--2" id="barcode">Barcode</h2>
@@ -50,20 +37,25 @@ import Loader from './Loader.vue'
 </template>
 
 <script>
+import * as d3 from 'd3'
+import { mapState } from 'pinia'
+import { useMainStore } from '../stores/main'
+import axios from '../libs/axios'
+import chartUtils from '../utils/chart'
+import mathUtils from '../utils/math'
+import numberUtils from '../utils/number'
+import tooltipUtils from '../utils/tooltip'
+import resizeMixin from '../mixins/resize'
+import ChartSaver from './ChartSaver.vue'
+import Icon from './Icon.vue'
+import Loader from './Loader.vue'
+
 export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
         Icon,
         Loader,
-    },
-    props: {
-        data: {
-            type: Array,
-        },
-        genomeSize: {
-            type: Number,
-        },
     },
     data() {
         return {
@@ -77,6 +69,7 @@ export default {
         }
     },
     computed: {
+        ...mapState(useMainStore, ['genomeSize', 'nanoVizerData']),
         filteredD3Data() {
             return this.d3Data?.slice(0, this.nbShownBarcodes)
         },
@@ -87,13 +80,6 @@ export default {
         },
     },
     watch: {
-        data(value) {
-            if (value) {
-                const parsedData = this.parseData(value)
-                this.d3Data = mathUtils.sort(parsedData, 'count', 'DESC')
-                this.drawGraph()
-            }
-        },
         fastqFile(newVal) {
             this.isError = false
             const barcodes = document.querySelector('.barcode-axis').querySelectorAll('text')
@@ -123,6 +109,11 @@ export default {
                 this.drawGraph()
             }
         },
+    },
+    mounted() {
+        const parsedData = this.parseData(this.nanoVizerData.barcode_count)
+        this.d3Data = mathUtils.sort(parsedData, 'count', 'DESC')
+        this.drawGraph()
     },
     methods: {
         moreBarcodes() {

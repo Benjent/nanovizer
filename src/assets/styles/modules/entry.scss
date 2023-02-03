@@ -1,6 +1,11 @@
 .entry {
     padding: 40px 20px;
     width: 100%;
+    margin-bottom: 100px; // Because summary entry is too small for header tab to be active. If it becomes bigger, use below & ~ & rule
+
+    // & ~ & {
+    //     margin-top: 100px;
+    // }
 
     &__graph {
         position: relative; // For tooltip

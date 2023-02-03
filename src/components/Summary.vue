@@ -1,37 +1,38 @@
 <template>
     <section class="entry">
         <h2 class="title title--2" id="summary">Summary</h2>
-        <div v-if="data">
+        <div>
             <div class="data">
                 <label class="data__label">Total number of reads</label>
-                <output class="data__value">{{data.total}}</output>
+                <output class="data__value">{{nanoVizerData.read_summary_count.total}}</output>
             </div>
             <div class="data">
                 <label class="data__label">Number of reads with single blocks</label>
-                <output class="data__value">{{data.single_block}}</output>
+                <output class="data__value">{{nanoVizerData.read_summary_count.single_block}}</output>
             </div>
             <div class="data">
                 <label class="data__label">Number of reads with multiple blocks</label>
-                <output class="data__value">{{data.multiple_block}}</output>
+                <output class="data__value">{{nanoVizerData.read_summary_count.multiple_block}}</output>
             </div>
             <div class="data">
                 <label class="data__label">Number of short reads with multiple blocks</label>
-                <output class="data__value">{{data.short_mutliple_block}}</output>
+                <output class="data__value">{{nanoVizerData.read_summary_count.short_mutliple_block}}</output>
             </div>
             <div class="data">
                 <label class="data__label">Number of removed reads</label>
-                <output class="data__value">{{data.removed}}</output>
+                <output class="data__value">{{nanoVizerData.read_summary_count.removed}}</output>
             </div>
         </div>
     </section>
 </template>
 
 <script>
+import { mapState } from 'pinia'
+import { useMainStore } from '../stores/main'
+
 export default {
-    props: {
-        data: {
-            type: Object,
-        },
+    computed: {
+        ...mapState(useMainStore, ['nanoVizerData']),
     },
 }
 </script>

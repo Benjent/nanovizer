@@ -1,10 +1,3 @@
-<script setup>
-import chartUtils from '../utils/chart'
-import mathUtils from '../utils/math'
-import numberUtils from '../utils/number'
-import ChartSaver from './ChartSaver.vue'
-</script>
-
 <template>
     <section class="entry l-position">
         <h2 class="title title--2" :id="`position${type}`">{{type}}' Position</h2>
@@ -30,17 +23,18 @@ import ChartSaver from './ChartSaver.vue'
 </template>
 
 <script>
+import { mapState } from 'pinia'
+import { useMainStore } from '../stores/main'
+import chartUtils from '../utils/chart'
+import mathUtils from '../utils/math'
+import numberUtils from '../utils/number'
+import ChartSaver from './ChartSaver.vue'
+
 export default {
     components: {
         ChartSaver,
     },
     props: {
-        data: {
-            type: Array,
-        },
-        genomeSize: {
-            type: Number,
-        },
         type: {
             type: Number,
             required: true,
@@ -57,6 +51,7 @@ export default {
         }
     },
     computed: {
+        ...mapState(useMainStore, ['genomeSize', 'nanoVizerData']),
         filteredD3Data() {
             return this.d3Data?.filter((d) => d.value >= this.threshold)
         },
@@ -70,13 +65,6 @@ export default {
         },
     },
     watch: {
-        data(value) {
-            if (value) {
-                const parsedData = chartUtils.parseData(value)
-                this.d3Data = mathUtils.sort(parsedData, 'key')
-                this.drawGraphs()
-            }
-        },
         threshold() {
             this.drawGraphs()
         },
@@ -86,6 +74,11 @@ export default {
     },
     unmounted() {
         window.removeEventListener('resize', this.drawGraphs)
+    },
+    mounted() {
+        const parsedData = chartUtils.parseData(this.nanoVizerData[`${this.type}_prime_count`])
+        this.d3Data = mathUtils.sort(parsedData, 'key')
+        this.drawGraphs()
     },
     methods: {
         drawGraphs() {

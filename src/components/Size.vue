@@ -1,12 +1,3 @@
-<script setup>
-import * as d3 from 'd3'
-import chartUtils from '../utils/chart'
-import numberUtils from '../utils/number'
-import tooltipUtils from '../utils/tooltip'
-import resizeMixin from '../mixins/resize'
-import ChartSaver from './ChartSaver.vue'
-</script>
-
 <template>
     <section class="entry">
         <h2 class="title title--2" id="size">Size</h2>
@@ -32,15 +23,19 @@ import ChartSaver from './ChartSaver.vue'
 </template>
 
 <script>
+import * as d3 from 'd3'
+import { mapState } from 'pinia'
+import { useMainStore } from '../stores/main'
+import chartUtils from '../utils/chart'
+import numberUtils from '../utils/number'
+import tooltipUtils from '../utils/tooltip'
+import resizeMixin from '../mixins/resize'
+import ChartSaver from './ChartSaver.vue'
+
 export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
-    },
-    props: {
-        data: {
-            type: Array,
-        },
     },
     data() {
         return {
@@ -53,6 +48,7 @@ export default {
         }
     },
     computed: {
+        ...mapState(useMainStore, ['nanoVizerData']),
         filteredD3Data() {
             return this.d3Data?.filter((d) => d.value >= this.threshold)
         },
@@ -63,16 +59,14 @@ export default {
         }
     },
     watch: {
-        data(value) {
-            if (value) {
-                this.d3Data = value.map((d) => d)
-                this.d3Data.sort(d3.ascending)
-                this.drawGraph()
-            }
-        },
         threshold() {
             this.drawGraph()
         },
+    },
+    mounted() {
+        this.d3Data = this.nanoVizerData.read_size.map((d) => d)
+        this.d3Data.sort(d3.ascending)
+        this.drawGraph()
     },
     methods: {
         drawGraph() {
