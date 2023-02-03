@@ -57,6 +57,11 @@ export default {
 <style lang="scss">
 @import './assets/styles/main.scss';
 
+html {
+    // Prevent white background on webap load
+    background: var(--background);
+}
+
 .l-graphs {
     @include theme;
     margin: 0 auto;
