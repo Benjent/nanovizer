@@ -1,9 +1,4 @@
 <script lang="js">
-import logoCnrs from '../assets/images/logos/cnrs.svg'
-import logoInserm from '../assets/images/logos/inserm.svg'
-import logoInstitutCochin from '../assets/images/logos/institut-cochin.svg'
-import logoUniversiteParisCite from '../assets/images/logos/universite-paris-cite.svg'
-
 export default {
     data() {
         return {
@@ -19,10 +14,10 @@ export default {
             Like this webapp? Have a feedback? Give me a shout at {{email}}!
         </p>
         <div class="l-footer__logos">
-            <img :src="logoCnrs" alt="Logo CNRS" />
-            <img :src="logoInserm" alt="Logo Inserm" />
-            <img :src="logoInstitutCochin" alt="Logo Institut Cochin" />
-            <img :src="logoUniversiteParisCite" alt="Logo Université Paris Cité" />
+            <img src="../assets/images/logos/cnrs.svg" alt="Logo CNRS" />
+            <img src="../assets/images/logos/inserm.svg" alt="Logo Inserm" />
+            <img src="../assets/images/logos/institut-cochin.svg" alt="Logo Institut Cochin" />
+            <img src="../assets/images/logos/universite-paris-cite.svg" alt="Logo Université Paris Cité" />
         </div>
     </footer>
 </template>
