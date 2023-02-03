@@ -163,7 +163,7 @@ export default {
                 })
                 .attr('cx', (d) => xScale(d))
                 .attr('cy', height)
-                .attr('r', (d) => 4)
+                .attr('r', chartUtils.theme.lollipop.sugar.radius)
                 .classed('lollipop__sugar', true)
 
             // const labels = svg
@@ -236,7 +236,7 @@ export default {
                 .attr('data-value', (d) => d.value)
                 .attr('cx', (d) => xScale(d.start))
                 .attr('cy', (d) => yScale(d.end))
-                .attr('r', '4')
+                .attr('r', chartUtils.theme.lollipop.sugar.radius)
                 .classed('lollipop__sugar', true)
 
             const tooltip = tooltipUtils.set(this.idGraphScatterplot)

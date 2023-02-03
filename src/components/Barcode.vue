@@ -219,7 +219,7 @@ export default {
             const blocks = svg.selectAll('.tooltipable')
             blocks
             .on('mouseover', function (event) {
-                const opacity = 0.1
+                const opacity = chartUtils.theme.lollipop.nonFocusOpacity
                 blocks.style('opacity', opacity)
                 d3.select(this).style('opacity', 1)
 

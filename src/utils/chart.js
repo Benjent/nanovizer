@@ -1,6 +1,15 @@
 import * as d3 from 'd3'
 import tooltipUtils from './tooltip'
 
+const theme = {
+    lollipop: {
+        sugar: {
+            radius: 4,
+        },
+        nonFocusOpacity: 0.1,
+    }
+}
+
 const getDatasetInteger = (event, key) => {
     return Number.parseInt(event.target.dataset[key])
 }
@@ -101,14 +110,14 @@ const drawLollipops = (idGraph, data, svg, xScale, yScale) => {
         .attr('data-value', (d) => d.value)
         .attr('cx', (d) => xScale(d.key))
         .attr('cy', (d) => yScale(d.value))
-        .attr('r', '4')
+        .attr('r', theme.lollipop.sugar.radius)
         .classed('lollipop__sugar', true)
 
     const tooltip = tooltipUtils.set(idGraph)
 
     circles
     .on('mouseover', function (event) {
-        const opacity = 0.1
+        const opacity = theme.lollipop.nonFocusOpacity
         circles.style('opacity', opacity)
         d3.select(this).style('opacity', 1)
 
@@ -143,4 +152,5 @@ export default {
     parseData,
     setScales,
     setSvg,
+    theme,
 }

@@ -142,10 +142,10 @@ export default {
                 .attr('data-value', (d) => d)
                 .attr('cx', (d) => center)
                 .attr('cy', (d) => yScale(d))
-                .attr('r', '4')
+                .attr('r', chartUtils.theme.lollipop.sugar.radius)
                 .classed('lollipop__sugar', true)
                 .on('mouseover', function () {
-                    const opacity = 0.1
+                    const opacity = chartUtils.theme.lollipop.nonFocusOpacity
                     circles.style('opacity', opacity)
                     d3.select(this).style('opacity', 1)
                     
