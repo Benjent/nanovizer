@@ -1,9 +1,7 @@
-<script setup>
+<script lang="js">
 import { saveSvgAsPng } from 'save-svg-as-png'
 import Icon from './Icon.vue'
-</script>
 
-<script lang="js">
 export default {
     components: {
         Icon,

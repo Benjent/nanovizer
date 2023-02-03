@@ -1,11 +1,9 @@
-<script setup>
+<script lang="js">
 import logoCnrs from '../assets/images/logos/cnrs.svg'
 import logoInserm from '../assets/images/logos/inserm.svg'
 import logoInstitutCochin from '../assets/images/logos/institut-cochin.svg'
 import logoUniversiteParisCite from '../assets/images/logos/universite-paris-cite.svg'
-</script>
 
-<script lang="js">
 export default {
     data() {
         return {
