@@ -1,6 +1,10 @@
 import * as d3 from 'd3'
 import tooltipUtils from './tooltip'
 
+const getDatasetInteger = (event, key) => {
+    return Number.parseInt(event.target.dataset[key])
+}
+
 const getXMax = (max, dataMax) => {
     return max ? Math.max(max, dataMax) : dataMax
 }
@@ -108,15 +112,15 @@ const drawLollipops = (idGraph, data, svg, xScale, yScale) => {
         circles.style('opacity', opacity)
         d3.select(this).style('opacity', 1)
 
-        const key = Number.parseInt(event.target.dataset.key)
+        const key = getDatasetInteger(event, "key")
         lines.style('opacity', (l) => l.key === key ? 1 : opacity)
 
         tooltip.style('opacity', 1)
     })
     .on('mousemove', function (event) {
         tooltipUtils.setCoordinates(event, tooltip)
-        const key = Number.parseInt(event.target.dataset.key)
-        const value = Number.parseInt(event.target.dataset.value)
+        const key = getDatasetInteger(event, "key")
+        const value = getDatasetInteger(event, "value")
         tooltip
         .html(`
             <div>Junction: ${key}</div>
@@ -134,6 +138,7 @@ const drawLollipops = (idGraph, data, svg, xScale, yScale) => {
 
 export default {
     drawLollipops,
+    getDatasetInteger,
     getXMax,
     parseData,
     setScales,

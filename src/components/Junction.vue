@@ -189,14 +189,14 @@ export default {
                 circles.style('opacity', opacity)
                 d3.select(this).style('opacity', 1)
 
-                const key = Number.parseInt(event.target.dataset.key)
+                const key = chartUtils.getDatasetInteger(event, "key")
                 arcs.style('opacity', (l) => [l.start, l.end].includes(key) ? 1 : opacity)
                 // labels.style('opacity', (l) => l === key ? 1 : 0)
                 tooltip.style('opacity', 1)
             })
             .on('mousemove', function (event) {
                 tooltipUtils.setCoordinates(event, tooltip)
-                const key = Number.parseInt(event.target.dataset.key)
+                const key = chartUtils.getDatasetInteger(event, "key")
                 const ends = event.target.dataset.ends.replaceAll(',', ', ')
                 tooltip
                 .html(`
@@ -249,9 +249,9 @@ export default {
             })
             .on('mousemove', function (event) {
                 tooltipUtils.setCoordinates(event, tooltip)
-                const start = Number.parseInt(event.target.dataset.start)
-                const end = Number.parseInt(event.target.dataset.end)
-                const value = Number.parseInt(event.target.dataset.value)
+                const start = chartUtils.getDatasetInteger(event, "start")
+                const end = chartUtils.getDatasetInteger(event, "end")
+                const value = chartUtils.getDatasetInteger(event, "value")
                 tooltip
                 .html(`
                     <div>3' Position: ${start}</div>
