@@ -103,7 +103,7 @@ export default {
         drawGraph() {
             if (!this.$refs[this.idGraph] || !this.filteredD3Data) { return }
             const { nodes, links } = this.filteredD3Data
-            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width / 1.4, { height: this.$refs[this.idGraph].getBoundingClientRect().width / 2 })
+            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width, { height: this.$refs[this.idGraph].getBoundingClientRect().width / 2 })
             const dataMax = d3.max(nodes)
             const xMax = chartUtils.getXMax(this.genomeSize, dataMax)
             this.max = d3.max(links.map((l) => l.value))
@@ -196,7 +196,6 @@ export default {
             })
             .on('mousemove', function (event) {
                 tooltipUtils.setCoordinates(event, tooltip)
-                tooltip.style('left', event.clientX + 'px') // Somehow d3 messes up x position
                 const key = Number.parseInt(event.target.dataset.key)
                 const ends = event.target.dataset.ends.replaceAll(',', ', ')
                 tooltip
