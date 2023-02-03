@@ -61,7 +61,6 @@ export default {
     @include theme;
     margin: 0 auto;
     width: 100%;
-    overflow-x: hidden;
     text-align: center;
     font-weight: normal;
     background: var(--background);

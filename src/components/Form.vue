@@ -107,7 +107,6 @@ export default {
 
 <style lang="scss">
 .l-form {
-    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -29,7 +29,7 @@ export default {
 
 <style lang="scss">
 .l-switch-theme {
-    position: absolute;
+    position: fixed;
     top: 20px;
     right: 20px;
     z-index: 1;
