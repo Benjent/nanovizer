@@ -34,8 +34,6 @@ import StartSite from './components/StartSite.vue'
 import Summary from './components/Summary.vue'
 import ThemeSwitch from './components/ThemeSwitch.vue'
 
-// TODO il semble que le RAF soit de mettre dans le store les positionMin3, , genomename, genomesize, etc. et commiter/pousser proprement 
-
 export default {
     components: {
         Barcode,
