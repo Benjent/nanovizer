@@ -8,21 +8,38 @@ export default {
     },
     props: {
         idGraph: {
-            type: String,
+            type: [String, Array],
             required: true,
         },
     },
+    data() {
+        return {}
+    },
+    computed: {
+        isMultipleGraphs() {
+            return Array.isArray(this.idGraph)
+        },
+    },
     methods: {
-        saveGraph() {
-            const wrapper = document.getElementById(this.idGraph)
+        saveGraphs() {
+            if (this.isMultipleGraphs) {
+                this.idGraph.forEach((id) => {
+                    this.saveGraph(id)
+                })
+            } else {
+                this.saveGraph(this.idGraph)
+            }
+        },
+        saveGraph(id) {
+            const wrapper = document.getElementById(id)
             const wrapperChildren = [...wrapper.children]
             const svg = wrapperChildren.find((element) => element.tagName === 'svg')
-            saveSvgAsPng(svg, this.idGraph)
+            saveSvgAsPng(svg, id)
         },
     },
 }
 </script>
 
 <template>
-    <button class="button" @click="saveGraph"><Icon icon="file_download" />&nbsp;Save graph</button>
+    <button class="button" @click="saveGraphs"><Icon icon="file_download" />&nbsp;Save graph{{ isMultipleGraphs ? "s" : "" }}</button>
 </template>
