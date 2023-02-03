@@ -3,6 +3,7 @@
         <h2 class="title title--2" id="junction">Junction</h2>
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
+            <div :id="idGraphScatterplot" :ref="idGraphScatterplot" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
                     <label class="data__label">Threshold</label>
@@ -40,6 +41,7 @@ export default {
     data() {
         return {
             idGraph: 'd3GraphJunction',
+            idGraphScatterplot: 'd3GraphJunctionScatterplot',
             max: 0,
             d3Data: undefined,
             threshold: 0,
@@ -66,14 +68,18 @@ export default {
     },
     watch: {
         threshold() {
-            this.drawGraph()
+            this.drawGraphs()
         },
     },
     mounted() {
         this.d3Data = this.parseData(this.nanoVizerData.junction_count)
-        this.drawGraph()
+        this.drawGraphs()
     },
     methods: {
+        drawGraphs() {
+            this.drawGraph()
+            this.drawGraphScatterplot()
+        },
         parseData(data) {
             const junctions = []
             data.forEach((d) => {
@@ -205,6 +211,61 @@ export default {
                 arcs.style('opacity', (d) => linkScale(d.value))
                 // labels.style('opacity', 0)
             })
+        },
+        drawGraphScatterplot() {
+            if (!this.$refs[this.idGraphScatterplot] || !this.filteredD3Data) { return }
+            const { links } = this.filteredD3Data
+            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraphScatterplot, this.$refs[this.idGraphScatterplot].getBoundingClientRect().width)
+
+            const xMax = d3.max(links.map((d) => d.start))
+            const xScale = d3.scaleLinear().range([0, width]).domain([0, xMax])
+            const xAxis = d3.axisBottom(xScale)
+            const xLegend = svg.append('g').attr('transform', 'translate(0,' + height + ')').call(xAxis)
+            
+            const yMax = d3.max(links.map((d) => d.end))
+            const yScale = d3.scaleLinear().range([height, 0]).domain([0, yMax])
+            const yAxis = d3.axisLeft(yScale)
+            const yLegend = svg.append('g').call(yAxis)
+
+            const circles = svg.append('g')
+            .selectAll('dot')
+            .data(links)
+            .enter()
+            .append('circle')
+                .attr('data-start', (d) => d.start)
+                .attr('data-end', (d) => d.end)
+                .attr('data-value', (d) => d.value)
+                .attr('cx', (d) => xScale(d.start))
+                .attr('cy', (d) => yScale(d.end))
+                .attr('r', '4')
+                .classed('lollipop__sugar', true)
+
+            const tooltip = tooltipUtils.set(this.idGraphScatterplot)
+            circles
+            .on('mouseover', function (event) {
+                const opacity = 0
+                circles.style('opacity', opacity)
+                d3.select(this).style('opacity', 1)
+                tooltip.style('opacity', 1)
+            })
+            .on('mousemove', function (event) {
+                tooltipUtils.setCoordinates(event, tooltip)
+                const start = Number.parseInt(event.target.dataset.start)
+                const end = Number.parseInt(event.target.dataset.end)
+                const value = Number.parseInt(event.target.dataset.value)
+                tooltip
+                .html(`
+                    <div>3' Position: ${start}</div>
+                    <div>5' Position: ${end}</div>
+                    <div>Junctions: ${value}</div>
+                `)
+            })
+            .on('mouseleave', function () {
+                tooltipUtils.reset(tooltip)
+                circles.style('opacity', 1)
+            })
+            
+            
         },
     },
 }
