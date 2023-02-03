@@ -20,7 +20,7 @@
     </header>
 </template>
 
-<script>
+<script lang="js">
 import { mapActions, mapState } from 'pinia'
 import { useMainStore } from '../stores/main'
 

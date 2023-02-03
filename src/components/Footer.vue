@@ -5,7 +5,7 @@ import logoInstitutCochin from '../assets/images/logos/institut-cochin.svg'
 import logoUniversiteParisCite from '../assets/images/logos/universite-paris-cite.svg'
 </script>
 
-<script>
+<script lang="js">
 export default {
     data() {
         return {

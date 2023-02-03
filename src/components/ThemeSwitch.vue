@@ -4,7 +4,7 @@
     </button>
 </template>
 
-<script>
+<script lang="js">
 import Icon from './Icon.vue'
 
 export default {

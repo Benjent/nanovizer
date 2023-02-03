@@ -3,7 +3,7 @@ import { saveSvgAsPng } from 'save-svg-as-png'
 import Icon from './Icon.vue'
 </script>
 
-<script>
+<script lang="js">
 export default {
     components: {
         Icon,

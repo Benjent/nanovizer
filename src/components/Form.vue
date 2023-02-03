@@ -51,7 +51,7 @@
     </form>
 </template>
 
-<script>
+<script lang="js">
 import { mapActions, mapState, mapWritableState } from 'pinia'
 import { useMainStore } from '../stores/main'
 import Icon from './Icon.vue'

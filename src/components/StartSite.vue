@@ -22,7 +22,7 @@
     </section>
 </template>
 
-<script>
+<script lang="js">
 import { mapState } from 'pinia'
 import { useMainStore } from '../stores/main'
 import chartUtils from '../utils/chart'

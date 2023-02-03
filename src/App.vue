@@ -19,7 +19,7 @@
     </div>
 </template>
 
-<script>
+<script lang="js">
 import { mapState } from 'pinia'
 import { useMainStore } from './stores/main'
 import Barcode from './components/Barcode.vue'
