@@ -12,6 +12,7 @@
         <p v-if="isError" class="l-barcode__error">
             An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
         </p>
+        <p class="l-barcode__alert l-barcode__helper helper"><Icon icon="info" />&nbsp;Please be aware that in order to have a better visual representation of reads, barcode ends are arbitrarily set in a range from 1 to the genome size.</p>
         <div>
             <div :id="idGraph" :ref="idGraph" class="entry__graph entry__graph--big"></div>
             <div class="l-barcode__sticky-cta">
@@ -248,6 +249,12 @@ export default {
 .l-barcode {
     &__helper {
         margin-bottom: 20px;
+    }
+
+    &__alert {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     &__error {

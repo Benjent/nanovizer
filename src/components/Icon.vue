@@ -11,5 +11,11 @@ export default {
 </script>
 
 <template>
-    <span class="material-symbols-outlined">{{icon}}</span>
+    <span class="l-icon material-symbols-outlined">{{icon}}</span>
 </template>
+
+<style lang="scss">
+.l-icon {
+    font-size: 1.2rem;
+}
+</style>
