@@ -1,6 +1,6 @@
 <template>
     <form class="l-form">
-        <h1 class="title--1 l-form__title">NanoVizer</h1>
+        <h1 class="title--1 l-form__title"><img class="l-form__logo" :src="logo" alt="Logo NanoVizer" /></h1>
         <div class="l-form__input">
             <label class="data__label">File name</label>
             <input class="input data__value" v-model="fileName"/>
@@ -59,6 +59,8 @@
 </template>
 
 <script lang="js">
+import nanovizerDarkThemeLogo from '@/assets/images/logos/nanovizer-dark-theme.svg'
+import nanovizerLightThemeLogo from '@/assets/images/logos/nanovizer-light-theme.svg'
 import { mapActions, mapState, mapWritableState } from 'pinia'
 import { useMainStore } from '../stores/main'
 import Icon from './Icon.vue'
@@ -69,9 +71,15 @@ export default {
         Icon,
         Loader,
     },
+    data() {
+        return {}
+    },
     computed: {
-        ...mapState(useMainStore, ['nanoVizerData', 'isFileNameValid', 'isLoading', 'isError']),
+        ...mapState(useMainStore, ['theme', 'nanoVizerData', 'isFileNameValid', 'isLoading', 'isError']),
         ...mapWritableState(useMainStore, ['fileName', 'genomeName', 'genomeSize', 'minReadLength', 'minPosition3', 'minPosition5', 'maxPosition5']),
+        logo() {
+            return this.theme === 'dark' ? nanovizerDarkThemeLogo : nanovizerLightThemeLogo
+        },
         isFormValid() {
             return !this.isLoading
                 // && !this.isLoadingGenomes
@@ -115,6 +123,10 @@ export default {
     &__title {
         margin-bottom: 30px;
         padding-top: 6%;
+    }
+
+    &__logo {
+        width: 180px;
     }
 
     &__input + &__input{

@@ -5,6 +5,7 @@ import showcaseBig from '../showcase/showcase-sars.json'
 
 const useMainStore = defineStore('main', {
     state: () => ({
+        theme: 'dark',
         fileName: '',
         genomeName: '',
         genomeSize: undefined,

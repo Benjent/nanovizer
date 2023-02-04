@@ -1,15 +1,27 @@
 <script lang="js">
+import nanovizerDarkThemeLogo from '@/assets/images/logos/nanovizer-dark-theme.svg'
+import nanovizerLightThemeLogo from '@/assets/images/logos/nanovizer-light-theme.svg'
+import { mapState } from 'pinia'
+import { useMainStore } from '../stores/main'
+
 export default {
     data() {
         return {
             email: 'benjent@hotmail.fr',
         }
     },
+    computed: {
+        ...mapState(useMainStore, ['theme']),
+        logo() {
+            return this.theme === 'dark' ? nanovizerDarkThemeLogo : nanovizerLightThemeLogo
+        },
+    },
 }
 </script>
 
 <template>
     <footer class="l-footer">
+        <img class="l-footer__logo" :src="logo" alt="Logo NanoVizer" />
         <p class="l-footer__feedback">
             Like this webapp? Have a feedback? Give me a shout at {{email}}!
         </p>
@@ -27,9 +39,13 @@ export default {
     padding: 20px 60px;
     background: var(--background-footer);
 
+    &__logo {
+        width: 120px;
+    }
+
     &__feedback {
         font-size: 0.8rem;
-        margin-bottom: 20px;
+        margin: 20px 0;
     }
 
     &__logos {
