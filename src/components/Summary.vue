@@ -10,11 +10,11 @@
                 <label class="data__label">Host reads</label>
                 <output class="data__value">TODO</output>
             </div>
-            <br />
             <div class="data">
                 <label class="data__label">Viral reads for all genomes</label>
                 <output class="data__value">TODO</output>
             </div>
+            <br />
             <div class="data">
                 <label class="data__label">Viral reads for a specific gene</label>
                 <output class="data__value">TODO</output>
@@ -40,7 +40,6 @@
                 <label class="data__label">Short Multiple-block reads</label>
                 <output class="data__value">{{nanoVizerData.read_summary_count.short_mutliple_block}}</output>
             </div>
-            <br />
             <div class="data">
                 <label class="data__label">Reads too small</label>
                 <output class="data__value">TODO</output>
