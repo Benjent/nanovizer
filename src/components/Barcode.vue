@@ -1,39 +1,44 @@
 <template>
     <section class="entry l-barcode">
         <h2 class="title title--2" id="barcode">Barcode</h2>
-        <div class="data">
-            <label class="data__label">FASTQ file name</label>
-            <input class="input data__value" v-model="fastqFile" min="0" />
-        </div>
-        <p class="helper l-barcode__helper">
-            Provide the name of the FASTQ file then click on a barcode to export all its corresponding sequences as a new FASTQ file saved in the result folder
-        </p>
-        <Loader v-if="isLoadingBarcode" />
-        <p v-if="isError" class="l-barcode__error">
-            An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
-        </p>
-        <p class="l-barcode__alert l-barcode__helper helper"><Icon icon="info" />&nbsp;Please be aware that in order to have a better visual representation of reads, barcode ends are arbitrarily set in a range from 1 to the genome size.</p>
-        <div>
-            <div :id="idGraph" :ref="idGraph" class="entry__graph entry__graph--big"></div>
-            <div class="l-barcode__sticky-cta">
-                <Loader v-if="isLoading" />
-                <template v-else>
-                    <button  class="button button--secondary" :disabled="isLoading" @click="moreBarcodes">
-                        <Icon icon="playlist_add" />&nbsp;Reveal 10 more barcodes
-                    </button>
-                    <button  class="button button--secondary" :disabled="isLoading" @click="lessBarcodes">
-                        <Icon icon="remove" />&nbsp;Hide last barcode
-                    </button>
-                </template>
+        <Failure v-if="!rawData">
+            Missing data. Chart could not be drawn.
+        </Failure>
+        <template v-else>
+            <div class="data">
+                <label class="data__label">FASTQ file name</label>
+                <input class="input data__value" v-model="fastqFile" min="0" />
             </div>
-            <footer v-if="d3Data" class="entry__footer">
-                <div class="data">
-                    <label class="data__label">Displayed data percentage</label>
-                    <output class="data__value">{{percentageFilteredD3Data}}%</output>
+            <p class="helper l-barcode__helper">
+                Provide the name of the FASTQ file then click on a barcode to export all its corresponding sequences as a new FASTQ file saved in the result folder
+            </p>
+            <Loader v-if="isLoadingBarcode" />
+            <p v-if="isError" class="l-barcode__error">
+                An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
+            </p>
+            <p class="l-barcode__alert l-barcode__helper helper"><Icon icon="info" />&nbsp;Please be aware that in order to have a better visual representation of reads, barcode ends are arbitrarily set in a range from 1 to the genome size.</p>
+            <div>
+                <div :id="idGraph" :ref="idGraph" class="entry__graph entry__graph--big"></div>
+                <div class="l-barcode__sticky-cta">
+                    <Loader v-if="isLoading" />
+                    <template v-else>
+                        <button  class="button button--secondary" :disabled="isLoading" @click="moreBarcodes">
+                            <Icon icon="playlist_add" />&nbsp;Reveal 10 more barcodes
+                        </button>
+                        <button  class="button button--secondary" :disabled="isLoading" @click="lessBarcodes">
+                            <Icon icon="remove" />&nbsp;Hide last barcode
+                        </button>
+                    </template>
                 </div>
-                <ChartSaver :id-graph="idGraph" />
-            </footer>
-        </div>
+                <footer v-if="d3Data" class="entry__footer">
+                    <div class="data">
+                        <label class="data__label">Displayed data percentage</label>
+                        <output class="data__value">{{percentageFilteredD3Data}}%</output>
+                    </div>
+                    <ChartSaver :id-graph="idGraph" />
+                </footer>
+            </div>
+        </template>
     </section>
 </template>
 
@@ -48,6 +53,7 @@ import numberUtils from '../utils/number'
 import tooltipUtils from '../utils/tooltip'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
+import Failure from './Failure.vue'
 import Icon from './Icon.vue'
 import Loader from './Loader.vue'
 
@@ -55,6 +61,7 @@ export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
+        Failure,
         Icon,
         Loader,
     },
@@ -78,6 +85,9 @@ export default {
             const ratio = this.d3Data && this.filteredD3Data ? this.filteredD3Data.length / this.d3Data.length : 1
             const percentage = ratio * 100
             return numberUtils.frFloat(numberUtils.decimal(percentage))
+        },
+        rawData() {
+            return this.nanoVizerData.barcode_count
         },
     },
     watch: {
@@ -112,7 +122,8 @@ export default {
         },
     },
     mounted() {
-        const parsedData = this.parseData(this.nanoVizerData.barcode_count)
+        if (!this.rawData) return
+        const parsedData = this.parseData(this.rawData)
         this.d3Data = mathUtils.sort(parsedData, 'count', 'DESC')
         this.drawGraph()
     },

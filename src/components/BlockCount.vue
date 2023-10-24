@@ -1,7 +1,10 @@
 <template>
     <section class="entry">
         <h2 class="title title--2" id="blockCount">Block count</h2>
-        <div>
+        <Failure v-if="!rawData">
+            Missing data. Chart could not be drawn.
+        </Failure>
+        <div v-else>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
@@ -20,11 +23,13 @@ import { useMainStore } from '../stores/main'
 import chartUtils from '../utils/chart'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
+import Failure from './Failure.vue'
 
 export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
+        Failure,
     },
     data() {
         return {
@@ -35,9 +40,13 @@ export default {
     },
     computed: {
         ...mapState(useMainStore, ['nanoVizerData']),
+        rawData() {
+            return this.nanoVizerData.block_count
+        },
     },
     mounted() {
-        this.d3Data = chartUtils.parseData(this.nanoVizerData.block_count)
+        if (!this.rawData) return
+        this.d3Data = chartUtils.parseData(this.rawData)
         this.drawGraph()
     },
     methods: {

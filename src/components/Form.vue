@@ -52,9 +52,9 @@
             <Loader v-if="isLoading" />
             <button v-else class="button" :disabled="!isFormValid" type="button" @click="() => startNanoVizer(false)"><Icon icon="science" />&nbsp;Submit</button>
         </div>
-        <p v-if="isError" class="l-form__error">
+        <Failure v-if="isError" class="l-form__error">
             An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
-        </p>
+        </Failure>
     </form>
 </template>
 
@@ -63,11 +63,13 @@ import nanovizerDarkThemeLogo from '@/assets/images/logos/nanovizer-dark-theme.s
 import nanovizerLightThemeLogo from '@/assets/images/logos/nanovizer-light-theme.svg'
 import { mapActions, mapState, mapWritableState } from 'pinia'
 import { useMainStore } from '../stores/main'
+import Failure from './Failure.vue'
 import Icon from './Icon.vue'
 import Loader from './Loader.vue'
 
 export default {
     components: {
+        Failure,
         Icon,
         Loader,
     },
@@ -158,7 +160,6 @@ export default {
 
     &__error {
         margin-top: 20px;
-        color: var(--alert);
     }
 }
 </style>

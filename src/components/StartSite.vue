@@ -1,7 +1,10 @@
 <template>
     <section class="entry">
         <h2 class="title title--2" id="startSite">Start site</h2>
-        <div>
+        <Failure v-if="!rawData">
+            Missing data. Chart could not be drawn.
+        </Failure>
+        <div v-else>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
@@ -29,11 +32,13 @@ import chartUtils from '../utils/chart'
 import numberUtils from '../utils/number'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
+import Failure from './Failure.vue'
 
 export default {
     mixins: [resizeMixin],
     components: {
         ChartSaver,
+        Failure,
     },
     props: {
         data: {
@@ -57,7 +62,10 @@ export default {
             const ratio = this.d3Data && this.filteredD3Data ? this.filteredD3Data.length / this.d3Data.length : 1
             const percentage = ratio * 100
             return numberUtils.frFloat(numberUtils.decimal(percentage))
-        }
+        },
+        rawData() {
+            return this.nanoVizerData.start_site_count
+        },
     },
     watch: {
         threshold() {
@@ -65,7 +73,8 @@ export default {
         },
     },
     mounted() {
-        this.d3Data = chartUtils.parseData(this.nanoVizerData.start_site_count)
+        if (!this.rawData) return
+        this.d3Data = chartUtils.parseData(this.rawData)
         this.drawGraph()
     },
     methods: {

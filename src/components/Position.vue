@@ -1,7 +1,10 @@
 <template>
     <section class="entry l-position">
         <h2 class="title title--2" :id="`position${type}`">{{type}}' Position</h2>
-        <div>
+        <Failure v-if="!rawData">
+            Missing data. Chart could not be drawn.
+        </Failure>
+        <div v-else>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
@@ -29,10 +32,12 @@ import chartUtils from '../utils/chart'
 import mathUtils from '../utils/math'
 import numberUtils from '../utils/number'
 import ChartSaver from './ChartSaver.vue'
+import Failure from './Failure.vue'
 
 export default {
     components: {
         ChartSaver,
+        Failure,
     },
     props: {
         type: {
@@ -63,6 +68,9 @@ export default {
             const percentage = ratio * 100
             return numberUtils.frFloat(numberUtils.decimal(percentage))
         },
+        rawData() {
+            return this.nanoVizerData[`${this.type}_prime_count`]
+        },
     },
     watch: {
         threshold() {
@@ -76,7 +84,8 @@ export default {
         window.removeEventListener('resize', this.drawGraphs)
     },
     mounted() {
-        const parsedData = chartUtils.parseData(this.nanoVizerData[`${this.type}_prime_count`])
+        if (!this.rawData) return
+        const parsedData = chartUtils.parseData(this.rawData)
         this.d3Data = mathUtils.sort(parsedData, 'key')
         this.drawGraphs()
     },
