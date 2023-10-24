@@ -64,7 +64,7 @@ export default {
         },
     },
     mounted() {
-        this.d3Data = this.nanoVizerData.read_size.map((d) => d)
+        this.d3Data = this.nanoVizerData.read_size?.map((d) => d)
         this.d3Data.sort(d3.ascending)
         this.drawGraph()
     },
