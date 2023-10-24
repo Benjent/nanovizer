@@ -37,31 +37,28 @@ const useMainStore = defineStore('main', {
             this.nanoVizerData = undefined
             window.scrollTo(0, 0)
         },
-        triggerParsing() {
+        async triggerParsing() {
             this.isLoading = true
             this.isError = false
-            
-            const params = {
-                file_name: this.fileName,
-                genome_name: this.genomeName,
-                genome_size: this.genomeSize,
-                min_read_length: this.minReadLength,
-                min_position_3: this.minPosition3,
-                min_position_5: this.minPosition5,
-                max_position_5: this.maxPosition5,
-            }
 
-            axios.post('/parse-file', params)
-            .then((response) => {
-                this.isLoading = false
+            try {
+                const params = {
+                    file_name: this.fileName,
+                    genome_name: this.genomeName,
+                    genome_size: this.genomeSize,
+                    min_read_length: this.minReadLength,
+                    min_position_3: this.minPosition3,
+                    min_position_5: this.minPosition5,
+                    max_position_5: this.maxPosition5,
+                }
+    
+                const response = await axios.post('/parse-file', params)
                 this.nanoVizerData = response.data
-            })
-            .catch((error) => {
+            } catch (error) {
                 this.isError = true
-            })
-            .finally(() => {
-                this.isLoading = false
-            })
+            }
+            
+            this.isLoading = false
         },
         useShowcaseData() {
             const isShowcaseBig = false && Math.random() < 0.5
