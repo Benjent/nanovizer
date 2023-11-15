@@ -5,7 +5,8 @@
             <main class="l-graphs__main">
                 <Size />
                 <BlockCount />
-                <StartSite />
+                <Site type="start" />
+                <Site type="end" />
                 <Position :type="3" />
                 <Position :type="5" />
                 <Junction />
@@ -29,8 +30,8 @@ import Form from './components/Form.vue'
 import Header from './components/Header.vue'
 import Junction from './components/Junction.vue'
 import Position from './components/Position.vue'
+import Site from './components/Site.vue'
 import Size from './components/Size.vue'
-import StartSite from './components/StartSite.vue'
 import Summary from './components/Summary.vue'
 import ThemeSwitch from './components/ThemeSwitch.vue'
 
@@ -43,8 +44,8 @@ export default {
         Header,
         Junction,
         Position,
+        Site,
         Size,
-        StartSite,
         Summary,
         ThemeSwitch,
     },

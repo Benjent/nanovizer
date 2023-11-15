@@ -1,6 +1,6 @@
 <template>
     <section class="entry">
-        <h2 class="title title--2" id="startSite">Start site</h2>
+        <h2 class="title title--2" :id="`${type}Site`">{{graphTitle}}</h2>
         <Failure v-if="!rawData">
             Missing data. Chart could not be drawn.
         </Failure>
@@ -41,13 +41,16 @@ export default {
         Failure,
     },
     props: {
-        data: {
-            type: Array,
+        type: {
+            type: String,
+            required: true,
+            validator: (value) => {
+                return ["start", "end"].includes(value)
+            }
         },
     },
     data() {
         return {
-            idGraph: 'd3GraphStartSite',
             max: 0,
             d3Data: undefined,
             threshold: 0,
@@ -58,13 +61,19 @@ export default {
         filteredD3Data() {
             return this.d3Data?.filter((d) => d.value >= this.threshold)
         },
+        idGraph() {
+            return `d3Graph${this.type}Site`
+        },
+        graphTitle() {
+            return `${this.type.charAt(0).toUpperCase()}${this.type.slice(1)} site`
+        },
         percentageFilteredD3Data() {
             const ratio = this.d3Data && this.filteredD3Data ? this.filteredD3Data.length / this.d3Data.length : 1
             const percentage = ratio * 100
             return numberUtils.frFloat(numberUtils.decimal(percentage))
         },
         rawData() {
-            return this.nanoVizerData.start_site_count
+            return this.nanoVizerData[`${this.type}_site_count`]
         },
     },
     watch: {

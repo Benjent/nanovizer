@@ -32,6 +32,7 @@ export default {
                 { title: 'Size', to: 'size' },
                 { title: 'Block count', to: 'blockCount' },
                 { title: 'Start site', to: 'startSite' },
+                { title: 'End site', to: 'endSite' },
                 { title: '3\' Position', to: 'position3' },
                 { title: '5\' Position', to: 'position5' },
                 { title: 'Junction', to: 'junction' },
