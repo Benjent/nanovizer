@@ -18,7 +18,7 @@
             <p v-if="isError" class="l-barcode__error">
                 An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
             </p>
-            <p class="l-barcode__alert l-barcode__helper helper"><Icon icon="info" />&nbsp;Please be aware that in order to have a better visual representation of reads, barcode ends are arbitrarily set in a range from 1 to the genome size.</p>
+            <p class="l-barcode__alert l-barcode__helper helper"><Icon icon="info" />&nbsp;Please be aware that in order to have a better visual representation of reads, consensus start and end positions are displayed.</p>
             <div>
                 <div :id="idGraph" :ref="idGraph" class="entry__graph entry__graph--big"></div>
                 <div class="l-barcode__sticky-cta">
@@ -170,7 +170,8 @@ export default {
             const chartHeight = approximateBarHeight * this.filteredD3Data.length
             const dataMax = d3.max(this.filteredD3Data.map((d) => d.blocks[d.blocks.length - 1]))
 
-            const xMin = d3.min(this.filteredD3Data.map((d) => d.blocks[0]))
+            // const xMin = d3.min(this.filteredD3Data.map((d) => d.blocks[0]))
+            const xMin = 0
             const xMax = chartUtils.getXMax(this.genomeSize, dataMax)
 
             const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width, { height: chartHeight, margin: { left: 180, right: 100 } })
@@ -214,7 +215,7 @@ export default {
 
             entries.each((d, i) => {
                 d.blocks.forEach(() => {
-                    if (i < d.blocks.length - 1) {
+                    if (i < d.blocks.length) {
                         entries.append('rect')
                             .attr('data-start', (d) => d.blocks[i])
                             .attr('data-end', (d) => d.blocks[i + 1])
