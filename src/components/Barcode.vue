@@ -5,13 +5,15 @@
             Missing data. Chart could not be drawn.
         </Failure>
         <template v-else>
-            <div class="data">
-                <label class="data__label">FASTQ file name</label>
-                <input class="input data__value" v-model="fastqFile" min="0" />
-            </div>
-            <p class="helper l-barcode__helper">
-                Provide the name of the FASTQ file then click on a barcode to export all its corresponding sequences as a new FASTQ file saved in the result folder
-            </p>
+            <template v-if="isFastqEnabled">
+                <div class="data">
+                    <label class="data__label">FASTQ file name</label>
+                    <input class="input data__value" v-model="fastqFile" min="0" />
+                </div>
+                <p class="helper l-barcode__helper">
+                    Provide the name of the FASTQ file then click on a barcode to export all its corresponding sequences as a new FASTQ file saved in the result folder
+                </p>
+            </template>
             <Loader v-if="isLoadingBarcode" />
             <p v-if="isError" class="l-barcode__error">
                 An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
@@ -74,6 +76,7 @@ export default {
             isLoadingBarcode: false,
             d3Data: undefined,
             nbShownBarcodes: 10,
+            isFastqEnabled: false,
         }
     },
     computed: {
