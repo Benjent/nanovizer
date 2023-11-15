@@ -6,7 +6,7 @@
         </Failure>
         <div v-else>
             <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
-            <div :id="idGraphScatterplot" :ref="idGraphScatterplot" class="entry__graph"></div>
+            <div v-if="isScatterplotEnabled" :id="idGraphScatterplot" :ref="idGraphScatterplot" class="entry__graph"></div>
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
                     <label class="data__label">Threshold</label>
@@ -20,7 +20,7 @@
                     <label class="data__label">Displayed data percentage</label>
                     <output class="data__value">{{percentageFilteredD3Data}}%</output>
                 </div>
-                <ChartSaver :id-graph="[idGraph, idGraphScatterplot]" />
+                <ChartSaver :id-graph="isScatterplotEnabled ? [idGraph, idGraphScatterplot] : idGraph" />
             </footer>
         </div>
     </section>
@@ -50,6 +50,7 @@ export default {
             max: 0,
             d3Data: undefined,
             threshold: 0,
+            isScatterplotEnabled: false,
         }
     },
     computed: {
