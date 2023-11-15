@@ -1,7 +1,7 @@
 <template>
     <header id="header" class="l-header">
         <div class="l-header__titles">
-            <h2 class="title title--2 title--marginless data__value">{{fileName}}</h2>
+            <h2 class="title title--2 title--marginless data__value l-header__titles__file-name">{{fileName}}</h2>
             <h3 class="title title--4 title--marginless">{{genomeName}} ({{genomeSize}})</h3>
             <a class="link" @click="startAgain">Make another analysis</a>
         </div>
@@ -100,6 +100,14 @@ export default {
     &__titles {
         flex: 1;
         padding: 10px 20px;
+
+        & &__file-name {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: center;
+            margin: auto;
+        }
     }
 
     &__nav {
