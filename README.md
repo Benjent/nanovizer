@@ -7,7 +7,7 @@
 
 NanoVizer is an interactive data-visualisation and chart-saver tool assisting researchers in their work.
 
-This is a [Vue.js v3](https://vuejs.org/) project bootstrapped with [Create Vue](https://github.com/vuejs/create-vue).
+This is a [Vue.js v3](https://vuejs.org/) project bootstrapped with [Create Vue](https://github.com/vuejs/create-vue). Backend can be found [here](https://github.com/CorentinAube/NanoViZer).
 
 [See it live](https://benjent.github.io/nanovizer/).
 
@@ -37,7 +37,7 @@ This is a [Vue.js v3](https://vuejs.org/) project bootstrapped with [Create Vue]
 
     1. Go where you want the NanoVizer repository to be installed to
 
-    2. Set up the backend of NanoVizer
+    2. Set up the [backend](https://github.com/CorentinAube/NanoViZer) of NanoVizer
 
         1. Clone the repository
 
