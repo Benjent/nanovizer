@@ -1,5 +1,5 @@
 {
-  "name": "vue-d3",
+  "name": "nanovizer",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
