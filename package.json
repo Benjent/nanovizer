@@ -27,5 +27,6 @@
     "sass": "^1.49.9",
     "sass-loader": "^12.6.0",
     "vite": "^2.8.4"
-  }
+  },
+  "homepage": "https://benjent.github.io/nanovizer"
 }
