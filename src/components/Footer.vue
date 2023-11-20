@@ -21,7 +21,7 @@ export default {
 
 <template>
     <footer class="l-footer">
-        <img class="l-footer__logo" :src="logo" alt="Logo NanoVizer" />
+        <img class="l-footer__logo" :src="logo" alt="Logo NanoViZer" />
         <p class="l-footer__feedback">
             Like this webapp? Have a feedback? Give me a shout at {{email}}!
         </p>

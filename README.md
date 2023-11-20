@@ -1,11 +1,11 @@
-# <img src="./src/assets/images/logos/nanovizer-dark-theme.svg#gh-dark-mode-only" alt="NanoVizer dark theme logo" width="320px" />
-# <img src="./src/assets/images/logos/nanovizer-light-theme.svg#gh-light-mode-only" alt="NanoVizer light theme logo" width="320px" />
+# <img src="./src/assets/images/logos/nanovizer-dark-theme.svg#gh-dark-mode-only" alt="NanoViZer dark theme logo" width="320px" />
+# <img src="./src/assets/images/logos/nanovizer-light-theme.svg#gh-light-mode-only" alt="NanoViZer light theme logo" width="320px" />
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg?style=flat) ![GitHub CI](https://github.com/Benjent/nanovizer/actions/workflows/main.yml/badge.svg)
 
 ![GitHub Pages badge](https://img.shields.io/badge/GitHub_Pages-222222?logo=github&logoColor=white) ![Vue.js badge](https://img.shields.io/badge/Vue.js_3-42b883?logo=vuedotjs&logoColor=white) ![Sass badge](https://img.shields.io/badge/Sass-cf649a?logo=sass&logoColor=white) ![D3.js badge](https://img.shields.io/badge/D3.js-ef7234?logo=d3&logoColor=white) ![Conventional commits badge](https://img.shields.io/badge/Conventional_commits-fa6673?logo=conventionalcommits&logoColor=white) ![ESLint badge](https://img.shields.io/badge/ESLint-4b32c3?logo=eslint&logoColor=white)
 
-NanoVizer is an interactive data-visualisation and chart-saver tool assisting researchers in their work.
+NanoViZer is an interactive data-visualisation and chart-saver tool assisting researchers in their work.
 
 This is a [Vue.js v3](https://vuejs.org/) project bootstrapped with [Create Vue](https://github.com/vuejs/create-vue). Backend can be found [here](https://github.com/CorentinAube/NanoViZer).
 
@@ -14,8 +14,8 @@ This is a [Vue.js v3](https://vuejs.org/) project bootstrapped with [Create Vue]
 ## Table of contents
 
 - [Requirements](#requirements)
-- [Using NanoVizer for the first time](#using-nanovizer-for-the-first-time)
-- [Running NanoVizer](#running-nanovizer)
+- [Using NanoViZer for the first time](#using-nanovizer-for-the-first-time)
+- [Running NanoViZer](#running-nanovizer)
 
 ## Requirements
 
@@ -23,7 +23,7 @@ This is a [Vue.js v3](https://vuejs.org/) project bootstrapped with [Create Vue]
 - [Python 3](https://www.python.org/downloads/)
 - [Node and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
-## Using NanoVizer for the first time
+## Using NanoViZer for the first time
 
 1. Install dependencies
 
@@ -35,9 +35,9 @@ This is a [Vue.js v3](https://vuejs.org/) project bootstrapped with [Create Vue]
 
 2. Set up the project
 
-    1. Go where you want the NanoVizer repository to be installed to
+    1. Go where you want the NanoViZer repository to be installed to
 
-    2. Set up the [backend](https://github.com/CorentinAube/NanoViZer) of NanoVizer
+    2. Set up the [backend](https://github.com/CorentinAube/NanoViZer) of NanoViZer
 
         1. Clone the repository
 
@@ -53,9 +53,9 @@ This is a [Vue.js v3](https://vuejs.org/) project bootstrapped with [Create Vue]
             apt-get update -y && apt-get install -y python3-pip python-dev bedtools && pip3 install Flask Flask-Cors
             ```
 
-    3. Set up the frontend of NanoVizer
+    3. Set up the frontend of NanoViZer
 
-        1. Return to where the NanoVizer repository is installed
+        1. Return to where the NanoViZer repository is installed
 
         2. Clone the repository
 
@@ -71,9 +71,9 @@ This is a [Vue.js v3](https://vuejs.org/) project bootstrapped with [Create Vue]
             npm install
             ```
 
-3. Follow the steps in the *Running NanoVizer* section
+3. Follow the steps in the *Running NanoViZer* section
 
-## Running NanoVizer
+## Running NanoViZer
 
 1. Run the project
 
