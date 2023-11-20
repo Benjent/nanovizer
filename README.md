@@ -107,6 +107,10 @@ This is a [Vue.js v3](https://vuejs.org/) project bootstrapped with [Create Vue]
 
 ## FAQ
 
+### What is the reason for this repository?
+
+There is [an existing NanoViZer backend solution](https://github.com/CorentinAube/NanoViZer.git), coded in Python, which generates several charts with a given .bam file. This repository allows the same charts to be generated through a frontend solution, except they are now interactive, and without re-writing the existing NanoViZer code.
+
 ### How to open a terminal?
 
 Inside the file explorer, right click and click on *Git bash here*.
@@ -114,5 +118,5 @@ Inside the file explorer, right click and click on *Git bash here*.
 ### Why not using a serverless app?
 
 - This project is intended to run for free
-- .bam files are too heavy to manipulate for free
+- .bam files are too heavy to manipulate for free (some of them exceed 100GB)
 - It is faster to move .bam files in a local directory compared to uploading them in the cloud
