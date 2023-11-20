@@ -1,12 +1,12 @@
 <template>
     <form class="l-form">
-        <h1 class="title--1 l-form__title"><img class="l-form__logo" :src="logo" alt="Logo NanoVizer" /></h1>
+        <h1 class="title--1 l-form__title"><img class="l-form__logo" :src="logo" alt="Logo NanoViZer" /></h1>
         <div class="l-form__input">
             <label class="data__label">File name</label>
             <input class="input data__value" v-model="fileName"/>
         </div>
         <p>
-            <a class="link" @click="() => startNanoVizer(true)">Or try with showcase data</a>
+            <a class="link" @click="() => startNanoViZer(true)">Or try with showcase data</a>
         </p>
 
         <fieldset class="fieldset l-form__fieldset">
@@ -50,7 +50,7 @@
 
         <div class="l-form__button">
             <Loader v-if="isLoading" />
-            <button v-else class="button" :disabled="!isFormValid" type="button" @click="() => startNanoVizer(false)"><Icon icon="science" />&nbsp;Submit</button>
+            <button v-else class="button" :disabled="!isFormValid" type="button" @click="() => startNanoViZer(false)"><Icon icon="science" />&nbsp;Submit</button>
         </div>
         <Failure v-if="isError" class="l-form__error">
             An error occured during the process. Either the file is corrupted, misspelled or missing ; or we came across data that we couldn't parse.
@@ -98,7 +98,7 @@ export default {
     },
     methods: {
         ...mapActions(useMainStore, ['triggerParsing', 'useShowcaseData']),
-        async startNanoVizer(isShowcase) {
+        async startNanoViZer(isShowcase) {
             if (isShowcase) {
                 await this.useShowcaseData()
             } else {
