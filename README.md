@@ -5,7 +5,7 @@
 
 ![GitHub Pages badge](https://img.shields.io/badge/GitHub_Pages-222222?logo=github&logoColor=white) ![Vue.js badge](https://img.shields.io/badge/Vue.js_3-42b883?logo=vuedotjs&logoColor=white) ![Sass badge](https://img.shields.io/badge/Sass-cf649a?logo=sass&logoColor=white) ![D3.js badge](https://img.shields.io/badge/D3.js-ef7234?logo=d3&logoColor=white) ![Conventional commits badge](https://img.shields.io/badge/Conventional_commits-fa6673?logo=conventionalcommits&logoColor=white) ![ESLint badge](https://img.shields.io/badge/ESLint-4b32c3?logo=eslint&logoColor=white)
 
-NanoViZer is an interactive data-visualisation and chart-saver tool assisting researchers in their work.
+NanoViZer (Nanopore Virus analyZer) is an interactive data-visualisation and chart-saver tool assisting researchers in their work.
 
 This is a [Vue.js v3](https://vuejs.org/) project bootstrapped with [Create Vue](https://github.com/vuejs/create-vue). Backend can be found [here](https://github.com/CorentinAube/NanoViZer).
 
