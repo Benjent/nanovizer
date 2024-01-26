@@ -1,6 +1,14 @@
 <script lang="js">
+import cnrsDarkThemeLogo from '@/assets/images/logos/cnrs-dark-theme.gif'
+import cnrsLightThemeLogo from '@/assets/images/logos/cnrs-light-theme.gif'
+import insermDarkThemeLogo from '@/assets/images/logos/inserm-dark-theme.png'
+import insermLightThemeLogo from '@/assets/images/logos/inserm-light-theme.png'
+import institutCochinDarkThemeLogo from '@/assets/images/logos/institut-cochin-dark-theme.svg'
+import institutCochinLightThemeLogo from '@/assets/images/logos/institut-cochin-light-theme.svg'
 import nanovizerDarkThemeLogo from '@/assets/images/logos/nanovizer-dark-theme.svg'
 import nanovizerLightThemeLogo from '@/assets/images/logos/nanovizer-light-theme.svg'
+import universiteParisCiteDarkThemeLogo from '@/assets/images/logos/universite-paris-cite-dark-theme.svg'
+import universiteParisCiteLightThemeLogo from '@/assets/images/logos/universite-paris-cite-light-theme.svg'
 import { mapState } from 'pinia'
 import { useMainStore } from '../stores/main'
 
@@ -12,8 +20,20 @@ export default {
     },
     computed: {
         ...mapState(useMainStore, ['theme']),
-        logo() {
+        cnrsLogo() {
+            return this.theme === 'dark' ? cnrsDarkThemeLogo : cnrsLightThemeLogo
+        },
+        insermLogo() {
+            return this.theme === 'dark' ? insermDarkThemeLogo : insermLightThemeLogo
+        },
+        institutCochinLogo() {
+            return this.theme === 'dark' ? institutCochinDarkThemeLogo : institutCochinLightThemeLogo
+        },
+        nanovizerLogo() {
             return this.theme === 'dark' ? nanovizerDarkThemeLogo : nanovizerLightThemeLogo
+        },
+        universiteParisCiteLogo() {
+            return this.theme === 'dark' ? universiteParisCiteDarkThemeLogo : universiteParisCiteLightThemeLogo
         },
     },
 }
@@ -21,15 +41,15 @@ export default {
 
 <template>
     <footer class="l-footer">
-        <img class="l-footer__logo" :src="logo" alt="Logo NanoViZer" />
+        <img class="l-footer__logo" :src="nanovizerLogo" alt="Logo NanoViZer" />
         <p class="l-footer__feedback">
             Like this webapp? Have a feedback? Give me a shout at {{email}}!
         </p>
         <div class="l-footer__logos">
-            <img src="../assets/images/logos/cnrs.svg" alt="Logo CNRS" />
-            <img src="../assets/images/logos/inserm.svg" alt="Logo Inserm" />
-            <img src="../assets/images/logos/institut-cochin.svg" alt="Logo Institut Cochin" />
-            <img src="../assets/images/logos/universite-paris-cite.svg" alt="Logo Université Paris Cité" />
+            <img :src="cnrsLogo" alt="Logo CNRS" style="height: 3rem;" />
+            <img :src="insermLogo" alt="Logo Inserm" style="height: 2rem;" />
+            <img :src="institutCochinLogo" alt="Logo Institut Cochin" style="height: 6rem;" />
+            <img :src="universiteParisCiteLogo" alt="Logo Université Paris Cité" style="height: 2.5rem;" />
         </div>
     </footer>
 </template>
@@ -51,11 +71,8 @@ export default {
     &__logos {
         display: flex;
         justify-content: center;
-
-        img {
-            height: 60px;
-            margin: 0 10px;
-        }
+        align-items: center;
+        gap: 3rem;
     }
 }
 </style>
