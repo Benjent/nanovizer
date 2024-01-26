@@ -1,55 +1,55 @@
 <template>
-    <section class="entry">
+    <section class="entry l-summary">
         <h2 class="title title--2" id="summary">Summary</h2>
         <Failure v-if="!rawData">
             Missing data. Summary could not be shown.
         </Failure>
         <div v-else>
-            <div class="data">
-                <label class="data__label">Reads</label>
-                <output class="data__value">{{rawData.total}}</output>
+            <div class="data l-summary__data">
+                <label class="data__label l-summary__data__label">Reads</label>
+                <output class="data__value l-summary__data__value">{{rawData.total}}</output>
             </div>
-            <div class="data">
-                <label class="data__label">Host reads</label>
-                <output class="data__value">TODO</output>
+            <div class="data l-summary__data">
+                <label class="data__label l-summary__data__label">Host reads</label>
+                <output class="data__value l-summary__data__value">TODO</output>
             </div>
-            <div class="data">
-                <label class="data__label">Viral reads for all genomes</label>
-                <output class="data__value">TODO</output>
-            </div>
-            <br />
-            <div class="data">
-                <label class="data__label">Viral reads for a specific gene</label>
-                <output class="data__value">TODO</output>
-            </div>
-            <div class="data">
-                <label class="data__label">Viral single-block reads</label>
-                <output class="data__value">TODO</output>
-            </div>
-            <div class="data">
-                <label class="data__label">Viral multiple-block reads</label>
-                <output class="data__value">TODO</output>
+            <div class="data l-summary__data">
+                <label class="data__label l-summary__data__label">Viral reads for all genomes</label>
+                <output class="data__value l-summary__data__value">TODO</output>
             </div>
             <br />
-            <div class="data">
-                <label class="data__label">Single-block reads</label>
-                <output class="data__value">{{rawData.single_block}}</output>
+            <div class="data l-summary__data">
+                <label class="data__label l-summary__data__label">Viral reads for a specific gene</label>
+                <output class="data__value l-summary__data__value">TODO</output>
             </div>
-            <div class="data">
-                <label class="data__label">Multiple-block reads</label>
-                <output class="data__value">{{rawData.multiple_block}}</output>
+            <div class="data l-summary__data">
+                <label class="data__label l-summary__data__label">Viral single-block reads</label>
+                <output class="data__value l-summary__data__value">TODO</output>
             </div>
-            <div class="data">
-                <label class="data__label">Short Multiple-block reads</label>
-                <output class="data__value">{{rawData.short_mutliple_block}}</output>
+            <div class="data l-summary__data">
+                <label class="data__label l-summary__data__label">Viral multiple-block reads</label>
+                <output class="data__value l-summary__data__value">TODO</output>
             </div>
-            <div class="data">
-                <label class="data__label">Reads too small</label>
-                <output class="data__value">TODO</output>
+            <br />
+            <div class="data l-summary__data">
+                <label class="data__label l-summary__data__label">Single-block reads</label>
+                <output class="data__value l-summary__data__value">{{rawData.single_block}}</output>
             </div>
-            <div class="data">
-                <label class="data__label">Removed reads</label>
-                <output class="data__value">{{rawData.removed}}</output>
+            <div class="data l-summary__data">
+                <label class="data__label l-summary__data__label">Multiple-block reads</label>
+                <output class="data__value l-summary__data__value">{{rawData.multiple_block}}</output>
+            </div>
+            <div class="data l-summary__data">
+                <label class="data__label l-summary__data__label">Short Multiple-block reads</label>
+                <output class="data__value l-summary__data__value">{{rawData.short_mutliple_block}}</output>
+            </div>
+            <div class="data l-summary__data">
+                <label class="data__label l-summary__data__label">Reads too small</label>
+                <output class="data__value l-summary__data__value">TODO</output>
+            </div>
+            <div class="data l-summary__data">
+                <label class="data__label l-summary__data__label">Removed reads</label>
+                <output class="data__value l-summary__data__value">{{rawData.removed}}</output>
             </div>
         </div>
     </section>
@@ -72,3 +72,20 @@ export default {
     },
 }
 </script>
+
+<style lang="scss">
+.l-summary {
+    &__data {
+        display: flex;
+
+        &__label {
+            width: 100%;
+            text-align: right;
+        }
+        &__value {
+            width: 100%;
+            text-align: left;
+        }
+    }
+}
+</style>
