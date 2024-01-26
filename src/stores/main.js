@@ -5,6 +5,7 @@ import showcaseNew from '../showcase/showcase-hiv.json'
 const useMainStore = defineStore('main', {
     state: () => ({
         theme: 'dark',
+        isContrasted: false,
         fileName: '',
         genomeName: '',
         genomeSize: undefined,

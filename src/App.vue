@@ -1,8 +1,8 @@
 <template>
-    <div class="l-graphs">
+    <div class="l-nanovizer">
         <template v-if="nanoVizerData">
             <Header />
-            <main class="l-graphs__main">
+            <main class="l-nanovizer__main">
                 <Size />
                 <BlockCount />
                 <Site type="start" />
@@ -16,7 +16,10 @@
             <Footer />
         </template>
         <Form v-else />
-        <ThemeSwitch />
+        <div class="l-nanovizer__switches">
+            <ThemeSwitch />
+            <ContrastSwitch />
+        </div>
     </div>
 </template>
 
@@ -25,6 +28,7 @@ import { mapState } from 'pinia'
 import { useMainStore } from './stores/main'
 import Barcode from './components/Barcode.vue'
 import BlockCount from './components/BlockCount.vue'
+import ContrastSwitch from './components/ContrastSwitch.vue'
 import Footer from './components/Footer.vue'
 import Form from './components/Form.vue'
 import Header from './components/Header.vue'
@@ -39,6 +43,7 @@ export default {
     components: {
         Barcode,
         BlockCount,
+        ContrastSwitch,
         Footer,
         Form,
         Header,
@@ -63,7 +68,7 @@ html {
     background: var(--background);
 }
 
-.l-graphs {
+.l-nanovizer {
     @include theme;
     margin: 0 auto;
     width: 100%;
@@ -78,6 +83,14 @@ html {
         z-index: 1;
         top: 0;
         background: var(--background-header);
+    }
+
+    &__switches {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1;
+        font-size: 0.8rem;
     }
 
     &__main {

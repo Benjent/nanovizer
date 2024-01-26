@@ -31,8 +31,9 @@
     --background-footer: var(--marine-light);
 
     --font: var(--white);
-    --font-helper: var(--grey-ultradark);
+    --font-helper: rgb(var(--cyan));
     --button-font: var(--white);
+    --tab-font: var(--white);
 
     --chart-axis: var(--white);
     --chart-data: rgb(var(--green));
@@ -45,6 +46,45 @@
 
     --alert: var(--pink);
     --disabled: var(--grey);
+}
+
+.contrasted {
+    --primary: var(--white);
+    --primary-hover: var(--white);
+    --primary-hover-background: rgba(var(--white), 0.1);
+    --secondary: var(--white);
+    --secondary-hover: var(--white);
+    --secondary-hover-background: rgba(var(--white), 0.1);
+    --tertiary: rgb(var(--cyan));
+
+    --background: var(--marine);
+    --background-header: var(--marine-dark);
+    --background-footer: var(--marine-light);
+
+    --font: var(--white);
+    --font-helper: var(--white);
+    --button-font: var(--marine-dark);
+    --tab-font: var(--white);
+
+    --chart-axis: var(--white);
+    --chart-data: var(--white);
+    --input-background: var(--marine-light);
+    --input-background-hover: var(--marine-ultralight);
+    --link: var(--tertiary);
+    --tab-background-active: var(--secondary);
+    --tab-background-hover: var(--marine);
+    --tab-font-active: var(--marine);
+
+    --alert: var(--white);
+    --disabled: var(--grey);
+
+    .link {
+        text-decoration: underline;
+    }
+
+    .tab:hover {
+        color: var(--white) !important;
+    }
 }
 
 .light {
@@ -63,6 +103,7 @@
     --font: var(--grey-ultradark);
     --font-helper: var(--grey-dark);
     --button-font: var(--white);
+    --tab-font: var(--grey-ultradark);
 
     --chart-axis: var(--grey-ultradark);
     --chart-data: rgb(var(--blue));
@@ -75,4 +116,35 @@
 
     --alert: var(--pink);
     --disabled: var(--grey-ultradark);
+
+    &.contrasted {
+        --primary: black;
+        --primary-hover: var(--grey-dark);
+        --primary-hover-background: rgba(var(--grey-ultradark), 0.1);
+        --secondary: black;
+        --secondary-hover: var(--grey-dark);
+        --secondary-hover-background: rgba(var(--grey-ultradark), 0.1);
+        --tertiary: black;
+    
+        --background: var(--white);
+        --background-header: var(--white-dark);
+        --background-footer: var(--white);
+    
+        --font: black;
+        --font-helper: var(--grey-ultradark);
+        --button-font: var(--white);
+        --tab-font: black;
+    
+        --chart-axis: black;
+        --chart-data: black;
+        --input-background: var(--white-ultradark);
+        --input-background-hover: var(--grey);
+        --link: var(--tertiary);
+        --tab-background-active: var(--primary);
+        --tab-background-hover: var(--primary-hover);
+        --tab-font-active: var(--white);
+    
+        --alert: var(--pink);
+        --disabled: var(--grey-ultradark);
+    }
 }

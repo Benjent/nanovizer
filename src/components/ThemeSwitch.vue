@@ -1,5 +1,5 @@
 <template>
-    <button class="button button--text l-switch-theme" @click="toggleTheme">
+    <button class="button button--text" @click="toggleTheme">
         <Icon :icon="themeIcon" />&nbsp;{{themeText}}
     </button>
 </template>
@@ -32,13 +32,3 @@ export default {
     },
 }
 </script>
-
-<style lang="scss">
-.l-switch-theme {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1;
-    font-size: 0.8rem;
-}
-</style>
