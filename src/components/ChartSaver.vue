@@ -15,12 +15,17 @@ export default {
         },
     },
     data() {
-        return {}
+        return {
+            isWithBackground: false,
+        }
     },
     computed: {
         ...mapState(useMainStore, ['fileName', 'genomeName']),
         isMultipleGraphs() {
             return Array.isArray(this.idGraph)
+        },
+        idCheckbox() {
+            return `${this.idGraph}WithBackground`
         },
     },
     methods: {
@@ -81,6 +86,11 @@ export default {
                 .rectangle { fill: ${chartDataCssVariable} }
             `
             svg.prepend(fragment)
+
+            if (this.isWithBackground) {
+                const backgroundCssVariable = style.getPropertyValue('--background')
+                svg.style = `background: ${backgroundCssVariable};`
+            }
         },
         saveGraphs() {
             if (this.isMultipleGraphs) {
@@ -106,5 +116,20 @@ export default {
 </script>
 
 <template>
-    <button class="button" @click="saveGraphs"><Icon icon="file_download" />&nbsp;Save graph{{ isMultipleGraphs ? "s" : "" }}</button>
+    <div class="l-chart-saver">
+        <button class="button" @click="saveGraphs"><Icon icon="file_download" />&nbsp;Save graph{{ isMultipleGraphs ? "s" : "" }}</button>
+        <label :for="idCheckbox">
+            <input type="checkbox" :id="idCheckbox" v-model="isWithBackground" />
+            With background
+        </label>
+    </div>
 </template>
+
+<style lang="scss">
+// TODO style checkbox inputs
+.l-chart-saver {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+</style>
