@@ -41,7 +41,10 @@ export default {
         getImageName() {
             const now = new Date()
             const { year, month, day, hour, minute, second } = dateUtils.getCalendarDate(now)
-            const imageName = `${this.fileName} ${this.genomeName} ${this.idGraph.replace("d3Graph", "")} ${year}-${month}-${day} ${hour}h${minute}m${second}s`
+            const prefix = `${this.fileName.replaceAll('.', '_')} ${this.genomeName}`
+            const chartName = `${this.idGraph.replace('d3Graph', '')}`
+            const suffix = `${year}-${month}-${day} ${hour}h${minute}m${second}s`
+            const imageName = `${prefix} ${chartName} ${suffix}`
             return imageName
         },
         getSvgNode(id) {
