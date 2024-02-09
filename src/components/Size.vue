@@ -162,7 +162,7 @@ export default {
                 })
                 .on('mousemove', function(event) {
                     tooltipUtils.setCoordinates(event, tooltipCircle)
-                    const value = chartUtils.getDatasetInteger(event, "value")
+                    const value = chartUtils.getDatasetInteger(event, 'value')
                     tooltipCircle.html(`
                         <div>Occurences: ${value}</div>
                     `)
