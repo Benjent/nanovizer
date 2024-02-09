@@ -86,9 +86,10 @@ html {
     }
 
     &__switches {
+        display: flex;
         position: fixed;
-        top: 20px;
-        right: 20px;
+        top: 10px;
+        right: 10px;
         z-index: 1;
         font-size: 0.8rem;
     }

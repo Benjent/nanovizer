@@ -21,7 +21,6 @@
 </template>
 
 <script lang="js">
-// TODO aligner light theme et contrast horizontalement au-dessus des tabs
 import { mapActions, mapState } from 'pinia'
 import { useMainStore } from '../stores/main'
 
