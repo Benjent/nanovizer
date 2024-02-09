@@ -62,7 +62,7 @@ export default {
             return this.d3Data?.filter((d) => d.value >= this.threshold)
         },
         idGraph() {
-            return `d3Graph${this.type}Site`
+            return `d3Graph${this.type.charAt(0).toUpperCase()}${this.type.slice(1)}Site`
         },
         graphTitle() {
             return `${this.type.charAt(0).toUpperCase()}${this.type.slice(1)} site`
