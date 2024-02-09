@@ -5,8 +5,8 @@
             Missing data. Chart could not be drawn.
         </Failure>
         <div v-else>
-            <div :id="idGraph" :ref="idGraph" class="entry__chart"></div>
-            <div v-if="isScatterplotEnabled" :id="idGraphScatterplot" :ref="idGraphScatterplot" class="entry__chart"></div>
+            <div :id="idChart" :ref="idChart" class="entry__chart"></div>
+            <div v-if="isScatterplotEnabled" :id="idChartScatterplot" :ref="idChartScatterplot" class="entry__chart"></div>
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
                     <label class="data__label">Threshold</label>
@@ -20,7 +20,7 @@
                     <label class="data__label">Displayed data percentage</label>
                     <output class="data__value">{{percentageFilteredD3Data}}%</output>
                 </div>
-                <ChartSaver :id-graph="isScatterplotEnabled ? [idGraph, idGraphScatterplot] : idGraph" />
+                <ChartSaver :id-chart="isScatterplotEnabled ? [idChart, idChartScatterplot] : idChart" />
             </footer>
         </div>
     </section>
@@ -45,8 +45,8 @@ export default {
     },
     data() {
         return {
-            idGraph: 'd3GraphJunction',
-            idGraphScatterplot: 'd3GraphJunctionScatterplot',
+            idChart: 'd3ChartJunction',
+            idChartScatterplot: 'd3ChartJunctionScatterplot',
             max: 0,
             d3Data: undefined,
             threshold: 0,
@@ -77,18 +77,18 @@ export default {
     },
     watch: {
         threshold() {
-            this.drawGraphs()
+            this.drawCharts()
         },
     },
     mounted() {
         if (!this.rawData) return
         this.d3Data = this.parseData(this.rawData)
-        this.drawGraphs()
+        this.drawCharts()
     },
     methods: {
-        drawGraphs() {
-            this.drawGraph()
-            this.drawGraphScatterplot()
+        drawCharts() {
+            this.drawChart()
+            this.drawChartScatterplot()
         },
         parseData(data) {
             const junctions = []
@@ -110,10 +110,10 @@ export default {
                 }),
             }
         },
-        drawGraph() {
-            if (!this.$refs[this.idGraph] || !this.filteredD3Data) { return }
+        drawChart() {
+            if (!this.$refs[this.idChart] || !this.filteredD3Data) { return }
             const { nodes, links } = this.filteredD3Data
-            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width, { height: this.$refs[this.idGraph].getBoundingClientRect().width / 2 })
+            const { svg, width, height, margin } = chartUtils.setSvg(this.idChart, this.$refs[this.idChart].getBoundingClientRect().width, { height: this.$refs[this.idChart].getBoundingClientRect().width / 2 })
             const dataMax = d3.max(nodes)
             const xMax = chartUtils.getXMax(this.genomeSize, dataMax)
             this.max = d3.max(links.map((l) => l.value))
@@ -192,7 +192,7 @@ export default {
             //     .style('stroke', 'pink')
             //     .style('opacity', 0)
 
-            const tooltip = tooltipUtils.set(this.idGraph)
+            const tooltip = tooltipUtils.set(this.idChart)
             circles
             .on('mouseover', function (event) {
                 const opacity = 0
@@ -221,10 +221,10 @@ export default {
                 // labels.style('opacity', 0)
             })
         },
-        drawGraphScatterplot() {
-            if (!this.$refs[this.idGraphScatterplot] || !this.filteredD3Data) { return }
+        drawChartScatterplot() {
+            if (!this.$refs[this.idChartScatterplot] || !this.filteredD3Data) { return }
             const { links } = this.filteredD3Data
-            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraphScatterplot, this.$refs[this.idGraphScatterplot].getBoundingClientRect().width)
+            const { svg, width, height, margin } = chartUtils.setSvg(this.idChartScatterplot, this.$refs[this.idChartScatterplot].getBoundingClientRect().width)
 
             const xMax = d3.max(links.map((d) => d.start))
             const xScale = d3.scaleLinear().range([0, width]).domain([0, xMax])
@@ -249,7 +249,7 @@ export default {
                 .attr('r', chartUtils.theme.lollipop.sugar.radius)
                 .classed('lollipop__sugar', true)
 
-            const tooltip = tooltipUtils.set(this.idGraphScatterplot)
+            const tooltip = tooltipUtils.set(this.idChartScatterplot)
             circles
             .on('mouseover', function (event) {
                 const opacity = 0

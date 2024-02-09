@@ -20,7 +20,7 @@
             </p>
             <p class="l-barcode__alert l-barcode__helper helper"><Icon icon="info" />&nbsp;Please be aware that in order to have a better visual representation of reads, consensus start and end positions are displayed.</p>
             <div>
-                <div :id="idGraph" :ref="idGraph" class="entry__chart entry__chart--big"></div>
+                <div :id="idChart" :ref="idChart" class="entry__chart entry__chart--big"></div>
                 <div class="l-barcode__sticky-cta">
                     <Loader v-if="isLoading" />
                     <template v-else>
@@ -37,7 +37,7 @@
                         <label class="data__label">Displayed data percentage</label>
                         <output class="data__value">{{percentageFilteredD3Data}}%</output>
                     </div>
-                    <ChartSaver :id-graph="idGraph" />
+                    <ChartSaver :id-chart="idChart" />
                 </footer>
             </div>
         </template>
@@ -70,7 +70,7 @@ export default {
     data() {
         return {
             fastqFile: '',
-            idGraph: 'd3GraphBarcode',
+            idChart: 'd3ChartBarcode',
             isError: false,
             isLoading: false,
             isLoadingBarcode: false,
@@ -116,11 +116,11 @@ export default {
                 this.isLoading = true
                 setTimeout(() => {
                     // Force loading rendering before drawing charts
-                    this.drawGraph()
+                    this.drawChart()
                     this.isLoading = false
                 }, 1)
             } else {
-                this.drawGraph()
+                this.drawChart()
             }
         },
     },
@@ -128,7 +128,7 @@ export default {
         if (!this.rawData) return
         const parsedData = this.parseData(this.rawData)
         this.d3Data = mathUtils.sort(parsedData, 'count', 'DESC')
-        this.drawGraph()
+        this.drawChart()
     },
     methods: {
         moreBarcodes() {
@@ -162,10 +162,10 @@ export default {
                 this.isLoadingBarcode = false
             })
         },
-        drawGraph() {
+        drawChart() {
             const self = this
 
-            if (!this.$refs[this.idGraph] || !this.d3Data) { return }
+            if (!this.$refs[this.idChart] || !this.d3Data) { return }
             const approximateBarHeight = 20
             const chartHeight = approximateBarHeight * this.filteredD3Data.length
             const dataMax = d3.max(this.filteredD3Data.map((d) => d.blocks[d.blocks.length - 1]))
@@ -174,7 +174,7 @@ export default {
             const xMin = 0
             const xMax = chartUtils.getXMax(this.genomeSize, dataMax)
 
-            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width, { height: chartHeight, margin: { left: 180, right: 100 } })
+            const { svg, width, height, margin } = chartUtils.setSvg(this.idChart, this.$refs[this.idChart].getBoundingClientRect().width, { height: chartHeight, margin: { left: 180, right: 100 } })
             const xScale = d3.scaleLinear().range([0, width]).domain([xMin, xMax])
             const xAxis = d3.axisBottom(xScale)
             const xLegend = svg.append('g')
@@ -230,7 +230,7 @@ export default {
                 })
             })
             
-            const tooltip = tooltipUtils.set(this.idGraph)
+            const tooltip = tooltipUtils.set(this.idChart)
             const blocks = svg.selectAll('.tooltipable')
             blocks
             .on('mouseover', function (event) {

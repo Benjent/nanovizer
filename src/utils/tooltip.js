@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
 
-const set = (idGraph) => {
-    return d3.select(`#${idGraph}`)
+const set = (idChart) => {
+    return d3.select(`#${idChart}`)
         .append('div')
             .style('opacity', 0)
             .attr('class', 'tooltip')

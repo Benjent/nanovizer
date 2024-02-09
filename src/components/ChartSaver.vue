@@ -9,7 +9,7 @@ export default {
         Icon,
     },
     props: {
-        idGraph: {
+        idChart: {
             type: [String, Array],
             required: true,
         },
@@ -21,11 +21,11 @@ export default {
     },
     computed: {
         ...mapState(useMainStore, ['fileName', 'genomeName']),
-        isMultipleGraphs() {
-            return Array.isArray(this.idGraph)
+        isMultipleCharts() {
+            return Array.isArray(this.idChart)
         },
         idCheckbox() {
-            return `${this.idGraph}WithBackground`
+            return `${this.idChart}WithBackground`
         },
     },
     methods: {
@@ -42,7 +42,7 @@ export default {
             const now = new Date()
             const { year, month, day, hour, minute, second } = dateUtils.getCalendarDate(now)
             const prefix = `${this.fileName.replaceAll('.', '_')} ${this.genomeName}`
-            const chartName = `${this.idGraph.replace('d3Graph', '')}`
+            const chartName = `${this.idChart.replace('d3Chart', '')}`
             const suffix = `${year}-${month}-${day} ${hour}h${minute}m${second}s`
             const imageName = `${prefix} ${chartName} ${suffix}`
             return imageName
@@ -95,16 +95,16 @@ export default {
                 svg.style = `background: ${backgroundCssVariable};`
             }
         },
-        saveGraphs() {
-            if (this.isMultipleGraphs) {
-                this.idGraph.forEach((id) => {
-                    this.saveGraph(id)
+        saveCharts() {
+            if (this.isMultipleCharts) {
+                this.idChart.forEach((id) => {
+                    this.saveChart(id)
                 })
             } else {
-                this.saveGraph(this.idGraph)
+                this.saveChart(this.idChart)
             }
         },
-        saveGraph(id) {
+        saveChart(id) {
             const svg = this.getSvgNode(id)
 
             // Prevent from altering DOM node
@@ -120,7 +120,7 @@ export default {
 
 <template>
     <div class="l-chart-saver">
-        <button class="button" @click="saveGraphs"><Icon icon="file_download" />&nbsp;Save graph{{ isMultipleGraphs ? "s" : "" }}</button>
+        <button class="button" @click="saveCharts"><Icon icon="file_download" />&nbsp;Save chart{{ isMultipleCharts ? "s" : "" }}</button>
         <label :for="idCheckbox">
             <input type="checkbox" :id="idCheckbox" v-model="isWithBackground" />
             With background

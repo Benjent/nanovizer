@@ -89,7 +89,7 @@ const setScales = (data, svg, width, height, options = {}) => {
     return { xScale, xAxis, xMax, yScale, yAxis, yMax }
 }
 
-const drawLollipops = (idGraph, data, svg, xScale, yScale) => {
+const drawLollipops = (idChart, data, svg, xScale, yScale) => {
     const lines = svg.selectAll()
     .data(data)
     .enter()
@@ -113,7 +113,7 @@ const drawLollipops = (idGraph, data, svg, xScale, yScale) => {
         .attr('r', theme.lollipop.sugar.radius)
         .classed('lollipop__sugar', true)
 
-    const tooltip = tooltipUtils.set(idGraph)
+    const tooltip = tooltipUtils.set(idChart)
 
     circles
     .on('mouseover', function (event) {

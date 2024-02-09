@@ -1,11 +1,11 @@
 <template>
     <section class="entry">
-        <h2 class="title title--2" :id="`${type}Site`">{{graphTitle}}</h2>
+        <h2 class="title title--2" :id="`${type}Site`">{{chartTitle}}</h2>
         <Failure v-if="!rawData">
             Missing data. Chart could not be drawn.
         </Failure>
         <div v-else>
-            <div :id="idGraph" :ref="idGraph" class="entry__chart"></div>
+            <div :id="idChart" :ref="idChart" class="entry__chart"></div>
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
                     <label class="data__label">Threshold</label>
@@ -19,7 +19,7 @@
                     <label class="data__label">Displayed data percentage</label>
                     <output class="data__value">{{percentageFilteredD3Data}}%</output>
                 </div>
-                <ChartSaver :id-graph="idGraph" />
+                <ChartSaver :id-chart="idChart" />
             </footer>
         </div>
     </section>
@@ -61,10 +61,10 @@ export default {
         filteredD3Data() {
             return this.d3Data?.filter((d) => d.value >= this.threshold)
         },
-        idGraph() {
-            return `d3Graph${this.type.charAt(0).toUpperCase()}${this.type.slice(1)}Site`
+        idChart() {
+            return `d3Chart${this.type.charAt(0).toUpperCase()}${this.type.slice(1)}Site`
         },
-        graphTitle() {
+        chartTitle() {
             return `${this.type.charAt(0).toUpperCase()}${this.type.slice(1)} site`
         },
         percentageFilteredD3Data() {
@@ -78,20 +78,20 @@ export default {
     },
     watch: {
         threshold() {
-            this.drawGraph()
+            this.drawChart()
         },
     },
     mounted() {
         if (!this.rawData) return
         this.d3Data = chartUtils.parseData(this.rawData)
-        this.drawGraph()
+        this.drawChart()
     },
     methods: {
-        drawGraph() {
-            if (!this.$refs[this.idGraph] || !this.filteredD3Data) { return }
-            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
+        drawChart() {
+            if (!this.$refs[this.idChart] || !this.filteredD3Data) { return }
+            const { svg, width, height, margin } = chartUtils.setSvg(this.idChart, this.$refs[this.idChart].getBoundingClientRect().width)
             const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.filteredD3Data, svg, width, height, { max: this.genomeSize })
-            const { lines, circles } = chartUtils.drawLollipops(this.idGraph, this.filteredD3Data, svg, xScale, yScale)
+            const { lines, circles } = chartUtils.drawLollipops(this.idChart, this.filteredD3Data, svg, xScale, yScale)
 
             this.max = yMax
         },

@@ -1,8 +1,8 @@
 export default {
     created() {
-        window.addEventListener('resize', this.drawGraph)
+        window.addEventListener('resize', this.drawChart)
     },
     unmounted() {
-        window.removeEventListener('resize', this.drawGraph)
+        window.removeEventListener('resize', this.drawChart)
     },
 }

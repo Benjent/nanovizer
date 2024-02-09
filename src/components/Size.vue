@@ -5,7 +5,7 @@
             Missing data. Chart could not be drawn.
         </Failure>
         <div v-else>
-            <div :id="idGraph" :ref="idGraph" class="entry__chart entry__chart--small"></div>
+            <div :id="idChart" :ref="idChart" class="entry__chart entry__chart--small"></div>
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
                     <label class="data__label">Max</label>
@@ -19,7 +19,7 @@
                     <label class="data__label">Median</label>
                     <output class="data__value">{{median}}</output>
                 </div>
-                <ChartSaver :id-graph="idGraph" />
+                <ChartSaver :id-chart="idChart" />
             </footer>
         </div>
     </section>
@@ -44,7 +44,7 @@ export default {
     },
     data() {
         return {
-            idGraph: 'd3GraphSize',
+            idChart: 'd3ChartSize',
             max: 0,
             min: 0,
             median: 0,
@@ -68,19 +68,19 @@ export default {
     },
     watch: {
         threshold() {
-            this.drawGraph()
+            this.drawChart()
         },
     },
     mounted() {
         if (!this.rawData) return
         this.d3Data = this.rawData.map((d) => d)
         this.d3Data.sort(d3.ascending)
-        this.drawGraph()
+        this.drawChart()
     },
     methods: {
-        drawGraph() {
-            if (!this.$refs[this.idGraph] || !this.d3Data) { return }
-            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
+        drawChart() {
+            if (!this.$refs[this.idChart] || !this.d3Data) { return }
+            const { svg, width, height, margin } = chartUtils.setSvg(this.idChart, this.$refs[this.idChart].getBoundingClientRect().width)
 
             const q1 = d3.quantile(this.d3Data, .25)
             const median = d3.quantile(this.d3Data, .5)
@@ -110,7 +110,7 @@ export default {
                 .attr('y2', yScale(max))
                 .classed('boxplot__line', true)
 
-            const tooltipBox = tooltipUtils.set(this.idGraph)
+            const tooltipBox = tooltipUtils.set(this.idChart)
             const box = svg.append('rect')
                 .attr('x', center - (boxWidth / 2))
                 .attr('y', yScale(q3))
@@ -143,7 +143,7 @@ export default {
                 .attr('y2', (d) => yScale(d))
                 .classed('boxplot__line', true)
 
-            const tooltipCircle = tooltipUtils.set(this.idGraph)
+            const tooltipCircle = tooltipUtils.set(this.idChart)
             const circles = svg.selectAll()
             .data(this.d3Data.filter((d) => d > max || d < min))
             .enter()

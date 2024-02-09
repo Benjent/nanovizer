@@ -5,13 +5,13 @@
             Missing data. Chart could not be drawn.
         </Failure>
         <div v-else>
-            <div :id="idGraph" :ref="idGraph" class="entry__chart"></div>
+            <div :id="idChart" :ref="idChart" class="entry__chart"></div>
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
                     <label class="data__label">Max</label>
                     <output class="data__value">{{max}}</output>
                 </div>
-                <ChartSaver :id-graph="idGraph" />
+                <ChartSaver :id-chart="idChart" />
             </footer>
         </div>
     </section>
@@ -33,7 +33,7 @@ export default {
     },
     data() {
         return {
-            idGraph: 'd3GraphBlockCount',
+            idChart: 'd3ChartBlockCount',
             max: 0,
             d3Data: undefined,
         }
@@ -47,14 +47,14 @@ export default {
     mounted() {
         if (!this.rawData) return
         this.d3Data = chartUtils.parseData(this.rawData)
-        this.drawGraph()
+        this.drawChart()
     },
     methods: {
-        drawGraph() {
-            if (!this.$refs[this.idGraph] || !this.d3Data) { return }
-            const { svg, width, height, margin } = chartUtils.setSvg(this.idGraph, this.$refs[this.idGraph].getBoundingClientRect().width)
+        drawChart() {
+            if (!this.$refs[this.idChart] || !this.d3Data) { return }
+            const { svg, width, height, margin } = chartUtils.setSvg(this.idChart, this.$refs[this.idChart].getBoundingClientRect().width)
             const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.d3Data, svg, width, height, { nice: true })
-            const { lines, circles } = chartUtils.drawLollipops(this.idGraph, this.d3Data, svg, xScale, yScale)
+            const { lines, circles } = chartUtils.drawLollipops(this.idChart, this.d3Data, svg, xScale, yScale)
 
             this.max = yMax
         },
