@@ -5,8 +5,8 @@
             Missing data. Chart could not be drawn.
         </Failure>
         <div v-else>
-            <div :id="idGraph" :ref="idGraph" class="entry__graph"></div>
-            <div v-if="isScatterplotEnabled" :id="idGraphScatterplot" :ref="idGraphScatterplot" class="entry__graph"></div>
+            <div :id="idGraph" :ref="idGraph" class="entry__chart"></div>
+            <div v-if="isScatterplotEnabled" :id="idGraphScatterplot" :ref="idGraphScatterplot" class="entry__chart"></div>
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
                     <label class="data__label">Threshold</label>

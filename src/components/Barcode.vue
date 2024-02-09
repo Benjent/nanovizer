@@ -20,7 +20,7 @@
             </p>
             <p class="l-barcode__alert l-barcode__helper helper"><Icon icon="info" />&nbsp;Please be aware that in order to have a better visual representation of reads, consensus start and end positions are displayed.</p>
             <div>
-                <div :id="idGraph" :ref="idGraph" class="entry__graph entry__graph--big"></div>
+                <div :id="idGraph" :ref="idGraph" class="entry__chart entry__chart--big"></div>
                 <div class="l-barcode__sticky-cta">
                     <Loader v-if="isLoading" />
                     <template v-else>

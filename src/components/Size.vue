@@ -5,7 +5,7 @@
             Missing data. Chart could not be drawn.
         </Failure>
         <div v-else>
-            <div :id="idGraph" :ref="idGraph" class="entry__graph entry__graph--small"></div>
+            <div :id="idGraph" :ref="idGraph" class="entry__chart entry__chart--small"></div>
             <footer v-if="d3Data" class="entry__footer">
                 <div class="data">
                     <label class="data__label">Max</label>
