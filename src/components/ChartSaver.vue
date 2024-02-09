@@ -1,5 +1,4 @@
 <script lang="js">
-import { saveSvgAsPng } from 'save-svg-as-png'
 import { mapState } from 'pinia'
 import { useMainStore } from '../stores/main'
 import dateUtils from '../utils/date'
@@ -25,6 +24,64 @@ export default {
         },
     },
     methods: {
+        downloadChart(url) {
+            const imageName = this.getImageName()
+            const downloadLink = document.createElement("a")
+            downloadLink.href = url
+            downloadLink.download = `${imageName}.svg`
+            document.body.appendChild(downloadLink)
+            downloadLink.click()
+            document.body.removeChild(downloadLink)
+        },
+        getImageName() {
+            const now = new Date()
+            const { year, month, day, hour, minute, second } = dateUtils.getCalendarDate(now)
+            const imageName = `${this.fileName} ${this.genomeName} ${this.idGraph.replace("d3Graph", "")} ${year}-${month}-${day} ${hour}h${minute}m${second}s`
+            return imageName
+        },
+        getSvgNode(id) {
+            const wrapper = document.getElementById(id)
+            const wrapperChildren = [...wrapper.children]
+            return wrapperChildren.find((element) => element.tagName === 'svg')
+        },
+        getXmlFromSvg(svg) {
+            this.setStyleToSvg(svg)
+        
+            const serializer = new XMLSerializer()
+            let source = serializer.serializeToString(svg)
+
+            // Name spaces
+            if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+                source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"')
+            }
+            if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
+                source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"')
+            }
+
+            return '<?xml version="1.0" standalone="no"?>\r\n' + source 
+        },
+        setStyleToSvg(svg) {
+            const style = getComputedStyle(document.body)
+            const primaryCssVariable = style.getPropertyValue('--primary')
+            const chartAxisCssVariable = style.getPropertyValue('--chart-axis')
+            const chartDataCssVariable = style.getPropertyValue('--chart-data')
+
+            const fragment = document.createDocumentFragment()
+            const styleTag = fragment.appendChild(document.createElement("style"))
+            styleTag.textContent = `
+                .domain { stroke: ${chartAxisCssVariable}; }
+                .tick {
+                    text { fill: ${chartAxisCssVariable}; stroke: none; }
+                    line { stroke: ${chartAxisCssVariable}; }
+                }
+                .boxplot__line { stroke: ${primaryCssVariable} }
+                .boxplot__box { fill: ${chartDataCssVariable} }
+                .lollipop__sugar { fill: ${chartDataCssVariable} }
+                .lollipop__stick { stroke: ${chartDataCssVariable} }
+                .rectangle { fill: ${chartDataCssVariable} }
+            `
+            svg.prepend(fragment)
+        },
         saveGraphs() {
             if (this.isMultipleGraphs) {
                 this.idGraph.forEach((id) => {
@@ -35,13 +92,14 @@ export default {
             }
         },
         saveGraph(id) {
-            const wrapper = document.getElementById(id)
-            const wrapperChildren = [...wrapper.children]
-            const svg = wrapperChildren.find((element) => element.tagName === 'svg')
-            const now = new Date()
-            const { year, month, day, hour, minute, second } = dateUtils.getCalendarDate(now)
-            const imageName = `${this.fileName} ${this.genomeName} ${this.idGraph.replace("d3Graph", "")} ${year}-${month}-${day} ${hour}h${minute}m${second}s`
-            saveSvgAsPng(svg, imageName)
+            const svg = this.getSvgNode(id)
+
+            // Prevent from altering DOM node
+            const standaloneSvg = svg.cloneNode(true)
+            const source = this.getXmlFromSvg(standaloneSvg)
+            const svgUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(source)}`
+
+            this.downloadChart(svgUrl)
         },
     },
 }
