@@ -30,7 +30,6 @@ import * as d3 from 'd3'
 import { mapState } from 'pinia'
 import { useMainStore } from '../stores/main'
 import chartUtils from '../utils/chart'
-import numberUtils from '../utils/number'
 import tooltipUtils from '../utils/tooltip'
 import resizeMixin from '../mixins/resize'
 import ChartSaver from './ChartSaver.vue'
@@ -49,26 +48,12 @@ export default {
             min: 0,
             median: 0,
             d3Data: undefined,
-            threshold: 0,
         }
     },
     computed: {
         ...mapState(useMainStore, ['nanoVizerData']),
-        filteredD3Data() {
-            return this.d3Data?.filter((d) => d.value >= this.threshold)
-        },
-        percentageFilteredD3Data() {
-            const ratio = this.d3Data && this.filteredD3Data ? this.filteredD3Data.length / this.d3Data.length : 1
-            const percentage = ratio * 100
-            return numberUtils.frFloat(numberUtils.decimal(percentage))
-        },
         rawData() {
             return this.nanoVizerData.read_size
-        },
-    },
-    watch: {
-        threshold() {
-            this.drawChart()
         },
     },
     mounted() {
