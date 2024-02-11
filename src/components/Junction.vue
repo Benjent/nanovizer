@@ -28,6 +28,7 @@
 
 <script lang="js">
 import * as d3 from 'd3'
+import debounce from 'lodash.debounce'
 import { mapState } from 'pinia'
 import { useMainStore } from '../stores/main'
 import chartUtils from '../utils/chart'
@@ -76,9 +77,9 @@ export default {
         },
     },
     watch: {
-        threshold() {
+        threshold: debounce(function() {
             this.drawChart()
-        },
+        }, 400),
     },
     mounted() {
         if (!this.rawData) return
