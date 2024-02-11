@@ -143,7 +143,8 @@ export default {
                         .join(' ')
                     })
                 .style('fill', 'none')
-                .style('opacity', (d) => linkScale(d.value))
+                // .style('opacity', (d) => linkScale(d.value))
+                .style('fill', 'none')
                 .classed('lollipop__stick', true)
 
             // const size = d3.scaleLinear()
@@ -217,7 +218,8 @@ export default {
             .on('mouseleave', function () {
                 tooltipUtils.reset(tooltip)
                 circles.style('opacity', 1)
-                arcs.style('opacity', (d) => linkScale(d.value))
+                // arcs.style('opacity', (d) => linkScale(d.value))
+                arcs.style('opacity', 1)
                 // labels.style('opacity', 0)
             })
         },
