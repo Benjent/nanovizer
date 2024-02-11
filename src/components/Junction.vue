@@ -77,18 +77,18 @@ export default {
     },
     watch: {
         threshold() {
-            this.drawCharts()
+            this.drawChart()
         },
     },
     mounted() {
         if (!this.rawData) return
         this.d3Data = this.parseData(this.rawData)
-        this.drawCharts()
+        this.drawChart()
     },
     methods: {
-        drawCharts() {
-            this.drawChart()
-            this.drawChartScatterplot()
+        drawChart() {
+            this.drawArcs()
+            this.drawScatterplot()
         },
         parseData(data) {
             const junctions = []
@@ -110,7 +110,7 @@ export default {
                 }),
             }
         },
-        drawChart() {
+        drawArcs() {
             if (!this.$refs[this.idChart] || !this.filteredD3Data) { return }
             const { nodes, links } = this.filteredD3Data
             const { svg, width, height, margin } = chartUtils.setSvg(this.idChart, this.$refs[this.idChart].getBoundingClientRect().width, { height: this.$refs[this.idChart].getBoundingClientRect().width / 2 })
@@ -221,7 +221,7 @@ export default {
                 // labels.style('opacity', 0)
             })
         },
-        drawChartScatterplot() {
+        drawScatterplot() {
             if (!this.$refs[this.idChartScatterplot] || !this.filteredD3Data) { return }
             const { links } = this.filteredD3Data
             const { svg, width, height, margin } = chartUtils.setSvg(this.idChartScatterplot, this.$refs[this.idChartScatterplot].getBoundingClientRect().width)
