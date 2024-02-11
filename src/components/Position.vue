@@ -28,6 +28,7 @@
 <script lang="js">
 import debounce from 'lodash.debounce'
 import { mapState } from 'pinia'
+import { DEBOUNCE_VALUE } from '../globals'
 import { useMainStore } from '../stores/main'
 import chartUtils from '../utils/chart'
 import mathUtils from '../utils/math'
@@ -76,7 +77,7 @@ export default {
     watch: {
         threshold: debounce(function() {
             this.drawChart()
-        }, 400),
+        }, DEBOUNCE_VALUE),
     },
     created() {
         window.addEventListener('resize', this.drawCharts)

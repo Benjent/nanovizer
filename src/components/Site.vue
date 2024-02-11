@@ -28,6 +28,7 @@
 <script lang="js">
 import debounce from 'lodash.debounce'
 import { mapState } from 'pinia'
+import { DEBOUNCE_VALUE } from '../globals'
 import { useMainStore } from '../stores/main'
 import chartUtils from '../utils/chart'
 import numberUtils from '../utils/number'
@@ -80,7 +81,7 @@ export default {
     watch: {
         threshold: debounce(function() {
             this.drawChart()
-        }, 400),
+        }, DEBOUNCE_VALUE),
     },
     mounted() {
         if (!this.rawData) return
