@@ -105,6 +105,13 @@ This is a [Vue.js v3](https://vuejs.org/) project bootstrapped with [Create Vue]
 
 3. Put the .bam file in the */data* folder
 
+## Theme and contrast
+
+You can switch from dark to light themes with the button on the top-right corner of the screen. You can also increase the contrast with the button next to it.
+
+> 💡 Tip
+> Use the light theme along with high contrast to obtain black on white charts, that you can save as is, which is handful for print purpose.
+
 ## FAQ
 
 ### What is the reason for this repository?
