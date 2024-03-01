@@ -53,7 +53,7 @@ export default {
         drawChart() {
             if (!this.$refs[this.idChart] || !this.d3Data) { return }
             const { svg, width, height, margin } = chartUtils.setSvg(this.idChart, this.$refs[this.idChart].getBoundingClientRect().width)
-            const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.d3Data, svg, width, height, { nice: true })
+            const { xScale, xAxis, xMax, yScale, yAxis, yMax } = chartUtils.setScales(this.d3Data, svg, width, height, { nice: true, min: 2 })
             const { lines, circles } = chartUtils.drawLollipops(this.idChart, this.d3Data, svg, xScale, yScale)
 
             this.max = yMax

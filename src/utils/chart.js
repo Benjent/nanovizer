@@ -50,10 +50,11 @@ const setScales = (data, svg, width, height, options = {}) => {
 
     const dataMax = d3.max(keys)
     const xMax = options.max ? getXMax(options.max, dataMax) : dataMax
+    const xMin = options.min || 0
 
     const xScale = options.sorted
         ? d3.scaleBand().range([0, width]).domain(keys)
-        : d3.scaleLinear().range([0, width]).domain([0, xMax])
+        : d3.scaleLinear().range([0, width]).domain([xMin, xMax])
 
     const xAxis = d3.axisBottom(xScale)
     if (options.nice && !options.sorted) {
