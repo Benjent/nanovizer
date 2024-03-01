@@ -24,8 +24,8 @@
                 <div class="l-barcode__sticky-cta">
                     <Loader v-if="isLoading" />
                     <template v-else>
-                        <button  class="button button--secondary" :disabled="isLoading" @click="moreBarcodes">
-                            <Icon icon="playlist_add" />&nbsp;Reveal 10 more barcodes
+                        <button class="button button--secondary" :disabled="isLoading" @click="moreBarcodes">
+                            <Icon icon="playlist_add" />&nbsp;Reveal {{nbBarcodesToAdd}} more barcodes
                         </button>
                         <button v-if="filteredD3Data?.length > 1" class="button button--secondary" :disabled="isLoading" @click="lessBarcodes">
                             <Icon icon="remove" />&nbsp;Hide last barcode
@@ -76,6 +76,7 @@ export default {
             isLoadingBarcode: false,
             d3Data: undefined,
             nbShownBarcodes: 10,
+            nbBarcodesToAdd: 10,
             isFastqEnabled: false,
         }
     },
@@ -132,7 +133,7 @@ export default {
     },
     methods: {
         moreBarcodes() {
-            this.nbShownBarcodes += 10
+            this.nbShownBarcodes += this.nbBarcodesToAdd
         },
         lessBarcodes() {
             this.nbShownBarcodes -= 1
