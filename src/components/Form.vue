@@ -1,52 +1,58 @@
 <template>
     <form class="l-form">
-        <h1 class="title--1 l-form__title"><img class="l-form__logo" :src="logo" alt="Logo NanoViZer" /></h1>
-        <div class="l-form__input">
-            <label class="data__label">File name</label>
-            <input class="input data__value" v-model="fileName"/>
-        </div>
-        <p>
-            <a class="link" @click="() => startNanoViZer(true)">Or try with showcase data</a>
-        </p>
+        <h1 class="title--1 l-form__title">
+            <img class="l-form__logo" :src="logo" alt="Logo NanoViZer" />
+        </h1>
 
-        <fieldset class="fieldset l-form__fieldset">
-            <legend class="fieldset__legend">Genome</legend>
-            <!-- <div class="l-form__genomes">
-                <button class="button button--text" :disabled="!isFileNameValid" @click="getGenomes">List genomes from file</button>
-                <p class="helper" v-if="knownGenomes">Known genomes for this file: {{knownGenomes.join(', ')}}</p>
-            </div> -->
-            <div class="l-form__input">
-                <label class="data__label">Name</label>
-                <input class="input data__value" v-model="genomeName"/>
-            </div>
-            <div class="l-form__input">
-                <label class="data__label">Size</label>
-                <input class="input input--pure data__value" type="number" v-model.number="genomeSize" min="0" />
-            </div>
-        </fieldset>
-
-        <fieldset class="fieldset l-form__fieldset">
-            <legend class="fieldset__legend">Filters (optional)</legend>
-            <div class="l-form__input">
-                <label class="data__label">Minimum read length</label>
-                <input class="input input--pure data__value" type="number" v-model.number="minReadLength" min="0" />
+        <section class="l-form__inputs">
+            <div>
+                <div class="l-form__input">
+                    <label class="data__label">File name</label>
+                    <input class="input data__value" v-model="fileName"/>
+                </div>
+                <p>
+                    <a class="link" @click="() => startNanoViZer(true)">Or try with showcase data</a>
+                </p>
             </div>
             <fieldset class="fieldset l-form__fieldset">
-                <legend class="fieldset__legend">Position</legend>
+                <legend class="fieldset__legend">Genome</legend>
+                <!-- <div class="l-form__genomes">
+                    <button class="button button--text" :disabled="!isFileNameValid" @click="getGenomes">List genomes from file</button>
+                    <p class="helper" v-if="knownGenomes">Known genomes for this file: {{knownGenomes.join(', ')}}</p>
+                </div> -->
                 <div class="l-form__input">
-                    <label class="data__label">3' minimum</label>
-                    <input class="input input--pure data__value" type="number" v-model.number="minPosition3" min="0" />
+                    <label class="data__label">Name</label>
+                    <input class="input data__value" v-model="genomeName"/>
                 </div>
                 <div class="l-form__input">
-                    <label class="data__label">5' minimum</label>
-                    <input class="input input--pure data__value" type="number" v-model.number="minPosition5" min="0" />
-                </div>
-                <div class="l-form__input">
-                    <label class="data__label">5' maximum</label>
-                    <input class="input input--pure data__value" type="number" v-model.number="maxPosition5" min="0" />
+                    <label class="data__label">Size</label>
+                    <input class="input input--pure data__value" type="number" v-model.number="genomeSize" min="0" />
                 </div>
             </fieldset>
-        </fieldset>
+    
+            <fieldset class="fieldset l-form__fieldset">
+                <legend class="fieldset__legend">Filters (optional)</legend>
+                <div class="l-form__input">
+                    <label class="data__label">Minimum read length</label>
+                    <input class="input input--pure data__value" type="number" v-model.number="minReadLength" min="0" />
+                </div>
+                <fieldset class="fieldset l-form__fieldset">
+                    <legend class="fieldset__legend">Position</legend>
+                    <div class="l-form__input">
+                        <label class="data__label">3' minimum</label>
+                        <input class="input input--pure data__value" type="number" v-model.number="minPosition3" min="0" />
+                    </div>
+                    <div class="l-form__input">
+                        <label class="data__label">5' minimum</label>
+                        <input class="input input--pure data__value" type="number" v-model.number="minPosition5" min="0" />
+                    </div>
+                    <div class="l-form__input">
+                        <label class="data__label">5' maximum</label>
+                        <input class="input input--pure data__value" type="number" v-model.number="maxPosition5" min="0" />
+                    </div>
+                </fieldset>
+            </fieldset>
+        </section>
 
         <div class="l-form__button">
             <Loader v-if="isLoading" />
@@ -117,18 +123,27 @@ export default {
 
 <style lang="scss">
 .l-form {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     background: var(--background-header);
 
     &__title {
         margin-bottom: 30px;
-        padding-top: 6%;
     }
 
     &__logo {
         width: 180px;
+    }
+
+    &__inputs {
+        display: flex;
+        gap: 20px;
+        align-items: baseline;
+        justify-content: center;
+        flex-wrap: wrap;
     }
 
     &__input + &__input{
@@ -141,7 +156,6 @@ export default {
 
     &__fieldset {
         width: fit-content;
-        margin-top: 40px;
     }
 
     &__genomes {

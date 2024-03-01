@@ -70,20 +70,14 @@ html {
 
 .l-nanovizer {
     @include theme;
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
     margin: 0 auto;
     width: 100%;
     text-align: center;
     font-weight: normal;
     background: var(--background);
-
-    &__header {
-        display: flex;
-        align-items: end;
-        position: sticky;
-        z-index: 1;
-        top: 0;
-        background: var(--background-header);
-    }
 
     &__switches {
         display: flex;
