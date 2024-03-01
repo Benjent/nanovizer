@@ -174,7 +174,7 @@ export default {
             const xMin = 0
             const xMax = chartUtils.getXMax(this.genomeSize, dataMax)
 
-            const { svg, width, height, margin } = chartUtils.setSvg(this.idChart, this.$refs[this.idChart].getBoundingClientRect().width, { height: chartHeight, margin: { left: 180, right: 100 } })
+            const { svg, width, height, margin } = chartUtils.setSvg(this.idChart, this.$refs[this.idChart].getBoundingClientRect().width, { height: chartHeight, margin: { left: 320, right: 100 } })
             const xScale = d3.scaleLinear().range([0, width]).domain([xMin, xMax])
             const xAxis = d3.axisBottom(xScale)
             const xLegend = svg.append('g')
