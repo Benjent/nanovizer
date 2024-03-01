@@ -167,8 +167,8 @@ export default {
             const self = this
 
             if (!this.$refs[this.idChart] || !this.d3Data) { return }
-            const approximateBarHeight = 20
-            const chartHeight = approximateBarHeight * this.filteredD3Data.length
+            const barHeight = 20
+            const chartHeight = Math.max(barHeight * this.filteredD3Data.length, 200)
             const dataMax = d3.max(this.filteredD3Data.map((d) => d.blocks[d.blocks.length - 1]))
 
             // const xMin = d3.min(this.filteredD3Data.map((d) => d.blocks[0]))
@@ -188,7 +188,6 @@ export default {
             const yScale = d3.scaleBand()
                 .domain(this.filteredD3Data.map((d) => d.barcode))
                 .range([0, height])
-                // .padding(0.1) // Adding padding messes up chart height computation
             const yAxis = d3.axisLeft(yScale)
             const yLegend = svg.append('g').classed('barcode-axis', true).call(yAxis)
 
@@ -206,7 +205,6 @@ export default {
             const yScaleRight = d3.scaleBand()
                 .domain(this.filteredD3Data)
                 .range([0, height])
-                .padding(0.1)
             const yAxisRight = d3.axisRight(yScaleRight).tickFormat((d) => d.count > 0 ? d.count : '')
             const yLegendRight = svg.append('g').attr('transform', `translate(${width}, 0)`).call(yAxisRight)
 
@@ -221,6 +219,8 @@ export default {
                         .attr('data-end', (d) => d.blocks[i + 1])
                         .attr('data-count', (d) => d.count)
                         .attr('x', (d) => xScale(d.blocks[i]))
+                        // Strange behavior: the bandwidth value is correct: (chartHeight-marginBottom-marginTop) / this.filteredD3Data.length
+                        // However the whole chart size increazes a bit for each new bar...
                         .attr('y', (d) => i % 2 === 0 ? yScale(d.barcode) : yScale(d.barcode) + yScale.bandwidth() / 2)
                         .attr('height', () => i % 2 === 0 ? yScale.bandwidth() : 0.6)
                         .attr('width', (d) => xScale(d.blocks[i + 1] - d.blocks[i]))
