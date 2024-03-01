@@ -213,21 +213,19 @@ export default {
                 .data(this.filteredD3Data)
                 .enter()
 
-            entries.each((d, i) => {
-                d.blocks.forEach(() => {
-                    if (i < d.blocks.length) {
-                        entries.append('rect')
-                            .attr('data-start', (d) => d.blocks[i])
-                            .attr('data-end', (d) => d.blocks[i + 1])
-                            .attr('data-count', (d) => d.count)
-                            .attr('x', (d) => xScale(d.blocks[i]))
-                            .attr('y', (d) => i % 2 === 0 ? yScale(d.barcode) : yScale(d.barcode) + yScale.bandwidth() / 2)
-                            .attr('height', () => i % 2 === 0 ? yScale.bandwidth() : 0.6)
-                            .attr('width', (d) => xScale(d.blocks[i + 1] - d.blocks[i]))
-                            .classed('rectangle', true)
-                            .classed('tooltipable', () => i % 2 === 0)
-                    }
-                })
+            entries.each((d) => {
+                for (let i = 0; i < d.blocks.length - 1; i++) {
+                    entries.append('rect')
+                        .attr('data-start', (d) => d.blocks[i])
+                        .attr('data-end', (d) => d.blocks[i + 1])
+                        .attr('data-count', (d) => d.count)
+                        .attr('x', (d) => xScale(d.blocks[i]))
+                        .attr('y', (d) => i % 2 === 0 ? yScale(d.barcode) : yScale(d.barcode) + yScale.bandwidth() / 2)
+                        .attr('height', () => i % 2 === 0 ? yScale.bandwidth() : 0.6)
+                        .attr('width', (d) => xScale(d.blocks[i + 1] - d.blocks[i]))
+                        .classed('rectangle', true)
+                        .classed('tooltipable', () => i % 2 === 0)
+                }
             })
             
             const tooltip = tooltipUtils.set(this.idChart)
