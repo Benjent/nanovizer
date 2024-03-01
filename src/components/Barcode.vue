@@ -27,7 +27,7 @@
                         <button  class="button button--secondary" :disabled="isLoading" @click="moreBarcodes">
                             <Icon icon="playlist_add" />&nbsp;Reveal 10 more barcodes
                         </button>
-                        <button  class="button button--secondary" :disabled="isLoading" @click="lessBarcodes">
+                        <button v-if="filteredD3Data?.length > 1" class="button button--secondary" :disabled="isLoading" @click="lessBarcodes">
                             <Icon icon="remove" />&nbsp;Hide last barcode
                         </button>
                     </template>
