@@ -10,28 +10,6 @@
                 <output class="data__value l-summary__data__value">{{rawData.total}}</output>
             </div>
             <div class="data l-summary__data">
-                <label class="data__label l-summary__data__label">Host reads</label>
-                <output class="data__value l-summary__data__value">TODO</output>
-            </div>
-            <div class="data l-summary__data">
-                <label class="data__label l-summary__data__label">Viral reads for all genomes</label>
-                <output class="data__value l-summary__data__value">TODO</output>
-            </div>
-            <br />
-            <div class="data l-summary__data">
-                <label class="data__label l-summary__data__label">Viral reads for a specific gene</label>
-                <output class="data__value l-summary__data__value">TODO</output>
-            </div>
-            <div class="data l-summary__data">
-                <label class="data__label l-summary__data__label">Viral single-block reads</label>
-                <output class="data__value l-summary__data__value">TODO</output>
-            </div>
-            <div class="data l-summary__data">
-                <label class="data__label l-summary__data__label">Viral multiple-block reads</label>
-                <output class="data__value l-summary__data__value">TODO</output>
-            </div>
-            <br />
-            <div class="data l-summary__data">
                 <label class="data__label l-summary__data__label">Single-block reads</label>
                 <output class="data__value l-summary__data__value">{{rawData.single_block}}</output>
             </div>
