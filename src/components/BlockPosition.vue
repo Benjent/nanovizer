@@ -1,6 +1,6 @@
 <template>
     <section class="entry">
-        <h2 class="title title--2" :id="`blockPosition${type}`">{{type}}' Block Position</h2>
+        <h2 class="title title--2" :id="`blockPosition${type}`">{{type}}' Block position</h2>
         <Failure v-if="!rawData">
             Missing data. Chart could not be drawn.
         </Failure>
