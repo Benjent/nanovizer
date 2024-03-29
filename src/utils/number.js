@@ -1,12 +1,12 @@
-const frFloat = (float) => {
-    return float.toString().replace('.', ',')
+const formatNumber = (number, options) => {
+    return new Intl.NumberFormat('en-EN', options).format(number)
 }
 
-const decimal = (number, precision = 2) => {
-    return Number(number).toFixed(precision)
+const formatPercentage = (number) => {
+    return new Intl.NumberFormat('en-EN', { style: 'unit', unit: 'percent', maximumFractionDigits: 2 }).format(number)
 }
 
 export default {
-    decimal,
-    frFloat,
+    formatNumber,
+    formatPercentage,
 }

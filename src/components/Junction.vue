@@ -17,8 +17,8 @@
                     <output class="data__value">{{max}}</output>
                 </div>
                 <div class="data">
-                    <label class="data__label">Displayed data percentage</label>
-                    <output class="data__value">{{percentageFilteredD3Data}}%</output>
+                    <label class="data__label">Displayed data</label>
+                    <output class="data__value">{{percentageFilteredD3Data}}</output>
                 </div>
                 <ChartSaver :id-chart="isScatterplotEnabled ? [idChart, idChartScatterplot] : idChart" />
             </footer>
@@ -71,7 +71,7 @@ export default {
         percentageFilteredD3Data() {
             const ratio = this.d3Data && this.filteredD3Data ? this.filteredD3Data.links.length / this.d3Data.links.length : 1
             const percentage = ratio * 100
-            return numberUtils.frFloat(numberUtils.decimal(percentage))
+            return numberUtils.formatPercentage(percentage)
         },
         rawData() {
             return this.nanoVizerData.junction_count
