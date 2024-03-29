@@ -241,8 +241,8 @@ export default {
             })
             .on('mousemove', function (event) {
                 tooltipUtils.setCoordinates(event, tooltip)
-                const start = chartUtils.getDatasetInteger(event, "start")
-                const end = chartUtils.getDatasetInteger(event, "end")
+                const start = chartUtils.getDatasetInteger(event, 'start')
+                const end = chartUtils.getDatasetInteger(event, 'end')
                 tooltip
                 .html(`
                     <div>Start: ${start}</div>

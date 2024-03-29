@@ -25,7 +25,7 @@ export default {
     methods: {
         toggleContrast() {
             this.isContrasted = !this.isContrasted
-            document.body.classList.toggle("contrasted")
+            document.body.classList.toggle('contrasted')
             this.contrastIcon = this.isContrasted ? 'contrast_rtl_off' : 'contrast'
             this.contrastText = this.isContrasted ? 'Low contrast' : 'High contrast'
         },

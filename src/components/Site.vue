@@ -47,7 +47,7 @@ export default {
             type: String,
             required: true,
             validator: (value) => {
-                return ["start", "end"].includes(value)
+                return ['start', 'end'].includes(value)
             }
         },
     },

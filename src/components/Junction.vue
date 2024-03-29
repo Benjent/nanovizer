@@ -95,8 +95,8 @@ export default {
         parseData(data) {
             const junctions = []
             data.forEach((d) => {
-                junctions.push(d[`3_prime`])
-                junctions.push(d[`5_prime`])
+                junctions.push(d['3_prime'])
+                junctions.push(d['5_prime'])
             })
 
             const unique = [...new Set(junctions)]
@@ -105,8 +105,8 @@ export default {
                 nodes: unique,
                 links: data.map((d) => {
                     return {
-                        start: d[`3_prime`],
-                        end: d[`5_prime`],
+                        start: d['3_prime'],
+                        end: d['5_prime'],
                         value: d.count,
                     }
                 }),
@@ -202,14 +202,14 @@ export default {
                 circles.style('opacity', opacity)
                 d3.select(this).style('opacity', 1)
 
-                const key = chartUtils.getDatasetInteger(event, "key")
+                const key = chartUtils.getDatasetInteger(event, 'key')
                 arcs.style('opacity', (l) => [l.start, l.end].includes(key) ? 1 : opacity)
                 // labels.style('opacity', (l) => l === key ? 1 : 0)
                 tooltip.style('opacity', 1)
             })
             .on('mousemove', function (event) {
                 tooltipUtils.setCoordinates(event, tooltip)
-                const key = chartUtils.getDatasetInteger(event, "key")
+                const key = chartUtils.getDatasetInteger(event, 'key')
                 const ends = event.target.dataset.ends.replaceAll(',', ', ')
                 tooltip
                 .html(`
@@ -263,9 +263,9 @@ export default {
             })
             .on('mousemove', function (event) {
                 tooltipUtils.setCoordinates(event, tooltip)
-                const start = chartUtils.getDatasetInteger(event, "start")
-                const end = chartUtils.getDatasetInteger(event, "end")
-                const value = chartUtils.getDatasetInteger(event, "value")
+                const start = chartUtils.getDatasetInteger(event, 'start')
+                const end = chartUtils.getDatasetInteger(event, 'end')
+                const value = chartUtils.getDatasetInteger(event, 'value')
                 tooltip
                 .html(`
                     <div>3' Block position: ${start}</div>

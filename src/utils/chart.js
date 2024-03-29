@@ -122,15 +122,15 @@ const drawLollipops = (idChart, data, svg, xScale, yScale) => {
         circles.style('opacity', opacity)
         d3.select(this).style('opacity', 1)
 
-        const key = getDatasetInteger(event, "key")
+        const key = getDatasetInteger(event, 'key')
         lines.style('opacity', (l) => l.key === key ? 1 : opacity)
 
         tooltip.style('opacity', 1)
     })
     .on('mousemove', function (event) {
         tooltipUtils.setCoordinates(event, tooltip)
-        const key = getDatasetInteger(event, "key")
-        const value = getDatasetInteger(event, "value")
+        const key = getDatasetInteger(event, 'key')
+        const value = getDatasetInteger(event, 'value')
         tooltip
         .html(`
             <div>Junction: ${key}</div>

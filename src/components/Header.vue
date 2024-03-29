@@ -81,7 +81,7 @@ export default {
             const element = document.getElementById(to)
             const niceOffset = 20
             const top = to === this.nav[0].to ? 0 : element.offsetTop - this.headerHeightOffset - niceOffset
-            window.scrollTo({ top, behavior: "smooth" })
+            window.scrollTo({ top, behavior: 'smooth' })
         },
         updateScrollPosition() {
             this.scrollPosition = window.scrollY

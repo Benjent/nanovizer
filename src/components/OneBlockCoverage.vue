@@ -60,9 +60,9 @@ export default {
             .x(d => xScale(d.key))
             .y(d => yScale(d.value))
 
-            svg.append("path")
-            .attr("d", line(this.d3Data))
-            .attr("fill", "none")
+            svg.append('path')
+            .attr('d', line(this.d3Data))
+            .attr('fill', 'none')
             .classed('lollipop__stick', true)
 
             this.max = yMax

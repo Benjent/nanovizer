@@ -25,7 +25,7 @@ export default {
     methods: {
         toggleTheme() {
             this.theme === 'dark' ? this.theme = 'light' : this.theme = 'dark'
-            document.body.classList.toggle("light")
+            document.body.classList.toggle('light')
             this.themeIcon = this.theme === 'dark' ? 'light_mode' : 'dark_mode'
             this.themeText = this.theme === 'dark' ? 'Light theme' : 'Dark theme'
         },

@@ -31,7 +31,7 @@ export default {
     methods: {
         downloadChart(url) {
             const imageName = this.getImageName()
-            const downloadLink = document.createElement("a")
+            const downloadLink = document.createElement('a')
             downloadLink.href = url
             downloadLink.download = `${imageName}.svg`
             document.body.appendChild(downloadLink)
@@ -75,7 +75,7 @@ export default {
             const chartDataCssVariable = style.getPropertyValue('--chart-data')
 
             const fragment = document.createDocumentFragment()
-            const styleTag = fragment.appendChild(document.createElement("style"))
+            const styleTag = fragment.appendChild(document.createElement('style'))
             styleTag.textContent = `
                 .domain { stroke: ${chartAxisCssVariable}; }
                 .tick {
