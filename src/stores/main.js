@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from '../libs/axios'
-import showcaseNew from '../showcase/showcase-hiv.json'
+import showcase from '../showcase/showcase-hiv.json'
 
 const useMainStore = defineStore('main', {
     state: () => ({
@@ -61,12 +61,11 @@ const useMainStore = defineStore('main', {
             this.isLoading = false
         },
         useShowcaseData() {
-            const isShowcaseBig = false && Math.random() < 0.5
-            const showcaseResponse = showcaseNew
+            const showcaseResponse = showcase
 
             this.fileName = 'showcase_hiv'
             this.genomeName = 'genome'
-            this.genomeSize = isShowcaseBig ? 30000 : 2000
+            this.genomeSize = 10000
             this.minBlockPosition3 = undefined
             this.minBlockPosition5 = undefined
             this.maxBlockPosition5 = undefined

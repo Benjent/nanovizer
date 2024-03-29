@@ -23,7 +23,7 @@
             </div>
             <div class="data l-summary__data">
                 <label class="data__label l-summary__data__label">Reads too small</label>
-                <output class="data__value l-summary__data__value">TODO</output>
+                <output class="data__value l-summary__data__value">{{rawData.too_small_reads}}</output>
             </div>
             <div class="data l-summary__data">
                 <label class="data__label l-summary__data__label">Removed reads</label>

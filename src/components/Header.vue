@@ -31,6 +31,7 @@ export default {
             nav: [
                 { title: 'Summary', to: 'summary' },
                 { title: 'Size', to: 'size' },
+                { title: 'One block coverage', to: 'oneBlockCoverage' },
                 { title: 'Block count', to: 'blockCount' },
                 { title: 'Start site', to: 'startSite' },
                 { title: 'End site', to: 'endSite' },

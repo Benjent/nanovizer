@@ -5,6 +5,7 @@
             <main class="l-nanovizer__main">
                 <Summary />
                 <Size />
+                <OneBlockCoverage />
                 <BlockCount />
                 <Site type="start" />
                 <Site type="end" />
@@ -34,6 +35,7 @@ import Footer from './components/Footer.vue'
 import Form from './components/Form.vue'
 import Header from './components/Header.vue'
 import Junction from './components/Junction.vue'
+import OneBlockCoverage from './components/OneBlockCoverage.vue'
 import Site from './components/Site.vue'
 import Size from './components/Size.vue'
 import Summary from './components/Summary.vue'
@@ -49,6 +51,7 @@ export default {
         Form,
         Header,
         Junction,
+        OneBlockCoverage,
         Site,
         Size,
         Summary,
