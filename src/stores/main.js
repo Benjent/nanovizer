@@ -10,9 +10,9 @@ const useMainStore = defineStore('main', {
         genomeName: '',
         genomeSize: undefined,
         minReadLength: undefined,
-        minPosition3: undefined,
-        minPosition5: undefined,
-        maxPosition5: undefined,
+        minBlockPosition3: undefined,
+        minBlockPosition5: undefined,
+        maxBlockPosition5: undefined,
         nanoVizerData: undefined,
         isLoading: false,
         isError: false,
@@ -47,9 +47,9 @@ const useMainStore = defineStore('main', {
                     genome_name: this.genomeName,
                     genome_size: this.genomeSize,
                     min_read_length: this.minReadLength,
-                    min_position_3: this.minPosition3,
-                    min_position_5: this.minPosition5,
-                    max_position_5: this.maxPosition5,
+                    min_position_3: this.minBlockPosition3,
+                    min_position_5: this.minBlockPosition5,
+                    max_position_5: this.maxBlockPosition5,
                 }
     
                 const response = await axios.post('/parse-file', params)
@@ -67,9 +67,9 @@ const useMainStore = defineStore('main', {
             this.fileName = 'showcase_hiv'
             this.genomeName = 'genome'
             this.genomeSize = isShowcaseBig ? 30000 : 2000
-            this.minPosition3 = undefined
-            this.minPosition5 = undefined
-            this.maxPosition5 = undefined
+            this.minBlockPosition3 = undefined
+            this.minBlockPosition5 = undefined
+            this.maxBlockPosition5 = undefined
 
             this.nanoVizerData = showcaseResponse.data
         },

@@ -213,7 +213,7 @@ export default {
                 const ends = event.target.dataset.ends.replaceAll(',', ', ')
                 tooltip
                 .html(`
-                    <div>Position: ${key}</div>
+                    <div>Block position: ${key}</div>
                     <div>Junction with: ${ends}</div>
                 `)
             })
@@ -268,8 +268,8 @@ export default {
                 const value = chartUtils.getDatasetInteger(event, "value")
                 tooltip
                 .html(`
-                    <div>3' Position: ${start}</div>
-                    <div>5' Position: ${end}</div>
+                    <div>3' Block position: ${start}</div>
+                    <div>5' Block position: ${end}</div>
                     <div>Junctions: ${value}</div>
                 `)
             })

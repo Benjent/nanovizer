@@ -1,6 +1,6 @@
 <template>
-    <section class="entry l-position">
-        <h2 class="title title--2" :id="`position${type}`">{{type}}' Position</h2>
+    <section class="entry">
+        <h2 class="title title--2" :id="`blockPosition${type}`">{{type}}' Block Position</h2>
         <Failure v-if="!rawData">
             Missing data. Chart could not be drawn.
         </Failure>
@@ -63,7 +63,7 @@ export default {
             return this.d3Data?.filter((d) => d.value >= this.threshold)
         },
         idChart() {
-            return `d3Chart${this.type}Position`
+            return `d3Chart${this.type}BlockPosition`
         },
         percentageFilteredD3Data() {
             const ratio = this.d3Data && this.filteredD3Data ? this.filteredD3Data.length / this.d3Data.length : 1

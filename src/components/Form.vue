@@ -37,18 +37,18 @@
                     <input class="input input--pure data__value" type="number" v-model.number="minReadLength" min="0" />
                 </div>
                 <fieldset class="fieldset l-form__fieldset">
-                    <legend class="fieldset__legend">Position</legend>
+                    <legend class="fieldset__legend">Block position</legend>
                     <div class="l-form__input">
                         <label class="data__label">3' minimum</label>
-                        <input class="input input--pure data__value" type="number" v-model.number="minPosition3" min="0" />
+                        <input class="input input--pure data__value" type="number" v-model.number="minBlockPosition3" min="0" />
                     </div>
                     <div class="l-form__input">
                         <label class="data__label">5' minimum</label>
-                        <input class="input input--pure data__value" type="number" v-model.number="minPosition5" min="0" />
+                        <input class="input input--pure data__value" type="number" v-model.number="minBlockPosition5" min="0" />
                     </div>
                     <div class="l-form__input">
                         <label class="data__label">5' maximum</label>
-                        <input class="input input--pure data__value" type="number" v-model.number="maxPosition5" min="0" />
+                        <input class="input input--pure data__value" type="number" v-model.number="maxBlockPosition5" min="0" />
                     </div>
                 </fieldset>
             </fieldset>
@@ -84,7 +84,7 @@ export default {
     },
     computed: {
         ...mapState(useMainStore, ['theme', 'nanoVizerData', 'isFileNameValid', 'isLoading', 'isError']),
-        ...mapWritableState(useMainStore, ['fileName', 'genomeName', 'genomeSize', 'minReadLength', 'minPosition3', 'minPosition5', 'maxPosition5']),
+        ...mapWritableState(useMainStore, ['fileName', 'genomeName', 'genomeSize', 'minReadLength', 'minBlockPosition3', 'minBlockPosition5', 'maxBlockPosition5']),
         logo() {
             return this.theme === 'dark' ? nanovizerDarkThemeLogo : nanovizerLightThemeLogo
         },
