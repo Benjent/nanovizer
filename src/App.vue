@@ -3,6 +3,7 @@
         <template v-if="nanoVizerData">
             <Header />
             <main class="l-nanovizer__main">
+                <Summary />
                 <Size />
                 <BlockCount />
                 <Site type="start" />
@@ -11,7 +12,6 @@
                 <Position :type="5" />
                 <Junction />
                 <Barcode />
-                <Summary />
             </main>
             <Footer />
         </template>

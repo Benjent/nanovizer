@@ -29,6 +29,7 @@ export default {
         return {
             headerHeightOffset: 100, // Ugly
             nav: [
+                { title: 'Summary', to: 'summary' },
                 { title: 'Size', to: 'size' },
                 { title: 'Block count', to: 'blockCount' },
                 { title: 'Start site', to: 'startSite' },
@@ -37,7 +38,6 @@ export default {
                 { title: '5\' Position', to: 'position5' },
                 { title: 'Junction', to: 'junction' },
                 { title: 'Barcode', to: 'barcode' },
-                { title: 'Summary', to: 'summary' },
             ],
             scrollPosition: 0,
         }
