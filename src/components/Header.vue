@@ -45,6 +45,11 @@ export default {
     computed: {
         ...mapState(useMainStore, ['fileName', 'genomeName', 'genomeSize']),
         activeNavItem() {
+            // Hack to bypass wrong document.body.clientHeight value before first scroll
+            if (this.scrollPosition === 0) {
+                return this.nav[0].to
+            }
+
             if (document.body.clientHeight - window.innerHeight === this.scrollPosition) {
                 return this.nav[this.nav.length - 1].to
             }
