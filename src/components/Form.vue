@@ -28,6 +28,10 @@
                     <label class="data__label">Size</label>
                     <input class="input input--pure data__value" type="number" v-model.number="genomeSize" min="0" />
                 </div>
+                <div class="l-form__input">
+                    <label class="data__label">File name (optional)</label>
+                    <input class="input data__value" v-model="genomeFileName" />
+                </div>
             </fieldset>
     
             <fieldset class="fieldset l-form__fieldset">
@@ -84,7 +88,7 @@ export default {
     },
     computed: {
         ...mapState(useMainStore, ['theme', 'nanoVizerData', 'isFileNameValid', 'isLoading', 'isError']),
-        ...mapWritableState(useMainStore, ['fileName', 'genomeName', 'genomeSize', 'minReadLength', 'minBlockPosition3', 'minBlockPosition5', 'maxBlockPosition5']),
+        ...mapWritableState(useMainStore, ['fileName', 'genomeFileName', 'genomeName', 'genomeSize', 'minReadLength', 'minBlockPosition3', 'minBlockPosition5', 'maxBlockPosition5']),
         logo() {
             return this.theme === 'dark' ? nanovizerDarkThemeLogo : nanovizerLightThemeLogo
         },

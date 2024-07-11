@@ -7,6 +7,7 @@ const useMainStore = defineStore('main', {
         theme: 'dark',
         isContrasted: false,
         fileName: '',
+        genomeFileName: '',
         genomeName: '',
         genomeSize: undefined,
         minReadLength: undefined,
@@ -44,6 +45,7 @@ const useMainStore = defineStore('main', {
             try {
                 const params = {
                     file_name: this.fileName,
+                    genome_file_name: this.genomeFileName,
                     genome_name: this.genomeName,
                     genome_size: this.genomeSize,
                     min_read_length: this.minReadLength,
