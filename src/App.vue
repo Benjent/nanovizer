@@ -5,10 +5,10 @@
             <main class="l-nanovizer__main">
                 <Summary />
                 <Size />
-                <OneBlockCoverage />
-                <BlockCount />
                 <Site type="start" />
                 <Site type="end" />
+                <OneBlockCoverage />
+                <BlockCount />
                 <BlockPosition :type="3" />
                 <BlockPosition :type="5" />
                 <Junction />

@@ -31,10 +31,10 @@ export default {
             nav: [
                 { title: 'Summary', to: 'summary' },
                 { title: 'Size', to: 'size' },
-                { title: 'One block coverage', to: 'oneBlockCoverage' },
-                { title: 'Block count', to: 'blockCount' },
                 { title: 'Start site', to: 'startSite' },
                 { title: 'End site', to: 'endSite' },
+                { title: 'One block coverage', to: 'oneBlockCoverage' },
+                { title: 'Block count', to: 'blockCount' },
                 { title: '3\' Block position', to: 'blockPosition3' },
                 { title: '5\' Block position', to: 'blockPosition5' },
                 { title: 'Junction', to: 'junction' },
