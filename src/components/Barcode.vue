@@ -212,12 +212,15 @@ export default {
                 .data(this.filteredD3Data)
                 .enter()
 
+            // Make sure we don't draw too many bars. Seems like entries.each is not adapted for d3.
+            // We should have a svg.selectAll().data(lines) and another svg.selectAll().data(blocks)
             entries.each((d) => {
                 for (let i = 0; i < d.blocks.length - 1; i++) {
                     entries.append('rect')
                         .attr('data-start', (d) => d.blocks[i])
                         .attr('data-end', (d) => d.blocks[i + 1])
                         .attr('data-count', (d) => d.count)
+                        .attr('data-barcode', (d) => d.barcode)
                         .attr('x', (d) => xScale(d.blocks[i]))
                         // Strange behavior: the bandwidth value is correct: (chartHeight-marginBottom-marginTop) / this.filteredD3Data.length
                         // However the whole chart size increazes a bit for each new bar...
@@ -241,6 +244,7 @@ export default {
             })
             .on('mousemove', function (event) {
                 tooltipUtils.setCoordinates(event, tooltip)
+                // const barcode = event.target.dataset['barcode']
                 const start = chartUtils.getDatasetInteger(event, 'start')
                 const end = chartUtils.getDatasetInteger(event, 'end')
                 tooltip
@@ -253,7 +257,6 @@ export default {
                 tooltipUtils.reset(tooltip)
                 blocks.style('opacity', 1)
             })
-
         },
     },
 }
